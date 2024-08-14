@@ -1,5 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import useAuthStore from '../store/useAuthStore';
+import Header from './Header';
+import Sidebar from './Sidebar';
 
 function ProtectedMainLayout() {
   const isLoggedIn = useAuthStore(state => state.isLoggedIn);
@@ -10,9 +12,9 @@ function ProtectedMainLayout() {
 
   return (
     <div className="flex w-full h-screen overflow-hidden">
-     navbar
+      <Sidebar />
       <div className="flex flex-col w-full overflow-hidden">
-        header
+        <Header />
         <div className="flex-1 p-4 overflow-auto">
           <Outlet />
         </div>
