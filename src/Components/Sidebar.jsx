@@ -134,7 +134,7 @@ export default function Sidebar() {
 
   return (
     <Card className="min-h-screen w-full max-w-[20rem] p-4 shadow shadow-blue-gray-700 rounded-none overflow-auto">
-      <div className="mb-2 p-4">
+      <div className="mb-2">
       <Typography className="cursor-pointer flex justify-center items-center" onClick={() => navigate("/")}>
       <img src={logo} alt="Logo" />
         </Typography>
