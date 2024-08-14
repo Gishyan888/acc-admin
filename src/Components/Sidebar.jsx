@@ -23,9 +23,9 @@ import {
   CreditCardIcon,
 } from "@heroicons/react/24/solid";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import logo from '../Images/MainLogo.svg'
 import { useLocation, useNavigate } from "react-router-dom";
 import useAuthStore from "../store/useAuthStore";
+import logo from "../Images/acc-logo.png";
 
 export default function Sidebar() {
   const location = useLocation();
@@ -40,16 +40,19 @@ export default function Sidebar() {
         icon: PresentationChartBarIcon,
         link: "/",
       },
+    ],
+    section2: [
+      {
+        name: "Logout",
+        icon: PowerIcon,
+        link: "/login",
+      }
     ]
   };
   
   useEffect(() => {
     const path = location.pathname;
-    if (path.startsWith("/offer")) {
-      setActiveTab("/offers");
-    } else {
-      setActiveTab(path);
-    }
+    setActiveTab(path);
   }, [location]);
 
   const [activeTab, setActiveTab] = useState("/");
@@ -132,8 +135,8 @@ export default function Sidebar() {
   return (
     <Card className="min-h-screen w-full max-w-[20rem] p-4 shadow shadow-blue-gray-700 rounded-none overflow-auto">
       <div className="mb-2 p-4">
-        <Typography className="cursor-pointer" onClick={() => navigate("/")}>
-          <img src={logo} alt="Logo" />
+      <Typography className="cursor-pointer flex justify-center items-center" onClick={() => navigate("/")}>
+      <img src={logo} alt="Logo" />
         </Typography>
       </div>
       <List className="flex flex-col justify-between h-full">
@@ -143,6 +146,13 @@ export default function Sidebar() {
               item.submenu ? renderAccordion(item, index) : renderListItem(item, index)
             )}
           </div>
+        </div>
+        
+        <div>
+          <hr className="my-2 border-blue-gray-50" />
+          {tabs.section2.map((item, index) =>
+            item.submenu ? renderAccordion(item, index) : renderListItem(item, index)
+          )}
         </div>
       </List>
     </Card>
