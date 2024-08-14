@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import MainPage from './Pages/MainPage';
 import Login from './Pages/Login/Login';
 import ForgotPassword from './Pages/Login/ForgotPassword';
 import ResetPassword from './Pages/Login/ResetPassword';
 import ProtectedMainLayout from './Components/ProtectedMainLayout';
 import useAuthStore from './store/useAuthStore';
 import Loading from './Components/Loading';
+import Dashboard from './Pages/Dashboard/Dashboard';
 
 function App() {
   const isLoggedIn = useAuthStore(state => state.isLoggedIn);
@@ -25,7 +25,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route element={<ProtectedMainLayout />}>
-          <Route path="/" element={<MainPage />} />
+          <Route path="/" element={<Dashboard />} />
         </Route>
       </Routes>
     </Router>
