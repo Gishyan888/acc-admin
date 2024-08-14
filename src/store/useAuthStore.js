@@ -10,7 +10,7 @@ const useAuthStore = create(
       loginError: null,
       login: async (userData) => {
         try {
-          const response = await api.post('/auth/employee/login', userData)
+          const response = await api.post('/login', userData)
           if (response.status === 200 || response.status === 201) {
             set({
               isLoggedIn: true,
