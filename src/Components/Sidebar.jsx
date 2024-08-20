@@ -21,6 +21,8 @@ import {
   DocumentTextIcon,
   DocumentChartBarIcon,
   CreditCardIcon,
+  FlagIcon,
+  PresentationChartLineIcon,
 } from "@heroicons/react/24/solid";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -33,12 +35,18 @@ export default function Sidebar() {
   useEffect(() => {
     setActiveTab(location.pathname);
   }, [location]);
+  
   const tabs = {
     section1: [
       {
         name: "Dashboard",
         icon: PresentationChartBarIcon,
         link: "/",
+      },
+      {
+        name: "Banners",
+        icon: PresentationChartLineIcon,
+        link: "/banners/header-banners",
       },
     ],
     section2: [
@@ -52,6 +60,7 @@ export default function Sidebar() {
   
   useEffect(() => {
     const path = location.pathname;
+    console.log("🚀 ~ useEffect ~ path:", path)
     setActiveTab(path);
   }, [location]);
 

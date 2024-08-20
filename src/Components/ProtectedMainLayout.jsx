@@ -15,7 +15,7 @@ function ProtectedMainLayout() {
       <Sidebar />
       <div className="flex flex-col w-full overflow-hidden">
         <Header />
-        <div className="flex-1 overflow-auto">
+        <div className="flex-1 overflow-auto bg-gray-100/80 ">
           <Outlet />
         </div>
       </div>
