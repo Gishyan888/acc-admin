@@ -13,7 +13,7 @@ export default function ForgotPassword() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    api.post(`/forgot-password`, { email })
+    api.post(`/password/${email}`)
     .then((res) => {
       console.log(res);
     })

@@ -9,7 +9,7 @@ export default function Header() {
       <div className="rounded-full h-10 w-10 bg-gray-700 cursor-pointer"
         data-tooltip-id='my-tooltip'
         data-tooltip-content='My Account'
-        onClick={() => navigate('/my-account/account-details')}>
+        onClick={() => navigate('/my-account')}>
       </div>
       <Tooltip
         id='my-tooltip'
