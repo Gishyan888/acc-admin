@@ -9,12 +9,11 @@ import Loading from './Components/Loading';
 import Dashboard from './Pages/Dashboard/Dashboard';
 import MyAccount from './Pages/MyAccount/MyAccount';
 import Banners from './Pages/Banners/Banners';
-import HeaderBanners from './Pages/Banners/HeaderBanners';
-import CompanyBanners from './Pages/Banners/CompanyBanners';
+import CreateEditBanner from './Pages/Banners/CreateEditBanner';
+import Cms from './Pages/CMS/Cms';
 
 function App() {
   const isLoggedIn = useAuthStore(state => state.isLoggedIn);
-  // console.log("🚀 ~ App ~ isLoggedIn:", isLoggedIn)
   const initializeAuth = useAuthStore(state => state.initializeAuth);
 
   useEffect(() => {
@@ -31,9 +30,17 @@ function App() {
         <Route element={<ProtectedMainLayout />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/my-account" element={<MyAccount />} />
-          <Route path="/banners" element={<Banners />} >
-            <Route path="header-banners" element={<HeaderBanners />} />
-            <Route path="company-banners" element={<CompanyBanners />} />
+          <Route path='/banners'>
+            <Route path="header-banners" element={<Banners />} />
+            <Route path="header-banners/:id/edit" element={<CreateEditBanner />} />
+            <Route path="header-banners/create" element={<CreateEditBanner />} />
+            <Route path="company-banners" element={<Banners />} />
+            <Route path="company-banners/:id/edit" element={<CreateEditBanner />} />
+            <Route path="company-banners/create" element={<CreateEditBanner />} />
+          </Route>
+          <Route path='/cms'>
+            <Route path="overview" element={<Cms />} />
+            <Route path="product-in-action" element={<Cms />} />
           </Route>
         </Route>
       </Routes>

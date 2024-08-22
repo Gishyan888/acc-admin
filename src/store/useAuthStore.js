@@ -14,7 +14,10 @@ const useAuthStore = create(
           if (response.status === 200 || response.status === 201) {
             set({
               isLoggedIn: true,
-              user: response.data.data,
+              user: {
+                ...response.data.data,
+                token: response.data.access_token 
+              },
               loginError: null,
             })
             return true

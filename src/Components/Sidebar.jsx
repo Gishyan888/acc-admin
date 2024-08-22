@@ -33,9 +33,17 @@ export default function Sidebar() {
   const location = useLocation();
 
   useEffect(() => {
-    setActiveTab(location.pathname);
+    if (location.pathname.includes('banners')) {
+      setActiveTab('/banners/header-banners')
+    } else if(location.pathname.includes('cms')) {
+      setActiveTab('/cms/overview')
+    }
+    else {
+      setActiveTab(location.pathname);
+    }
+
   }, [location]);
-  
+
   const tabs = {
     section1: [
       {
@@ -48,6 +56,11 @@ export default function Sidebar() {
         icon: PresentationChartLineIcon,
         link: "/banners/header-banners",
       },
+      {
+        name: "CMS",
+        icon: ShoppingBagIcon,
+        link: "/cms/overview",
+      }
     ],
     section2: [
       {
@@ -57,12 +70,6 @@ export default function Sidebar() {
       }
     ]
   };
-  
-  useEffect(() => {
-    const path = location.pathname;
-    console.log("🚀 ~ useEffect ~ path:", path)
-    setActiveTab(path);
-  }, [location]);
 
   const [activeTab, setActiveTab] = useState("/");
   const [open, setOpen] = useState(0);
@@ -144,8 +151,8 @@ export default function Sidebar() {
   return (
     <Card className="min-h-screen w-full max-w-[20rem] p-4 shadow shadow-blue-gray-700 rounded-none overflow-auto">
       <div className="mb-2">
-      <Typography className="cursor-pointer flex justify-center items-center" onClick={() => navigate("/")}>
-      <img src={logo} alt="Logo" />
+        <Typography className="cursor-pointer flex justify-center items-center" onClick={() => navigate("/")}>
+          <img src={logo} alt="Logo" />
         </Typography>
       </div>
       <List className="flex flex-col justify-between h-full">
@@ -156,7 +163,7 @@ export default function Sidebar() {
             )}
           </div>
         </div>
-        
+
         <div>
           <hr className="my-2 border-blue-gray-50" />
           {tabs.section2.map((item, index) =>

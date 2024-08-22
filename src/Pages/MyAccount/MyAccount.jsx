@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Input from '../../Components/Input';
 import Button from '../../Components/Button';
+import api from '../../api/api';
 
 export default function MyAccount() {
     const [credentials, setCredentials] = useState({
@@ -8,7 +9,7 @@ export default function MyAccount() {
         email: "",
         old_password: "",
         password: "",
-        confirm_password: "",
+        password_confirmation: "",
     });
 
     const handleChange = (e) => {
@@ -22,10 +23,17 @@ export default function MyAccount() {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log("🚀 ~ AccountDetails ~ credentials:", credentials);
+        api.put('/update-profile', credentials)
+        .then((res) => {
+            console.log("🚀 ~ AccountDetails ~ res:", res);
+        })
+        .catch((err) => {
+            console.log("🚀 ~ AccountDetails ~ err:", err);
+        });
     };
 
     return (
-        <div className="max-w-md mx-auto mt-10 p-8 bg-white rounded-lg shadow-lg">
+        <div className="max-w-96 mx-auto mt-10 p-8 bg-white rounded-lg shadow-lg">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">Account Details</h2>
             <form onSubmit={handleSubmit}>
                 <Input
@@ -56,8 +64,8 @@ export default function MyAccount() {
                 <Input
                     label="Confirm Password"
                     type="password"
-                    name="confirm_password"
-                    value={credentials.confirm_password}
+                    name="password_confirmation"
+                    value={credentials.password_confirmation}
                     onChange={handleChange} />
                 <Button
                     text="Update"
