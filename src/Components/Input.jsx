@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import PropTypes from 'prop-types';
 
-export default function Input({ label, label2, type, label2Link, name, value, onChange, placeholder }) {
+export default function Input({ label, label2, type, label2Link, name, value, onChange, placeholder, error }) {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -49,6 +49,7 @@ export default function Input({ label, label2, type, label2Link, name, value, on
           </button>
         )}
       </div>
+      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
     </div>
   )
 }

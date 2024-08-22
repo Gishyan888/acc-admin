@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Input from '../../Components/Input';
 import Button from '../../Components/Button';
 import api from '../../api/api';
+import Modal from '../../Components/Modal';
 
 export default function MyAccount() {
+
+
     const [credentials, setCredentials] = useState({
         name: "",
         email: "",
@@ -12,6 +15,27 @@ export default function MyAccount() {
         password_confirmation: "",
     });
 
+    useEffect(() => {
+      api.get('/admin')
+      .then((res) => {
+        setCredentials(prev => ({
+            ...prev,
+            name: res.data.name,
+            email: res.data.email
+          }))
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    }, [])
+    
+
+    const [errors, setErrors] = useState({});
+    const [modalVisible, setModalVisible] = useState(false)
+
+    const closeModal = () => {
+        setModalVisible(false)
+    }
     const handleChange = (e) => {
         const { name, value } = e.target;
         setCredentials((prev) => ({
@@ -22,15 +46,15 @@ export default function MyAccount() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("🚀 ~ AccountDetails ~ credentials:", credentials);
         api.put('/update-profile', credentials)
         .then((res) => {
-            console.log("🚀 ~ AccountDetails ~ res:", res);
+            setModalVisible(true)
         })
         .catch((err) => {
-            console.log("🚀 ~ AccountDetails ~ err:", err);
+            setErrors(err.response.data.errors);
         });
     };
+
 
     return (
         <div className="max-w-96 mx-auto mt-10 p-8 bg-white rounded-lg shadow-lg">
@@ -41,38 +65,49 @@ export default function MyAccount() {
                     type="text"
                     name="name"
                     value={credentials.name}
-                    onChange={handleChange} />
+                    onChange={handleChange}
+                    error={errors.name}
+                    />
                 <Input
                     label="Email"
                     type="text"
                     name="email"
                     value={credentials.email}
-                    onChange={handleChange} />
+                    onChange={handleChange}
+                    error={errors.email}
+                    />
                 <h2 className="text-2xl font-bold text-gray-800 mt-8 mb-6">Change Password</h2>
                 <Input
                     label="Old Password"
                     type="password"
                     name="old_password"
                     value={credentials.old_password}
-                    onChange={handleChange} />
+                    onChange={handleChange}
+                    error={errors.old_password}
+                    />
                 <Input
                     label="Password"
                     type="password"
                     name="password"
                     value={credentials.password}
-                    onChange={handleChange} />
+                    onChange={handleChange} 
+                    error={errors.password}
+                    />
                 <Input
                     label="Confirm Password"
                     type="password"
                     name="password_confirmation"
                     value={credentials.password_confirmation}
-                    onChange={handleChange} />
+                    onChange={handleChange}
+                    error={errors.password_confirmation}
+                     />
                 <Button
                     text="Update"
                     color="bg-amber-600 mt-4"
                     onClick={handleSubmit}
                 />
             </form>
+            <Modal value={"Success!"} isVisible={modalVisible} onClose={closeModal} />
         </div>
     );
 }

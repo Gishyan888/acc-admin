@@ -16,7 +16,8 @@ export default function Cms() {
         title: "",
         text: "",
         image_link: "",
-        image: null
+        image: null,
+        image_src: ''
     });
 
     useEffect(() => {
@@ -57,8 +58,10 @@ export default function Cms() {
             reader.onload = (e) => {
                 setCredentials(prev => ({
                     ...prev,
-                    image: e.target.result
+                    image: file,
+                    image_src: e.target.result
                 }));
+
             };
             reader.readAsDataURL(file);
         }
@@ -79,12 +82,13 @@ export default function Cms() {
         const files = event.target.files;
 
         if (files.length > 0) {
-            const file = files[0]; // Single file
+            const file = files[0];
             const reader = new FileReader();
             reader.onload = (e) => {
                 setCredentials(prev => ({
                     ...prev,
-                    image: e.target.result
+                    image: file,
+                    image_src: e.target.result
                 }));
             };
             reader.readAsDataURL(file);
@@ -94,41 +98,24 @@ export default function Cms() {
     const removeImage = () => {
         setCredentials(prev => ({
             ...prev,
-            image: null
+            image: null,
+            image_src: ''
         }));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        // Create a FormData object
         const formData = new FormData();
         formData.append('title', credentials.title);
         formData.append('text', credentials.text);
         if (location.pathname.includes('overview')) {
             formData.append('image_link', credentials.image_link);
         }
+        if (typeof credentials.image !== 'string') {
+            formData.append('image', credentials.image);
+        }
         formData.append('_method', 'PUT');
 
-        // If an image is present, append it to the FormData object
-        if (credentials.image) {
-            // Convert the data URL to a file object
-            const dataURLToFile = (dataURL, filename) => {
-                const [header, data] = dataURL.split(',');
-                const mime = header.match(/:(.*?);/)[1];
-                const bin = atob(data);
-                const array = [];
-                for (let i = 0; i < bin.length; i++) {
-                    array.push(bin.charCodeAt(i));
-                }
-                return new File([new Uint8Array(array)], filename, { type: mime });
-            };
-
-            const file = dataURLToFile(credentials.image, 'uploaded_image.jpg');
-            formData.append('image', file);
-        }
-
-        // Determine API URL based on the route
         let apiURL = '';
         if (location.pathname.includes('overview')) {
             apiURL = '/info-tab/2';
@@ -136,7 +123,6 @@ export default function Cms() {
             apiURL = '/info-tab/1';
         }
 
-        // Send the request using FormData and POST
         api.post(apiURL, formData)
             .then((res) => {
                 console.log(res);
@@ -145,7 +131,6 @@ export default function Cms() {
                 console.log(err);
             });
     };
-
 
     return (
         <div className="w-full">
@@ -185,7 +170,7 @@ export default function Cms() {
                                 style={{ display: "none" }}
                                 ref={fileInputRef}
                                 onChange={handleFileInputChange}
-                                disabled={!!credentials.image} // Disable if image exists
+                                disabled={!!credentials.image}
                             />
                         </div>
                     </div>
@@ -203,7 +188,7 @@ export default function Cms() {
                                     />
                                 }
                                 <img
-                                    src={credentials.image}
+                                    src={credentials.image_src ? credentials.image_src : credentials.image}
                                     alt="uploaded"
                                     className="object-contain rounded-lg shadow-md"
                                 />

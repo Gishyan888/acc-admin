@@ -1,16 +1,47 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Input from '../../Components/Input';
 import { FaUpload } from 'react-icons/fa';
 import Button from '../../Components/Button';
 import Textarea from '../../Components/Textarea';
+import api from '../../api/api';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import Modal from '../../Components/Modal';
 
 export default function CreateEditBanner() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [modalVisible, setModalVisible] = useState(false);
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (id) {
+      api.get(`/banners/${id}`)
+        .then((res) => {
+          setCredentials(res.data.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [])
+
+  const closeModal = () => {
+    return new Promise((resolve) => {
+      setModalVisible(false);
+      setTimeout(() => {
+        resolve();
+      }, 300);
+    });
+  };
+
   const [credentials, setCredentials] = useState({
     title: "",
-    button_text: "",
+    button_name: "",
     button_link: "",
-    description: "",
-    images: []  // Images are part of the credentials state
+    text: "",
+    image: null,
+    image_src: '',
+    type: location.pathname.includes('header-banners') ? "0" : "1"
   });
   const fileInputRef = useRef(null);
 
@@ -22,10 +53,6 @@ export default function CreateEditBanner() {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("🚀 ~ HeaderBanners ~ credentials:", credentials);
-  };
 
   const handleFileDrop = (event) => {
     event.preventDefault();
@@ -34,23 +61,17 @@ export default function CreateEditBanner() {
     const files = event.dataTransfer.files;
 
     if (files.length > 0) {
-      const imagesArray = Array.from(files);
-      Promise.all(
-        imagesArray.map((file) => {
-          return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-              resolve(e.target.result);
-            };
-            reader.readAsDataURL(file);
-          });
-        })
-      ).then((results) => {
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
         setCredentials(prev => ({
           ...prev,
-          images: [...prev.images, ...results]
+          image: file,
+          image_src: e.target.result
         }));
-      });
+
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -67,31 +88,60 @@ export default function CreateEditBanner() {
     const files = event.target.files;
 
     if (files.length > 0) {
-      const imagesArray = Array.from(files);
-      Promise.all(
-        imagesArray.map((file) => {
-          return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-              resolve(e.target.result);
-            };
-            reader.readAsDataURL(file);
-          });
-        })
-      ).then((results) => {
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
         setCredentials(prev => ({
           ...prev,
-          images: [...prev.images, ...results]
+          image: file,
+          image_src: e.target.result
         }));
-      });
+      };
+      reader.readAsDataURL(file);
     }
   };
 
-  const removeImage = (index) => {
+  const removeImage = () => {
     setCredentials(prev => ({
       ...prev,
-      images: prev.images.filter((_, i) => i !== index)
+      image: null,
+      image_src: ''
     }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("🚀 ~ HeaderBanners ~ credentials:", credentials);
+    const formData = new FormData();
+    formData.append('title', credentials.title);
+    formData.append('button_name', credentials.button_name);
+    formData.append('button_link', credentials.button_link);
+    if (!id) {
+      formData.append('type', credentials.type);
+    }
+    if (typeof credentials.image !== 'string') {
+      formData.append('image', credentials.image);
+  }
+
+    if (location.pathname.includes('company-banners')) {
+      formData.append('text', credentials.text);
+    }
+    let apiURL = '/banners';
+    if (id) {
+      formData.append('_method', 'PUT');
+      apiURL = `/banners/${id}`;
+    }
+
+    api.post(apiURL, formData)
+      .then(async (res) => {
+        setModalVisible(true);
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        await closeModal();
+        navigate(-1);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -109,8 +159,8 @@ export default function CreateEditBanner() {
             <Input
               label="Button Name"
               type="text"
-              name="button_text"
-              value={credentials.button_text}
+              name="button_name"
+              value={credentials.button_name}
               onChange={handleChange}
             />
             <Input
@@ -122,11 +172,11 @@ export default function CreateEditBanner() {
             />
             {location.pathname.includes('company-banners') &&
               <Textarea
-                label="Description"
-                name="description"
-                value={credentials.description}
+                label="text"
+                name="text"
+                value={credentials.text}
                 onChange={handleChange}
-                placeholder="Enter banner description"
+                placeholder="Enter banner text"
               />}
           </div>
 
@@ -151,24 +201,25 @@ export default function CreateEditBanner() {
         </div>
 
         <div className="w-1/2 flex flex-wrap">
-          {credentials.images.map((image, index) => (
-            <div key={index} className="relative m-2">
+          {credentials.image && (
+            <div className="relative m-2 flex flex-col gap-5">
               <img
-                src={image}
-                alt={`upload-${index}`}
-                className="object-contain rounded-lg shadow-md transition-transform transform hover:scale-105"
+                src={credentials.image_src ? credentials.image_src : credentials.image}
+                alt="uploaded"
+                className="object-contain rounded-lg shadow-md"
               />
               <button
                 type="button"
-                onClick={() => removeImage(index)}
+                onClick={removeImage}
                 className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-all duration-200"
               >
                 &times;
               </button>
             </div>
-          ))}
+          )}
         </div>
       </div>
+      <Modal value={"Success!"} isVisible={modalVisible} onClose={closeModal} />
 
       <div className='flex justify-end'>
         <Button
