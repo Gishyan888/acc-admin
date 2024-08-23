@@ -52,7 +52,6 @@ export default function Banners() {
         setSelectedBanner(item); 
         setModalVisible(true);
     };
-console.log("modalVisible", modalVisible);
 
     const deleteBanner = () => {
         closeModal()          

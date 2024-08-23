@@ -5,12 +5,14 @@ import Navigation from "../../Components/Navigation";
 import Textarea from "../../Components/Textarea";
 import { useEffect, useRef, useState } from "react";
 import api from "../../api/api";
+import Modal from "../../Components/Modal";
 
 export default function Cms() {
     const navItems = [
         { path: '/cms/overview', label: 'Overview' },
         { path: '/cms/product-in-action', label: 'Product In Action' }
     ];
+    const [modalVisible, setModalVisible] = useState(false);
 
     const [credentials, setCredentials] = useState({
         title: "",
@@ -19,6 +21,16 @@ export default function Cms() {
         image: null,
         image_src: ''
     });
+
+    const closeModal = () => {
+        return new Promise((resolve) => {
+            setModalVisible(false);
+            setTimeout(() => {
+                resolve();
+            }, 300);
+        });
+    };
+
 
     useEffect(() => {
         let apiURL = '';
@@ -124,8 +136,10 @@ export default function Cms() {
         }
 
         api.post(apiURL, formData)
-            .then((res) => {
-                console.log(res);
+            .then(async (res) => {
+                setModalVisible(true);
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                await closeModal();
             })
             .catch((err) => {
                 console.log(err);
@@ -203,6 +217,7 @@ export default function Cms() {
                         )}
                     </div>
                 </div>
+                <Modal value={"Success!"} isVisible={modalVisible} onClose={closeModal} />
 
                 <div className='flex justify-end'>
                     <Button
