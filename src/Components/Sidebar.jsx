@@ -33,15 +33,15 @@ export default function Sidebar() {
   const location = useLocation();
 
   useEffect(() => {
-    if (location.pathname.includes('banners')) {
-      setActiveTab('/banners/header-banners')
-    } else if(location.pathname.includes('cms')) {
-      setActiveTab('/cms/overview')
-    }
-    else {
+    if (location.pathname.includes("banners")) {
+      setActiveTab("/banners/header-banners");
+    } else if (location.pathname.includes("cms")) {
+      setActiveTab("/cms/overview");
+    } else if (location.pathname.includes("settings")) {
+      setActiveTab("/settings/categories");
+    } else {
       setActiveTab(location.pathname);
     }
-
   }, [location]);
 
   const tabs = {
@@ -60,15 +60,20 @@ export default function Sidebar() {
         name: "CMS",
         icon: ShoppingBagIcon,
         link: "/cms/overview",
-      }
+      },
+      {
+        name: "Settings",
+        icon: Cog6ToothIcon,
+        link: "/settings",
+      },
     ],
     section2: [
       {
         name: "Logout",
         icon: PowerIcon,
         link: "/login",
-      }
-    ]
+      },
+    ],
   };
 
   const [activeTab, setActiveTab] = useState("/");
@@ -78,7 +83,6 @@ export default function Sidebar() {
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
-
 
   const renderListItem = (item, index) => {
     const Icon = item.icon;
@@ -103,7 +107,9 @@ export default function Sidebar() {
         icon={
           <ChevronDownIcon
             strokeWidth={2.5}
-            className={`mx-auto h-4 w-4 transition-transform ${open === index + 1 ? "rotate-180" : ""}`}
+            className={`mx-auto h-4 w-4 transition-transform ${
+              open === index + 1 ? "rotate-180" : ""
+            }`}
           />
         }
       >
@@ -147,11 +153,13 @@ export default function Sidebar() {
     }
   };
 
-
   return (
     <Card className="min-h-screen w-full max-w-[20rem] p-4 shadow shadow-blue-gray-700 rounded-none overflow-auto">
       <div className="mb-2">
-        <Typography className="cursor-pointer flex justify-center items-center" onClick={() => navigate("/")}>
+        <Typography
+          className="cursor-pointer flex justify-center items-center"
+          onClick={() => navigate("/")}
+        >
           <img src={logo} alt="Logo" />
         </Typography>
       </div>
@@ -159,7 +167,9 @@ export default function Sidebar() {
         <div>
           <div>
             {tabs.section1.map((item, index) =>
-              item.submenu ? renderAccordion(item, index) : renderListItem(item, index)
+              item.submenu
+                ? renderAccordion(item, index)
+                : renderListItem(item, index)
             )}
           </div>
         </div>
@@ -167,7 +177,9 @@ export default function Sidebar() {
         <div>
           <hr className="my-2 border-blue-gray-50" />
           {tabs.section2.map((item, index) =>
-            item.submenu ? renderAccordion(item, index) : renderListItem(item, index)
+            item.submenu
+              ? renderAccordion(item, index)
+              : renderListItem(item, index)
           )}
         </div>
       </List>

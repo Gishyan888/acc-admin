@@ -35,9 +35,9 @@ export default function Cms() {
     useEffect(() => {
         let apiURL = '';
         if (location.pathname.includes('overview')) {
-            apiURL = '/info-tab/overview';
+            apiURL = 'admin/info-tab/overview';
         } else {
-            apiURL = '/info-tab/product_in_action';
+            apiURL = 'admin/info-tab/product_in_action';
         }
         api.get(apiURL)
             .then((res) => {
@@ -130,9 +130,9 @@ export default function Cms() {
 
         let apiURL = '';
         if (location.pathname.includes('overview')) {
-            apiURL = '/info-tab/2';
+            apiURL = 'admin/info-tab/2';
         } else {
-            apiURL = '/info-tab/1';
+            apiURL = 'admin/info-tab/1';
         }
 
         api.post(apiURL, formData)
