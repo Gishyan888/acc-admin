@@ -1,6 +1,7 @@
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 import api from '../api/api.js'
+import axios from 'axios'
 
 const useAuthStore = create(
   persist(
@@ -10,6 +11,7 @@ const useAuthStore = create(
       loginError: null,
       login: async (userData) => {
         try {
+          // await axios('/sanctum/csrf-cookie')
           const response = await api.post('/login', userData)
           if (response.status === 200 || response.status === 201) {
             set({
