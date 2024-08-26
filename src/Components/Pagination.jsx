@@ -11,15 +11,15 @@ export default function Pagination({ pageCount }) {
   return (
     <div>
       <ReactPaginate
+        className="flex justify-around w-1/4 bg-gray-300 rounded-lg h-[30px] items-center"
         breakLabel="..."
         nextLabel=">"
         onPageChange={({ selected }) => {
           handlePageClick(selected);
         }}
-        pageRangeDisplayed={5}
         pageCount={pageCount}
         previousLabel="<"
-        renderOnZeroPageCount={null}
+        initialPage={1}
       />
     </div>
   );
