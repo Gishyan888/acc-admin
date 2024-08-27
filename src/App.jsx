@@ -22,6 +22,9 @@ import Subcategories from "./Pages/Settings/components/subcategories/Subcategori
 import Products from "./Pages/Settings/components/products/Products";
 import Standards from "./Pages/Settings/components/standards/Standards";
 import Region from "./Pages/Settings/components/region/Region";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
@@ -31,52 +34,56 @@ function App() {
   }, [initializeAuth]);
 
   return (
-    <Router>
-      <Loading />
-      <Routes>
-        <Route
-          path="/login"
-          element={isLoggedIn ? <Navigate to="/" /> : <Login />}
-        />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route element={<ProtectedMainLayout />}>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/my-account" element={<MyAccount />} />
-          <Route path="/banners">
-            <Route path="header-banners" element={<Banners />} />
-            <Route
-              path="header-banners/:id/edit"
-              element={<CreateEditBanner />}
-            />
-            <Route
-              path="header-banners/create"
-              element={<CreateEditBanner />}
-            />
-            <Route path="company-banners" element={<Banners />} />
-            <Route
-              path="company-banners/:id/edit"
-              element={<CreateEditBanner />}
-            />
-            <Route
-              path="company-banners/create"
-              element={<CreateEditBanner />}
-            />
+    <>
+      {" "}
+      <Router>
+        <Loading />
+        <Routes>
+          <Route
+            path="/login"
+            element={isLoggedIn ? <Navigate to="/" /> : <Login />}
+          />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route element={<ProtectedMainLayout />}>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/my-account" element={<MyAccount />} />
+            <Route path="/banners">
+              <Route path="header-banners" element={<Banners />} />
+              <Route
+                path="header-banners/:id/edit"
+                element={<CreateEditBanner />}
+              />
+              <Route
+                path="header-banners/create"
+                element={<CreateEditBanner />}
+              />
+              <Route path="company-banners" element={<Banners />} />
+              <Route
+                path="company-banners/:id/edit"
+                element={<CreateEditBanner />}
+              />
+              <Route
+                path="company-banners/create"
+                element={<CreateEditBanner />}
+              />
+            </Route>
+            <Route path="/cms">
+              <Route path="overview" element={<Cms />} />
+              <Route path="product-in-action" element={<Cms />} />
+            </Route>
+            <Route path="/settings" element={<Settings />}>
+              <Route path="categories" element={<Categories />}></Route>
+              <Route path="subcategories" element={<Subcategories />}></Route>
+              <Route path="products" element={<Products />}></Route>
+              <Route path="standards" element={<Standards />}></Route>
+              <Route path="region" element={<Region />}></Route>
+            </Route>
           </Route>
-          <Route path="/cms">
-            <Route path="overview" element={<Cms />} />
-            <Route path="product-in-action" element={<Cms />} />
-          </Route>
-          <Route path="/settings" element={<Settings />}>
-            <Route path="categories" element={<Categories />}></Route>
-            <Route path="subcategories" element={<Subcategories />}></Route>
-            <Route path="products" element={<Products />}></Route>
-            <Route path="standards" element={<Standards />}></Route>
-            <Route path="region" element={<Region />}></Route>
-          </Route>
-        </Route>
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
+      <ToastContainer />
+    </>
   );
 }
 

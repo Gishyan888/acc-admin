@@ -29,7 +29,6 @@ export default function Settings() {
   const { tab } = useParams();
   const navigate = useNavigate();
   useEffect(() => {
-    console.log({ tab });
     if (!tab) {
       navigate("categories");
     }

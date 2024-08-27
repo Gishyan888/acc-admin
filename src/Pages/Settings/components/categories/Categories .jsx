@@ -9,91 +9,41 @@ import {
   CheckIcon,
   ArrowUpTrayIcon,
 } from "@heroicons/react/16/solid";
+import { toast } from "react-toastify";
+import useModal from "../../../../store/useModal";
+import AddOrEdirCategory from "./AddOrEdirCategory";
+import useCategory from "../../../../store/useCategory";
+import useLoading from "../../../../store/useLoading";
 export default function Categories() {
   const [categoriesOnPage, setCategoriesOnPage] = useState([]);
-  const [activeCategory, setActiveCategory] = useState({});
-  const mockData = {
-    data: [
-      {
-        id: 1,
-        name: "asa",
-        parent_id: null,
-        slug: "asa",
-        icon: "http://127.0.0.1:8000/storage/categories/ueBEc8fGDRLPqOKwaaWt1ypUvKzRkrXdnTd36kgn.jpg",
-        active: 1,
-        subcategories: [
-          {
-            id: 2,
-            name: "asa5",
-            parent_id: 1,
-            slug: "asa5",
-            icon: "http://127.0.0.1:8000/storage/categories/VkmL6fugUCY5Rp9iU7nM23qdYDyKQECICOFKZFip.jpg",
-            active: 1,
-          },
-        ],
-        meta_title: "asa",
-        meta_description: null,
-        meta_keywords: null,
-      },
-      {
-        id: 2,
-        name: "asa5",
-        parent_id: 1,
-        slug: "asa5",
-        icon: "http://127.0.0.1:8000/storage/categories/VkmL6fugUCY5Rp9iU7nM23qdYDyKQECICOFKZFip.jpg",
-        active: 1,
-      },
-    ],
-    links: {
-      first: "http://127.0.0.1:8000/api/admin/categories?page=1",
-      last: "http://127.0.0.1:8000/api/admin/categories?page=1",
-      prev: null,
-      next: null,
-    },
-    meta: {
-      current_page: 1,
-      from: 1,
-      last_page: 10,
-      links: [
-        {
-          url: null,
-          label: "&laquo; Previous",
-          active: false,
-        },
-        {
-          url: "http://127.0.0.1:8000/api/admin/categories?page=1",
-          label: "1",
-          active: true,
-        },
-        {
-          url: null,
-          label: "Next &raquo;",
-          active: false,
-        },
-      ],
-      path: "http://127.0.0.1:8000/api/admin/categories",
-      per_page: 10,
-      to: 2,
-      total: 2,
-    },
-  };
-  const formRef = useRef(null);
+  const isLoading = useLoading((state) => state.isLoading);
 
-  const handleEdit = () => {
-    setActiveCategory(null);
+  const handleEdit = (category) => {
+    useCategory.getState().setActiveCategory(category);
+    useModal.getState().setModalState(true);
   };
   const handleDelete = () => {};
-  const handleFileUpload = (e) => {};
+  const handleCreate = () => {
+    useModal.getState().setModalState(true);
+  };
+
+  const getCategories = async () => {
+    useLoading.getState().setIsLoading(true);
+    await api
+
+      .get("api/admin/categories")
+      .then((res) => {
+        setCategoriesOnPage(res?.data?.data);
+        useLoading.getState().setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        useLoading.getState().setIsLoading(false);
+      });
+  };
 
   useEffect(() => {
-    // api
-    //   .get("")
-    //   .then((res) => {})
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-
-    setCategoriesOnPage(mockData.data);
+    getCategories();
   }, []);
 
   return (
@@ -101,95 +51,63 @@ export default function Categories() {
       <div className="w-1/3">
         {/* <Spinner isSpinning={loading} /> */}
         <div
-          className={`mt-2 bg-white px-2 ${
-            categoriesOnPage?.length ? "h-[600px] overflow-y-auto" : ""
+          className={`mt-2 bg-white p-4 ${
+            categoriesOnPage?.length ? "overflow-y-auto" : ""
           }`}
         >
-          <form
-            ref={formRef}
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleCategoryCreate(activeCategory);
-            }}
-            className="mt-2 w-full"
-          >
-            <div className="border-b-gray-300 border-b py-2">
-              <p>Add Category</p>
-              <div className="flex items-center space-x-2 rounded">
-                <Input
-                  type="text"
-                  onChange={(e) => setActiveCategory({ name1: e.target.value })}
-                  className="ps-9"
-                  required={true}
-                  value={activeCategory?.name1 ?? ""}
-                />
-                <button>
-                  <ArrowUpTrayIcon />
-                  {/* <input
-                    type="file"
-                    onChange={handleFileUpload}
-                    ref={hiddenFileInput}
-                    className="none"
-                  /> */}
-                </button>
-                <button title="Ավելացնել կատեգորիա">
-                  <PlusIcon className="cursor-pointer w-[20px]" />
-                </button>
-              </div>
-            </div>
-          </form>
+          <div className="flex border-b border-b-gray-300 py-2  cursor-pointer">
+            <p className="text-xl font-bold mr-2">Add Category</p>
+            <button onClick={() => handleCreate()}>
+              <PlusIcon className="h-5 w-5" />
+            </button>
+          </div>
+
           <div>
-            {categoriesOnPage?.map((item) => {
-              return (
-                <div key={item.id} className="my-2 mr-2">
-                  <div key={item.id} className="my-2 flex items-center">
-                    <Input
-                      disabled={activeCategory?.id !== item.id}
-                      value={item?.name ?? ""}
-                      type="text"
-                      name="title"
-                      className="ps-9"
-                      onChange={(e) =>
-                        setActiveCategory({
-                          id: item.id,
-                          name: e.target.value,
-                        })
-                      }
-                    />
-                    <div className="flex pl-2">
-                      {activeCategory?.id && activeCategory?.id == item.id ? (
-                        <button
-                          title="Պահպանել կատեգորիան"
-                          onClick={() => {
-                            handleEdit(activeCategory);
-                          }}
-                        >
-                          <CheckIcon className="cursor-pointer h-[20px] w-[20px]" />
-                        </button>
-                      ) : (
+            <table className="w-full table-auto border-collapse">
+              <thead>
+                <tr className="">
+                  <th className="px-4 py-2 font-bold text-left"></th>
+                  <th className="px-4 py-2 font-bold text-left"></th>
+                  <th className="px-4 py-2 font-bold text-left"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {categoriesOnPage?.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.name}</td>
+                    <td>
+                      <img
+                        src={item.icon}
+                        className="h-[50px] w-[50px] object-cover"
+                      />
+                    </td>
+                    <td>
+                      <div className="flex pl-2">
                         <button
                           title="Խմբագրել կատեգորիան"
                           onClick={() => {
-                            setActiveCategory(item);
+                            handleEdit(item);
                           }}
                         >
                           <PencilIcon className="mx-1 h-[20px] w-[20px] cursor-pointer" />
                         </button>
-                      )}
-                      <button
-                        title="Ջնջել կատեգորիան"
-                        onClick={() => handleDelete(item.id)}
-                      >
-                        <TrashIcon className="h-[20px] w-[20px] cursor-pointer" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+
+                        <button
+                          title="Ջնջել կատեգորիան"
+                          onClick={() => handleDelete(item.id)}
+                        >
+                          <TrashIcon className="h-[20px] w-[20px] cursor-pointer" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
+      <AddOrEdirCategory />
     </div>
   );
 }
