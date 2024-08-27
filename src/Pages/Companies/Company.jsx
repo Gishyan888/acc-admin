@@ -119,7 +119,7 @@ export default function Company() {
               <img
                 src={newProfilePicture ? newProfilePicture.preview : companyData.profile_picture}
                 alt="Profile"
-                className="w-40 h-40 rounded-full object-cover mb-2"
+                className="w-40 h-40 object-cover mb-2"
               />
               {isEditing && (
                 <input
