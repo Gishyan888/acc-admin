@@ -13,7 +13,6 @@ export default function Companies() {
   }, [])
 
   const getCompany = (company) => {
-    console.log("🚀 ~ getCompany ~ company:", company.brand_name)
     navigate(`/company/${company.id}`)
   }
 
@@ -33,16 +32,24 @@ export default function Companies() {
           </thead>
           <tbody className="divide-y divide-gray-200">
             {companyData.map((company, index) => (
-              <tr key={index} className="hover:bg-gray-50" onClick={() => getCompany(company)}>
+              <tr key={index} className="hover:bg-gray-50 cursor-pointer" onClick={() => getCompany(company)}>
                 <td className="px-4 py-3 text-sm text-gray-900">{company.brand_name}</td>
                 <td className="px-4 py-3 text-sm text-gray-900">{company.company_name}</td>
                 <td className="px-4 py-3 text-sm text-gray-900">{company.email}</td>
                 <td className="px-4 py-3 text-sm text-gray-900">{company.phone_number}</td>
                 <td className="px-4 py-3 text-sm text-gray-900">
-                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${company.status === 'In Process' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'
-                    }`}>
-                    {company.status}
-                  </span>
+                <span
+  className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+    company.status === 'In Process'
+      ? 'bg-yellow-100 text-yellow-800'
+      : company.status === 'Rejected'
+      ? 'bg-red-100 text-red-800'
+      : 'bg-green-100 text-green-800'
+  }`}
+>
+  {company.status}
+</span>
+
                 </td>
               </tr>
             ))}

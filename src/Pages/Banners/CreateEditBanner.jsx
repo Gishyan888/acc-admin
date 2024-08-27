@@ -17,7 +17,7 @@ export default function CreateEditBanner() {
 
   useEffect(() => {
     if (id) {
-      api.get(`admin/banners/${id}`)
+      api.get(`api/admin/banners/${id}`)
         .then((res) => {
           setCredentials(res.data.data);
         })
@@ -128,10 +128,10 @@ export default function CreateEditBanner() {
     if (location.pathname.includes('company-banners')) {
       formData.append('text', credentials.text);
     }
-    let apiURL = 'admin/banners';
+    let apiURL = 'api/admin/banners';
     if (id) {
       formData.append('_method', 'PUT');
-      apiURL = `admin/banners/${id}`;
+      apiURL = `api/admin/banners/${id}`;
     }
 
     api.post(apiURL, formData)

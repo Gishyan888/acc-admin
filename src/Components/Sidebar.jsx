@@ -39,7 +39,10 @@ export default function Sidebar() {
       setActiveTab("/cms/overview");
     } else if (location.pathname.includes("settings")) {
       setActiveTab("/settings/categories");
-    } else {
+    } else if(location.pathname.includes("companies") || location.pathname.includes("company")) {
+      setActiveTab("/companies");
+    }
+    else {
       setActiveTab(location.pathname);
     }
   }, [location]);

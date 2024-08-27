@@ -129,9 +129,9 @@ export default function Cms() {
 
     let apiURL = "";
     if (location.pathname.includes("overview")) {
-      apiURL = "admin/info-tab/2";
+      apiURL = "api/admin/info-tab/2";
     } else {
-      apiURL = "admin/info-tab/1";
+      apiURL = "api/admin/info-tab/1";
     }
 
     api

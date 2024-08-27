@@ -1,7 +1,5 @@
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 export default function Input({
   label,
@@ -14,6 +12,8 @@ export default function Input({
   placeholder,
   error,
   required = false,
+  allowNumbers = false,
+  disabled = false,
 }) {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -26,6 +26,17 @@ export default function Input({
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleInputChange = (e) => {
+    if (allowNumbers) {
+      const regex = /^[0-9\b]+$/;
+      if (e.target.value === "" || regex.test(e.target.value)) {
+        onChange(e);
+      }
+    } else {
+      onChange(e);
+    }
   };
 
   return (
@@ -47,9 +58,10 @@ export default function Input({
           required={required}
           name={name}
           value={value}
-          onChange={onChange}
+          onChange={handleInputChange}
           placeholder={placeholder}
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          disabled={disabled}
         />
         {type === "password" && (
           <button
@@ -69,14 +81,3 @@ export default function Input({
     </div>
   );
 }
-
-Input.propTypes = {
-  label: PropTypes.string,
-  label2: PropTypes.string,
-  type: PropTypes.string.isRequired,
-  label2Link: PropTypes.string,
-  name: PropTypes.string,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  placeholder: PropTypes.string,
-};
