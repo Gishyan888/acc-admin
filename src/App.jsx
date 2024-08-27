@@ -22,6 +22,8 @@ import Subcategories from "./Pages/Settings/components/subcategories/Subcategori
 import Products from "./Pages/Settings/components/products/Products";
 import Standards from "./Pages/Settings/components/standards/Standards";
 import Region from "./Pages/Settings/components/region/Region";
+import Companies from "./Pages/Companies/Companies";
+import Company from "./Pages/Companies/Company";
 function App() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
@@ -63,6 +65,8 @@ function App() {
               element={<CreateEditBanner />}
             />
           </Route>
+          <Route path="/companies" element={<Companies />} />
+          <Route path="/company/:id" element={<Company />} />
           <Route path="/cms">
             <Route path="overview" element={<Cms />} />
             <Route path="product-in-action" element={<Cms />} />

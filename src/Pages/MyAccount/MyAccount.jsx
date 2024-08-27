@@ -16,7 +16,7 @@ export default function MyAccount() {
     });
 
     useEffect(() => {
-      api.get('admin/admin')
+      api.get('api/site/get-userdata')
       .then((res) => {
         setCredentials(prev => ({
             ...prev,
@@ -46,7 +46,7 @@ export default function MyAccount() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        api.put('admin/edit-profile', credentials)
+        api.put('api/admin/edit-profile', credentials)
         .then((res) => {
             setModalVisible(true)
         })

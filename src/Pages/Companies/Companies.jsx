@@ -1,0 +1,54 @@
+import { useEffect, useState } from "react"
+import api from "../../api/api"
+import { useNavigate } from "react-router-dom"
+
+export default function Companies() {
+  const navigate = useNavigate()
+  const [companyData, setCompanyData] = useState([])
+
+  useEffect(() => {
+    api.get('/api/admin/company')
+      .then(res => setCompanyData(res.data.data))
+      .catch(err => console.log(err))
+  }, [])
+
+  const getCompany = (company) => {
+    console.log("🚀 ~ getCompany ~ company:", company.brand_name)
+    navigate(`/company/${company.id}`)
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-6">Companies</h1>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+          <thead className="bg-gray-200">
+            <tr>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Brand Name</th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Company Name</th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Email</th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Phone Number</th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+            {companyData.map((company, index) => (
+              <tr key={index} className="hover:bg-gray-50" onClick={() => getCompany(company)}>
+                <td className="px-4 py-3 text-sm text-gray-900">{company.brand_name}</td>
+                <td className="px-4 py-3 text-sm text-gray-900">{company.company_name}</td>
+                <td className="px-4 py-3 text-sm text-gray-900">{company.email}</td>
+                <td className="px-4 py-3 text-sm text-gray-900">{company.phone_number}</td>
+                <td className="px-4 py-3 text-sm text-gray-900">
+                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${company.status === 'In Process' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'
+                    }`}>
+                    {company.status}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
+}

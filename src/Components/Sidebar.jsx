@@ -57,6 +57,11 @@ export default function Sidebar() {
         link: "/banners/header-banners",
       },
       {
+        name: "Companies",
+        icon: UsersIcon,
+        link: "/companies",
+      },
+      {
         name: "CMS",
         icon: ShoppingBagIcon,
         link: "/cms/overview",

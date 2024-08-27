@@ -27,9 +27,9 @@ export default function Banners() {
     const fetchBanners = () => {
         let apiURL = '';
         if (location.pathname.includes('header-banners')) {
-            apiURL = 'admin/banners/header';
+            apiURL = 'api/site/banners/header';
         } else {
-            apiURL = 'admin/banners/companies';
+            apiURL = 'api/site/banners/companies';
         }
         api.get(apiURL)
             .then((res) => {
