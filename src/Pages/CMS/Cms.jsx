@@ -22,6 +22,7 @@ export default function Cms() {
     image_src: "",
   });
 
+  const [errors, setErrors] = useState({})
   const closeModal = () => {
     return new Promise((resolve) => {
       setModalVisible(false);
@@ -41,6 +42,7 @@ export default function Cms() {
     api
       .get(apiURL)
       .then((res) => {
+        setErrors({});
         setCredentials(res.data.data);
       })
       .catch((err) => {
@@ -142,7 +144,7 @@ export default function Cms() {
         await closeModal();
       })
       .catch((err) => {
-        console.log(err);
+        setErrors(err.response.data.errors);
       });
   };
 
@@ -162,12 +164,14 @@ export default function Cms() {
                 type="text"
                 value={credentials.title}
                 onChange={handleChange}
+                error={errors.title}
               />
               <Textarea
                 label="Text"
                 name="text"
                 value={credentials.text}
                 onChange={handleChange}
+                error={errors.text}
               />
             </div>
 
@@ -175,9 +179,8 @@ export default function Cms() {
               onDragOver={handleDragOver}
               onDrop={handleFileDrop}
               onClick={handleImageUploadClick}
-              className={`bg-blue-500 w-full max-w-80 h-40 text-white p-4 flex flex-col justify-center items-center cursor-pointer rounded-md shadow-lg hover:bg-blue-600 transition-all duration-200 ease-in-out ${
-                credentials.image ? "cursor-not-allowed opacity-50" : ""
-              }`}
+              className={`bg-blue-500 w-full max-w-80 h-40 text-white p-4 flex flex-col justify-center items-center cursor-pointer rounded-md shadow-lg hover:bg-blue-600 transition-all duration-200 ease-in-out ${credentials.image ? "cursor-not-allowed opacity-50" : ""
+                }`}
             >
               <FaUpload className="w-8 h-8" />
               <span className="mt-2">Drag & Drop or </span>
@@ -195,8 +198,12 @@ export default function Cms() {
           </div>
 
           <div className="w-1/2 flex flex-wrap">
+            {errors.image && (
+              <p className="text-red-500">{errors.image}</p>
+            )}
             {credentials.image && (
               <div className="relative m-2 flex flex-col gap-5">
+
                 {location.pathname.includes("overview") && (
                   <Input
                     label="Image Link"
@@ -204,6 +211,7 @@ export default function Cms() {
                     type="text"
                     value={credentials.image_link ?? ""}
                     onChange={handleChange}
+                    error={errors.image_link}
                   />
                 )}
                 <img

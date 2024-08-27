@@ -99,14 +99,13 @@ export default function Company() {
   };
 
   return (
-    <div className="flex flex-col gap-3 p-4">
-      <div className="container mx-auto p-4 rounded shadow bg-white">
-        <h1 className="text-2xl font-bold mb-4">Company Details</h1>
-        <div className="mb-4">
+    <div className="flex flex-col pt-1 pb-4">
+      <div className="rounded shadow bg-white">
+        <div className="mb-32 relative">
           <img
             src={newBanner ? newBanner.preview : companyData.banner}
             alt="Banner"
-            className="w-full h-full object-cover rounded mb-2"
+            className="w-full h-[740px] object-cover rounded mb-2"
           />
           {isEditing && (
             <input
@@ -115,33 +114,34 @@ export default function Company() {
               className="mb-2"
             />
           )}
-        </div>
-        <div className="mb-4 flex w-1/2 justify-between">
-          <div>
-            <img
-              src={newProfilePicture ? newProfilePicture.preview : companyData.profile_picture}
-              alt="Profile"
-              className="w-40 h-40 rounded-full object-cover mb-2"
-            />
-            {isEditing && (
-              <input
-                type="file"
-                onChange={(e) => handleImageChange(e, 'profile')}
-                className="mb-2"
+          <div className="flex w-1/2 justify-between items-end absolute -bottom-24 left-12">
+            <div>
+              <img
+                src={newProfilePicture ? newProfilePicture.preview : companyData.profile_picture}
+                alt="Profile"
+                className="w-40 h-40 rounded-full object-cover mb-2"
               />
-            )}
+              {isEditing && (
+                <input
+                  type="file"
+                  onChange={(e) => handleImageChange(e, 'profile')}
+                  className="mb-2"
+                />
+              )}
+            </div>
+            <Input
+              label="Company Name"
+              name="company_name"
+              type="text"
+              allowNumbers={false}
+              value={companyData.company_name || ''}
+              onChange={handleInputChange}
+              disabled={!isEditing}
+            />
           </div>
-          <Input
-            label="Company Name"
-            name="company_name"
-            type="text"
-            allowNumbers={false}
-            value={companyData.company_name || ''}
-            onChange={handleInputChange}
-            disabled={!isEditing}
-          />
         </div>
-        <div className="flex flex-wrap gap-5">
+
+        <div className="flex flex-wrap gap-5 p-6">
           {[
             "brand_name", "business_address", "business_type", "city",
             "company_info", "company_type", "contact_person",
@@ -187,15 +187,15 @@ export default function Company() {
           })}
         </div>
         {companyData && companyData.reject_reason && (
-  <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-    <h3 className="text-lg font-bold text-red-800 mb-2">Rejection Reason</h3>
-    <p className="text-sm font-semibold text-red-800">
-      {companyData.reject_reason}
-    </p>
-  </div>
-)}
+          <div className="mt-4 p-4 m-4 bg-red-50 border border-red-200 rounded-lg">
+            <h3 className="text-lg font-bold text-red-800 mb-2">Rejection Reason</h3>
+            <p className="text-sm font-semibold text-red-800">
+              {companyData.reject_reason}
+            </p>
+          </div>
+        )}
 
-        <div className="mt-4 gap-3 flex justify-end">
+        <div className="mt-4 gap-3 flex justify-end p-4">
           {!isEditing ? (
             <Button
               text="Edit"
@@ -223,11 +223,11 @@ export default function Company() {
       </div>
       <div>
         {rejectCompany ? (
-          <div className="container flex flex-col mx-auto p-4 rounded shadow bg-white gap-3">
+          <div className="p-4 rounded shadow bg-white gap-3">
             <textarea placeholder="Enter reason for rejection" value={reason} onChange={(e) => setReason(e.target.value)} name="reason" id="reason" cols="30" rows="10" className="w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 
             </textarea>
-            <div className="container flex justify-end mx-auto p-4 rounded shadow bg-white gap-3">
+            <div className="flex justify-end mx-auto p-4 rounded shadow bg-white gap-3">
               <Button
                 text="Reject Company"
                 color="bg-red-500 w-40"
@@ -241,7 +241,7 @@ export default function Company() {
             </div>
           </div>
         ) : (
-          <div className="container flex justify-end mx-auto p-4 rounded shadow bg-white gap-3">
+          <div className="mt-4 flex justify-end mx-auto p-4 rounded shadow bg-white gap-3">
             <Button
               text="Approve Company"
               color="bg-blue-500 w-40"

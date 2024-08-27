@@ -12,7 +12,7 @@ export default function CreateEditBanner() {
   const navigate = useNavigate();
   const [modalVisible, setModalVisible] = useState(false);
   const { id } = useParams();
-
+  const [errors, setErrors] = useState({})
   let title = location.pathname.includes('header-banners') ? 'Header Banner' : 'Company Banner';
 
   useEffect(() => {
@@ -142,7 +142,7 @@ export default function CreateEditBanner() {
         navigate(-1);
       })
       .catch((err) => {
-        console.log(err);
+        setErrors(err.response.data.errors);
       });
   };
 
@@ -160,6 +160,7 @@ export default function CreateEditBanner() {
           name="title"
           value={credentials.title}
           onChange={handleChange}
+          error={errors.title}
         />
         <Input
           label="Button Name"
@@ -167,6 +168,7 @@ export default function CreateEditBanner() {
           name="button_name"
           value={credentials.button_name}
           onChange={handleChange}
+          error={errors.button_name}
         />
         <Input
           label="Button Link"
@@ -174,6 +176,7 @@ export default function CreateEditBanner() {
           name="button_link"
           value={credentials.button_link}
           onChange={handleChange}
+          error={errors.button_link}
         />
         {location.pathname.includes('company-banners') &&
           <Textarea
@@ -182,6 +185,7 @@ export default function CreateEditBanner() {
             value={credentials.text}
             onChange={handleChange}
             placeholder="Enter banner text"
+            error={errors.text}
           />}
       </div>
 
@@ -206,6 +210,9 @@ export default function CreateEditBanner() {
     </div>
 
     <div className="w-1/2 flex flex-wrap">
+    {errors.image && (
+              <p className="text-red-500">{errors.image}</p>
+            )}
       {credentials.image && (
         <div className="relative m-2 flex flex-col gap-5">
           <img
