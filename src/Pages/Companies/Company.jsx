@@ -247,11 +247,13 @@ export default function Company() {
               color="bg-blue-500 w-40"
               onClick={() => approveCompany()}
             />
-            <Button
-              text="Reject Company"
-              color="bg-red-500 w-40"
-              onClick={() => setRejectCompany(true)}
-            />
+           {companyData && !companyData.reject_reason && (
+             <Button
+             text="Reject Company"
+             color="bg-red-500 w-40"
+             onClick={() => setRejectCompany(true)}
+           />
+           )}
           </div>
         )}
       </div>
