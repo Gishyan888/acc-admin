@@ -69,11 +69,11 @@ export default function Sidebar() {
         icon: ShoppingBagIcon,
         link: "/cms/overview",
       },
-      {
-        name: "Settings",
-        icon: Cog6ToothIcon,
-        link: "/settings",
-      },
+      // {
+      //   name: "Settings",
+      //   icon: Cog6ToothIcon,
+      //   link: "/settings/categories",
+      // },
     ],
     section2: [
       {

@@ -175,6 +175,24 @@ export default function Company() {
                   </select>
                 </div>
               );
+            }else if(field === "firm_level"){
+              return (
+                <div key={field} className="flex flex-col w-full max-w-80">
+                  <label className="text-sm font-medium mb-1">
+                    Firm Level
+                  </label>
+                  <select
+                    name="region"
+                    value={companyData.firm_level || ''}
+                    onChange={handleInputChange}
+                    className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    disabled={!isEditing}
+                  >
+                    <option value="1">Basic</option>
+                    <option value="1">Top</option>
+                  </select>
+                </div>
+              );
             } else {
               return (
                 <Input

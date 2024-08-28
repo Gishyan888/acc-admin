@@ -16,7 +16,7 @@ export default function Banners() {
 
   const closeModal = () => {
     setModalVisible(false);
-    setSelectedBanner(null); // Clear the selected banner when the modal closes
+    setSelectedBanner(null);
   };
 
   const navItems = [

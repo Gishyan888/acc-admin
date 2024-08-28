@@ -17,15 +17,8 @@ import Banners from "./Pages/Banners/Banners";
 import CreateEditBanner from "./Pages/Banners/CreateEditBanner";
 import Cms from "./Pages/CMS/Cms";
 import Settings from "./Pages/Settings/Settings";
-import Categories from "./Pages/Settings/components/categories/Categories ";
-import Subcategories from "./Pages/Settings/components/subcategories/Subcategories ";
-import Products from "./Pages/Settings/components/products/Products";
-import Standards from "./Pages/Settings/components/standards/Standards";
-import Region from "./Pages/Settings/components/region/Region";
 import Companies from "./Pages/Companies/Companies";
 import Company from "./Pages/Companies/Company";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 function App() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
@@ -74,17 +67,14 @@ function App() {
               <Route path="overview" element={<Cms />} />
               <Route path="product-in-action" element={<Cms />} />
             </Route>
-            <Route path="/settings" element={<Settings />}>
-              <Route path="categories" element={<Categories />}></Route>
-              <Route path="subcategories" element={<Subcategories />}></Route>
-              <Route path="products" element={<Products />}></Route>
-              <Route path="standards" element={<Standards />}></Route>
-              <Route path="region" element={<Region />}></Route>
-            </Route>
+            <Route path="/settings">
+              <Route path="categories" element={<Settings />} />
+              <Route path="subcategories" element={<Settings />} />
+              <Route path="standards" element={<Settings />} />
+          </Route>
           </Route>
         </Routes>
       </Router>
-      <ToastContainer />
     </>
   );
 }

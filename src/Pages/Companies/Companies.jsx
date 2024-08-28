@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import api from "../../api/api"
 import { useNavigate } from "react-router-dom"
+import { EyeIcon } from "@heroicons/react/16/solid"
 
 export default function Companies() {
   const navigate = useNavigate()
@@ -17,12 +18,13 @@ export default function Companies() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Companies</h1>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
           <thead className="bg-gray-200">
             <tr>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider"></th>
               <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Brand Name</th>
               <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Company Name</th>
               <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Email</th>
@@ -33,6 +35,7 @@ export default function Companies() {
           <tbody className="divide-y divide-gray-200">
             {companyData.map((company, index) => (
               <tr key={index} className="hover:bg-gray-50 cursor-pointer" onClick={() => getCompany(company)}>
+                <td className="px-4 py-3 text-sm text-gray-900"><EyeIcon className="h-5 w-5 text-blue-500" /></td>
                 <td className="px-4 py-3 text-sm text-gray-900">{company.brand_name}</td>
                 <td className="px-4 py-3 text-sm text-gray-900">{company.company_name}</td>
                 <td className="px-4 py-3 text-sm text-gray-900">{company.email}</td>
