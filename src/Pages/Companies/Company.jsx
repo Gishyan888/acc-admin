@@ -248,10 +248,10 @@ export default function Company() {
       <div>
         {rejectCompany ? (
           <div className="p-4 rounded shadow bg-white gap-3">
-            <textarea placeholder="Enter reason for rejection" value={reason} onChange={(e) => setReason(e.target.value)} name="reason" id="reason" cols="30" rows="10" className="w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            <textarea placeholder="Enter reason for rejection" value={reason} onChange={(e) => setReason(e.target.value)} name="reason" id="reason" cols="30" rows="10" className="w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-4">
 
             </textarea>
-            <div className="flex justify-end mx-auto p-4 rounded shadow bg-white gap-3">
+            <div className="flex justify-end mx-auto p-4 rounded shadow bg-white gap-3 mt-4">
               <Button
                 text="Reject Company"
                 color="bg-red-500 w-40"
