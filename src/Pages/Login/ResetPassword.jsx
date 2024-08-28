@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Input from "../../Components/Input";
+import api from "../../api/api";
 
 export default function ResetPassword() {
   const [passwords, setPasswords] = useState({
@@ -9,7 +10,7 @@ export default function ResetPassword() {
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { token } = useParams(); 
+  const { token } = useParams();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,6 +24,7 @@ export default function ResetPassword() {
     e.preventDefault();
     setError("");
 
+
     if (passwords.newPassword !== passwords.confirmPassword) {
       setError("Passwords do not match");
       return;
@@ -33,9 +35,14 @@ export default function ResetPassword() {
       return;
     }
 
-    console.log("Resetting password with token:", token);
-    console.log("New password:", passwords.newPassword);
-    navigate("/login");
+    api.post(`/reset-password/${token}`, passwords)
+      .then((res) => {
+        console.log(res);
+        navigate("/login");
+
+      }).catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

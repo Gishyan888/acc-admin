@@ -14,6 +14,7 @@ export default function Company() {
   const [regions, setRegions] = useState([])
   const [rejectCompany, setRejectCompany] = useState(false)
   const [reason, setReason] = useState('')
+  const [errors, setErrors] = useState({});
   useEffect(() => {
     fetchCompanyData();
   }, []);
@@ -76,7 +77,8 @@ export default function Company() {
       setIsEditing(false);
       fetchCompanyData();
     } catch (err) {
-      console.error('Error during form submission:', err.response || err.message || err);
+      
+      setErrors(err.response.data.errors);
     }
   };
 
@@ -108,11 +110,13 @@ export default function Company() {
             className="w-full h-[740px] object-cover rounded mb-2"
           />
           {isEditing && (
-            <input
+           <div className="flex justify-end">
+             <input
               type="file"
               onChange={(e) => handleImageChange(e, 'banner')}
               className="mb-2"
             />
+           </div>
           )}
           <div className="flex w-1/2 justify-between items-end absolute -bottom-24 left-12">
             <div>
@@ -137,6 +141,7 @@ export default function Company() {
               value={companyData.company_name || ''}
               onChange={handleInputChange}
               disabled={!isEditing}
+              error={errors.company_name}
             />
           </div>
         </div>
@@ -181,6 +186,7 @@ export default function Company() {
                   value={String(companyData[field] || '')}
                   onChange={handleInputChange}
                   disabled={!isEditing}
+                  error={errors[field]}
                 />
               );
             }
