@@ -16,7 +16,7 @@ export default function Modal({ isVisible, onClose, button1Text, button2Text, bu
             return () => clearTimeout(timer);
         }
     }, [isVisible, onClose, button1Text, button2Text]);
-    
+
 
     return (
         <Rodal
@@ -37,12 +37,18 @@ export default function Modal({ isVisible, onClose, button1Text, button2Text, bu
                 {image === "success" && <img src={Success} alt="success" />}
                 {image === "fail" && <img src={Fail} alt="fail" />}
                 {image === "warning" && <img src={Warning} alt="warning" />}
-                {image === "success" && <p className='text-center text-base'>Success! Your action was completed.</p>}
-                {image === "fail" && <p className='text-center text-base'>Oops! Your action was failed.</p>}
+                {image === "success" && <div className='flex flex-col gap-2'>
+                    <p className='text-center'>Success!</p>
+                    <p className='text-center text-base'>Your action was completed.</p>
+                </div>}
+                {image === "fail" && <div className='flex flex-col gap-2'>
+                    <p className='text-center'>Oops!</p>
+                    <p className='text-center text-base'>Your action was failed.</p>
+                </div>}
                 {image === "warning" && <p className='text-center text-base'>Do you want to delete?</p>}
                 <div className='flex gap-3 mt-4'>
                     {button1Text && <Button text={button1Text} onClick={button1OnClick} color={button1Color} />}
-                    {button2Text && <Button text={button2Text} onClick={button2OnClick} color={button2Color} />}                
+                    {button2Text && <Button text={button2Text} onClick={button2OnClick} color={button2Color} />}
                 </div>
             </div>
         </Rodal>
