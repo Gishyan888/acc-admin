@@ -58,6 +58,13 @@ export default function Standard() {
     : api.post("api/admin/standards", {name: activeSettings.item.name});
     apiCall
       .then((res) => {
+        setModalDetails({
+          isVisible: true,
+          image: "success",
+          onClose: () => {
+            resetModalDetails();
+          },
+        })
         setActiveSettings.item({ name: "", icon: null });
         setActiveSettings.isCRUD(false);
         getStandards()

@@ -24,7 +24,7 @@ export default function Categories() {
       })
       .catch((err) => console.log(err));
   };
-  
+
   const { activeSettings, setActiveSettings } = useSettings()
   const { modalDetails, setModalDetails, resetModalDetails } = useModal()
   const formRef = useRef(null);

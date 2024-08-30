@@ -80,6 +80,13 @@ export default function Subcategories() {
       : api.post("api/admin/categories", { name: activeSettings.item.name, parent_id: selectedCategory });
     apiCall
       .then((res) => {
+        setModalDetails({
+          isVisible: true,
+          image: "success",
+          onClose: () => {
+            resetModalDetails();
+          },
+        })
         setActiveSettings.item({ name: "", icon: null });
         setActiveSettings.isCRUD(false);
         handleSubcategories(selectedCategory)
