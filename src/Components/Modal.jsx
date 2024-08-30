@@ -7,16 +7,35 @@ import Fail from '../Images/Fail.svg'
 import Success from '../Images/Success.svg'
 import Warning from '../Images/Warning.svg'
 
+const imageMap = {
+  success: Success,
+  fail: Fail,
+  warning: Warning
+};
+
+const contentMap = {
+  success: {
+    title: 'Success!',
+    message: 'Your action was completed.'
+  },
+  fail: {
+    title: 'Oops!',
+    message: 'Your action failed.'
+  },
+  warning: {
+    message: 'Do you want to delete?'
+  }
+};
+
 export default function Modal({ isVisible, onClose, button1Text, button2Text, button1OnClick, button2OnClick, button1Color, button2Color, image }) {
     useEffect(() => {
         if (isVisible && !button1Text && !button2Text) {
-            const timer = setTimeout(() => {
-                onClose();
-            }, 3000);
+            const timer = setTimeout(onClose, 3000);
             return () => clearTimeout(timer);
         }
     }, [isVisible, onClose, button1Text, button2Text]);
 
+    const content = contentMap[image] || {};
 
     return (
         <Rodal
@@ -34,18 +53,11 @@ export default function Modal({ isVisible, onClose, button1Text, button2Text, bu
             onClose={onClose}
         >
             <div className='flex flex-col gap-4 items-center justify-center w-full h-full font-medium text-xl'>
-                {image === "success" && <img src={Success} alt="success" />}
-                {image === "fail" && <img src={Fail} alt="fail" />}
-                {image === "warning" && <img src={Warning} alt="warning" />}
-                {image === "success" && <div className='flex flex-col gap-2'>
-                    <p className='text-center'>Success!</p>
-                    <p className='text-center text-base'>Your action was completed.</p>
-                </div>}
-                {image === "fail" && <div className='flex flex-col gap-2'>
-                    <p className='text-center'>Oops!</p>
-                    <p className='text-center text-base'>Your action was failed.</p>
-                </div>}
-                {image === "warning" && <p className='text-center text-base'>Do you want to delete?</p>}
+                {image && <img src={imageMap[image]} alt={image} />}
+                <div className='flex flex-col gap-2'>
+                    {content.title && <p className='text-center'>{content.title}</p>}
+                    {content.message && <p className='text-center text-base'>{content.message}</p>}
+                </div>
                 <div className='flex gap-3 mt-4'>
                     {button1Text && <Button text={button1Text} onClick={button1OnClick} color={button1Color} />}
                     {button2Text && <Button text={button2Text} onClick={button2OnClick} color={button2Color} />}
@@ -64,5 +76,5 @@ Modal.propTypes = {
     button2OnClick: PropTypes.func,
     button1Color: PropTypes.string,
     button2Color: PropTypes.string,
-    image: PropTypes.string
+    image: PropTypes.oneOf(['success', 'fail', 'warning'])
 }

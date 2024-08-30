@@ -16,6 +16,7 @@ export default function ForgotPassword() {
     api.post(`/forgot-password`, { email })
     .then((res) => {
       console.log(res);
+      navigate("/login");
     })
     .catch((err) => {
       console.log(err);

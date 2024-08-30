@@ -1,4 +1,3 @@
-import Modal from "../../Components/Modal";
 import Button from "../../Components/Button";
 import { PencilIcon, TrashIcon } from "@heroicons/react/16/solid";
 import Input from "../../Components/Input";
@@ -6,7 +5,6 @@ import { useEffect, useState } from "react";
 import useModal from "../../store/useModal";
 import useSettings from "../../store/useSettings";
 import api from "../../api/api";
-import { Tooltip } from "react-tooltip";
 
 export default function Subcategories() {
 
@@ -16,7 +14,7 @@ export default function Subcategories() {
   const [subcategories, setSubcategories] = useState([]);
 
   const { activeSettings, setActiveSettings } = useSettings()
-  const { modalDetails, setModalDetails, resetModalDetails } = useModal()
+  const { setModalDetails, resetModalDetails } = useModal()
 
   useEffect(() => {
     getCategories();
@@ -185,27 +183,6 @@ export default function Subcategories() {
           </div>
         )}
       </div>
-      <Modal
-        value={modalDetails.value}
-        isVisible={modalDetails.isVisible}
-        button1Text={modalDetails.button1Text}
-        button2Text={modalDetails.button2Text}
-        button1OnClick={modalDetails.button1OnClick}
-        button2OnClick={modalDetails.button2OnClick}
-        onClose={modalDetails.onClose}
-        button1Color={modalDetails.button1Color}
-        button2Color={modalDetails.button2Color}
-      />
-      <Tooltip
-        id="tooltip"
-        style={{
-          backgroundColor: "#fff",
-          color: "#222",
-          boxShadow: "0 0 5px #ddd",
-          fontSize: "1rem",
-          fontWeight: "normal",
-        }}
-      />
     </div>
   )
 }

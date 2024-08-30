@@ -29,8 +29,7 @@ import { Tooltip } from "react-tooltip";
 function App() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
-  const { modalDetails, setModalDetails, resetModalDetails } = useModal()
-  console.log("🚀 ~ App ~ modalDetails:", modalDetails)
+  const { modalDetails } = useModal()
 
   useEffect(() => {
     initializeAuth();

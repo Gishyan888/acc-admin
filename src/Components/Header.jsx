@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom'
-import { Tooltip } from 'react-tooltip'
 
 export default function Header() {
   const navigate = useNavigate()
@@ -11,16 +10,6 @@ export default function Header() {
         data-tooltip-content='My Account'
         onClick={() => navigate('/my-account')}>
       </div>
-      <Tooltip
-        id='my-tooltip'
-        style={{
-          backgroundColor: '#fff',
-          color: '#222',
-          boxShadow: '0 0 5px #ddd',
-          fontSize: '1rem',
-          fontWeight: 'normal',
-        }}
-      />
     </div>
   )
 }

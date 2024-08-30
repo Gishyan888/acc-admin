@@ -4,7 +4,6 @@ import Button from '../../Components/Button';
 import Textarea from '../../Components/Textarea';
 import api from '../../api/api';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import Modal from '../../Components/Modal';
 import FileUpload from '../../Components/FileUpload';
 import useModal from "../../store/useModal";
 
@@ -14,7 +13,7 @@ export default function CreateEditBanner() {
   const { id } = useParams();
   const [errors, setErrors] = useState({})
   let title = location.pathname.includes('header-banners') ? 'Header Banner' : 'Company Banner';
-  const { modalDetails, setModalDetails, resetModalDetails } = useModal()
+  const { setModalDetails, resetModalDetails } = useModal()
 
   useEffect(() => {
     if (id) {

@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import Input from '../../Components/Input';
 import Button from '../../Components/Button';
 import api from '../../api/api';
-import Modal from '../../Components/Modal';
+import useModal from '../../store/useModal';
 
 export default function MyAccount() {
-
+    const { setModalDetails, resetModalDetails } = useModal()
 
     const [credentials, setCredentials] = useState({
         name: "",
@@ -16,26 +16,21 @@ export default function MyAccount() {
     });
 
     useEffect(() => {
-      api.get('api/site/get-userdata')
-      .then((res) => {
-        setCredentials(prev => ({
-            ...prev,
-            name: res.data.name,
-            email: res.data.email
-          }))
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+        api.get('api/site/get-userdata')
+            .then((res) => {
+                setCredentials(prev => ({
+                    ...prev,
+                    name: res.data.name,
+                    email: res.data.email
+                }))
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }, [])
-    
+
 
     const [errors, setErrors] = useState({});
-    const [modalVisible, setModalVisible] = useState(false)
-
-    const closeModal = () => {
-        setModalVisible(false)
-    }
     const handleChange = (e) => {
         const { name, value } = e.target;
         setCredentials((prev) => ({
@@ -47,12 +42,18 @@ export default function MyAccount() {
     const handleSubmit = (e) => {
         e.preventDefault();
         api.put('api/admin/edit-profile', credentials)
-        .then((res) => {
-            setModalVisible(true)
-        })
-        .catch((err) => {
-            setErrors(err.response.data.errors);
-        });
+            .then(() => {
+                setModalDetails({
+                    isVisible: true,
+                    image: "success",
+                    onClose: () => {
+                        resetModalDetails();
+                    },
+                })
+            })
+            .catch((err) => {
+                setErrors(err.response.data.errors);
+            });
     };
 
 
@@ -67,7 +68,7 @@ export default function MyAccount() {
                     value={credentials.name}
                     onChange={handleChange}
                     error={errors.name}
-                    />
+                />
                 <Input
                     label="Email"
                     type="text"
@@ -75,7 +76,7 @@ export default function MyAccount() {
                     value={credentials.email}
                     onChange={handleChange}
                     error={errors.email}
-                    />
+                />
                 <h2 className="text-2xl font-bold text-gray-800 mt-8 mb-6">Change Password</h2>
                 <Input
                     label="Old Password"
@@ -84,15 +85,15 @@ export default function MyAccount() {
                     value={credentials.old_password}
                     onChange={handleChange}
                     error={errors.old_password}
-                    />
+                />
                 <Input
                     label="Password"
                     type="password"
                     name="password"
                     value={credentials.password}
-                    onChange={handleChange} 
+                    onChange={handleChange}
                     error={errors.password}
-                    />
+                />
                 <Input
                     label="Confirm Password"
                     type="password"
@@ -100,14 +101,13 @@ export default function MyAccount() {
                     value={credentials.password_confirmation}
                     onChange={handleChange}
                     error={errors.password_confirmation}
-                     />
+                />
                 <Button
                     text="Update"
                     color="bg-amber-600 mt-4"
                     onClick={handleSubmit}
                 />
             </form>
-            <Modal value={"Success!"} isVisible={modalVisible} onClose={closeModal} />
         </div>
     );
 }

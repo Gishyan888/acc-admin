@@ -22,7 +22,7 @@ export default function Standard() {
       .catch((err) => console.log(err));
   };
   const { activeSettings, setActiveSettings } = useSettings()
-  const { modalDetails, setModalDetails, resetModalDetails } = useModal()
+  const { setModalDetails, resetModalDetails } = useModal()
 
 
   const editStandard = (item) => {
@@ -146,27 +146,6 @@ export default function Standard() {
           </div>
         )}
       </div>
-      <Modal
-        value={modalDetails.value}
-        isVisible={modalDetails.isVisible}
-        button1Text={modalDetails.button1Text}
-        button2Text={modalDetails.button2Text}
-        button1OnClick={modalDetails.button1OnClick}
-        button2OnClick={modalDetails.button2OnClick}
-        onClose={modalDetails.onClose}
-        button1Color={modalDetails.button1Color}
-        button2Color={modalDetails.button2Color}
-      />
-      <Tooltip
-        id="tooltip"
-        style={{
-          backgroundColor: "#fff",
-          color: "#222",
-          boxShadow: "0 0 5px #ddd",
-          fontSize: "1rem",
-          fontWeight: "normal",
-        }}
-      />
     </div>
   )
 }

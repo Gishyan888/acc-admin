@@ -4,9 +4,7 @@ import Button from "../../Components/Button";
 import { useEffect, useRef, useState } from "react";
 import api from "../../api/api";
 import useSettings from "../../store/useSettings";
-import Modal from "../../Components/Modal";
 import useModal from "../../store/useModal";
-import { Tooltip } from "react-tooltip";
 import FileUpload from "../../Components/FileUpload";
 
 export default function Categories() {
@@ -26,7 +24,7 @@ export default function Categories() {
   };
 
   const { activeSettings, setActiveSettings } = useSettings()
-  const { modalDetails, setModalDetails, resetModalDetails } = useModal()
+  const { setModalDetails, resetModalDetails } = useModal()
   const formRef = useRef(null);
 
   const editCategory = (item) => {
@@ -181,27 +179,6 @@ export default function Categories() {
           </div>
         )}
       </div>
-      <Modal
-        value={modalDetails.value}
-        isVisible={modalDetails.isVisible}
-        button1Text={modalDetails.button1Text}
-        button2Text={modalDetails.button2Text}
-        button1OnClick={modalDetails.button1OnClick}
-        button2OnClick={modalDetails.button2OnClick}
-        onClose={modalDetails.onClose}
-        button1Color={modalDetails.button1Color}
-        button2Color={modalDetails.button2Color}
-      />
-      <Tooltip
-        id="tooltip"
-        style={{
-          backgroundColor: "#fff",
-          color: "#222",
-          boxShadow: "0 0 5px #ddd",
-          fontSize: "1rem",
-          fontWeight: "normal",
-        }}
-      />
     </div>
   )
 }
