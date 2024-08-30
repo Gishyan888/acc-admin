@@ -19,6 +19,10 @@ import Cms from "./Pages/CMS/Cms";
 import Settings from "./Pages/Settings/Settings";
 import Companies from "./Pages/Companies/Companies";
 import Company from "./Pages/Companies/Company";
+import Categories from "./Pages/Settings/Categories";
+import Subcategories from "./Pages/Settings/Subcategories";
+import Standard from "./Pages/Settings/Standard";
+import ProductType from "./Pages/Settings/ProductType";
 function App() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
@@ -67,11 +71,12 @@ function App() {
               <Route path="overview" element={<Cms />} />
               <Route path="product-in-action" element={<Cms />} />
             </Route>
-            <Route path="/settings">
-              <Route path="categories" element={<Settings />} />
-              <Route path="subcategories" element={<Settings />} />
-              <Route path="standards" element={<Settings />} />
-          </Route>
+            <Route path="/settings" element={<Settings />}>
+              <Route path="categories" element={<Categories />} />
+              <Route path="subcategories" element={<Subcategories />} />
+              <Route path="standards" element={<Standard />} />
+              <Route path="product-types" element={<ProductType />} />
+            </Route>
           </Route>
         </Routes>
       </Router>

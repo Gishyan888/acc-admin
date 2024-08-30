@@ -6,6 +6,7 @@ import Textarea from "../../Components/Textarea";
 import { useEffect, useRef, useState } from "react";
 import api from "../../api/api";
 import Modal from "../../Components/Modal";
+import FileUpload from "../../Components/FileUpload";
 
 export default function Cms() {
   const navItems = [
@@ -60,61 +61,22 @@ export default function Cms() {
     }));
   };
 
-  const handleFileDrop = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const files = event.dataTransfer.files;
-
-    if (files.length > 0) {
-      const file = files[0];
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setCredentials((prev) => ({
-          ...prev,
-          image: file,
-          image_src: e.target.result,
-        }));
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleFileSelect = (file) => {
+    setCredentials((prev) => ({
+      ...prev,
+      image: file,
+      image_src: URL.createObjectURL(file),
+    }))
   };
 
-  const handleDragOver = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-  };
-
-  const handleImageUploadClick = () => {
-    if (!credentials.image) {
-      fileInputRef.current.click();
-    }
-  };
-
-  const handleFileInputChange = (event) => {
-    const files = event.target.files;
-
-    if (files.length > 0) {
-      const file = files[0];
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setCredentials((prev) => ({
-          ...prev,
-          image: file,
-          image_src: e.target.result,
-        }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const removeImage = () => {
+  const handleFileRemove = () => {
     setCredentials((prev) => ({
       ...prev,
       image: null,
-      image_src: "",
-    }));
+      image_src: '',
+    }))
   };
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -156,7 +118,6 @@ export default function Cms() {
         className="w-full bg-white p-8 rounded-lg shadow-md flex flex-col"
       >
         <div className="flex gap-4 w-full">
-          <div className="w-full flex gap-3 max-w-4xl">
             <div className="flex flex-col gap-3 w-1/2">
               <Input
                 label="Title"
@@ -174,63 +135,26 @@ export default function Cms() {
                 error={errors.text}
               />
             </div>
-
-            <div
-              onDragOver={handleDragOver}
-              onDrop={handleFileDrop}
-              onClick={handleImageUploadClick}
-              className={`bg-blue-500 w-full max-w-80 h-40 text-white p-4 flex flex-col justify-center items-center cursor-pointer rounded-md shadow-lg hover:bg-blue-600 transition-all duration-200 ease-in-out ${credentials.image ? "cursor-not-allowed opacity-50" : ""
-                }`}
-            >
-              <FaUpload className="w-8 h-8" />
-              <span className="mt-2">Drag & Drop or </span>
-              <span className="underline">Click to Upload</span>
-              <input
-                className="canvas-input"
-                type="file"
-                accept="image/*"
-                style={{ display: "none" }}
-                ref={fileInputRef}
-                onChange={handleFileInputChange}
-                disabled={!!credentials.image}
+          <div className="w-full flex flex-col">
+          {credentials.image && location.pathname.includes("overview") && (
+              <Input
+                label="Image Link"
+                name="image_link"
+                type="text"
+                value={credentials.image_link ?? ""}
+                onChange={handleChange}
+                error={errors.image_link}
               />
-            </div>
-          </div>
-
-          <div className="w-1/2 flex flex-wrap">
+            )}
+            <FileUpload
+              file={credentials.image}
+              onFileSelect={handleFileSelect}
+              onFileRemove={handleFileRemove}
+              buttonText="Upload Image"
+              imageSize="w-1/2 h-64 mt-4"
+            />
             {errors.image && (
               <p className="text-red-500">{errors.image}</p>
-            )}
-            {credentials.image && (
-              <div className="relative m-2 flex flex-col gap-5">
-
-                {location.pathname.includes("overview") && (
-                  <Input
-                    label="Image Link"
-                    name="image_link"
-                    type="text"
-                    value={credentials.image_link ?? ""}
-                    onChange={handleChange}
-                    error={errors.image_link}
-                  />
-                )}
-                <img
-                  src={
-                    credentials.image_src
-                      ? credentials.image_src
-                      : credentials.image
-                  }
-                  alt="uploaded"
-                  className="object-contain rounded-lg shadow-md"
-                />
-                <button
-                  type="button"
-                  onClick={removeImage}
-                  className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-all duration-200"
-                >
-                  &times;
-                </button>
-              </div>
             )}
           </div>
         </div>

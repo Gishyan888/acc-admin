@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../api/api";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
+import { ArrowUpTrayIcon } from "@heroicons/react/16/solid";
 
 export default function Company() {
   const { id } = useParams();
@@ -15,6 +16,9 @@ export default function Company() {
   const [rejectCompany, setRejectCompany] = useState(false)
   const [reason, setReason] = useState('')
   const [errors, setErrors] = useState({});
+
+  const profileFileInputRef = useRef(null);
+  const bannerFileInputRef = useRef(null);
   useEffect(() => {
     fetchCompanyData();
   }, []);
@@ -77,7 +81,7 @@ export default function Company() {
       setIsEditing(false);
       fetchCompanyData();
     } catch (err) {
-      
+
       setErrors(err.response.data.errors);
     }
   };
@@ -100,6 +104,14 @@ export default function Company() {
     }
   };
 
+  const handleClick = (type) => {
+    if (type === 'profile') {
+      profileFileInputRef.current.click();
+    } else if (type === 'banner') {
+      bannerFileInputRef.current.click();
+    }
+  };
+
   return (
     <div className="flex flex-col pt-1 pb-4">
       <div className="rounded shadow bg-white">
@@ -109,15 +121,25 @@ export default function Company() {
             alt="Banner"
             className="w-full h-[740px] object-cover rounded mb-2"
           />
-          {isEditing && (
-           <div className="flex justify-end">
-             <input
-              type="file"
-              onChange={(e) => handleImageChange(e, 'banner')}
-              className="mb-2"
-            />
-           </div>
-          )}
+         {isEditing && (
+  <div className="flex justify-end">
+    <button
+      onClick={() => handleClick("banner")}
+      type="button"
+      className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+    >
+      <ArrowUpTrayIcon className="w-5 h-5" />
+      <span>Edit Image</span>
+      <input
+        type="file"
+        ref={bannerFileInputRef}
+        onChange={(e) => handleImageChange(e, 'banner')}
+        style={{ display: "none" }}
+        accept="image/*"
+      />
+    </button>
+  </div>
+)}
           <div className="flex w-1/2 justify-between items-end absolute -bottom-24 left-12">
             <div>
               <img
@@ -125,13 +147,23 @@ export default function Company() {
                 alt="Profile"
                 className="w-40 h-40 object-cover mb-2"
               />
-              {isEditing && (
-                <input
-                  type="file"
-                  onChange={(e) => handleImageChange(e, 'profile')}
-                  className="mb-2"
-                />
-              )}
+             {isEditing && (
+  <button
+    onClick={() => handleClick("profile")}
+    type="button"
+    className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+  >
+    <ArrowUpTrayIcon className="w-5 h-5" />
+    <span>Edit Logo</span>
+    <input
+      type="file"
+      ref={profileFileInputRef}
+      onChange={(e) => handleImageChange(e, 'profile')}
+      style={{ display: "none" }}
+      accept="image/*"
+    />
+  </button>
+)}
             </div>
             <Input
               label="Company Name"
@@ -175,7 +207,7 @@ export default function Company() {
                   </select>
                 </div>
               );
-            }else if(field === "firm_level"){
+            } else if (field === "firm_level") {
               return (
                 <div key={field} className="flex flex-col w-full max-w-80">
                   <label className="text-sm font-medium mb-1">
@@ -271,13 +303,13 @@ export default function Company() {
               color="bg-blue-500 w-40"
               onClick={() => approveCompany()}
             />
-           {companyData && !companyData.reject_reason && (
-             <Button
-             text="Reject Company"
-             color="bg-red-500 w-40"
-             onClick={() => setRejectCompany(true)}
-           />
-           )}
+            {companyData && !companyData.reject_reason && (
+              <Button
+                text="Reject Company"
+                color="bg-red-500 w-40"
+                onClick={() => setRejectCompany(true)}
+              />
+            )}
           </div>
         )}
       </div>

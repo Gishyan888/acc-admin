@@ -1,7 +1,32 @@
 import { create } from "zustand";
+
+const initialModalDetails = {
+  isVisible: false,
+  value: "",
+  button1Text: "",
+  button2Text: "",
+  button1OnClick: () => {},
+  button2OnClick: () => {},
+  button1Color: "",
+  button2Color: "",
+  onClose: () => {},
+};
+
 const useModal = create((set) => ({
-  isModalOpen: false,
-  setModalState: (state) => set({ isModalOpen: state }),
+  modalDetails: initialModalDetails,
+
+  setModalDetails: (details) =>
+    set((state) => ({
+      modalDetails: {
+        ...state.modalDetails,
+        ...details,
+      },
+    })),
+
+  resetModalDetails: () =>
+    set(() => ({
+      modalDetails: initialModalDetails,
+    })),
 }));
 
 export default useModal;
