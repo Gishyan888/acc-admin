@@ -3,10 +3,10 @@ import Select from 'react-select';
 
 const getBackgroundColor = (value) => {
     switch (value) {
-        case '1':
+        case 'Basic':
         case 'Pending':
             return '#FFC107';
-        case '2':
+        case 'Top Rated':
         case 'Approved':
             return '#28A745';
         case 'Rejected':

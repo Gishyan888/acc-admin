@@ -5,6 +5,7 @@ import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import { ArrowUpTrayIcon } from "@heroicons/react/16/solid";
 import StyledSelect from "../../Components/StyledSelect";
+import useModal from "../../store/useModal";
 
 export default function Company() {
   const { id } = useParams();
@@ -17,13 +18,14 @@ export default function Company() {
   const [rejectCompany, setRejectCompany] = useState(false)
   const [reason, setReason] = useState('')
   const [errors, setErrors] = useState({});
+  const { setModalDetails, resetModalDetails } = useModal()
 
   const profileFileInputRef = useRef(null);
   const bannerFileInputRef = useRef(null);
 
   const firmLevelOptions = [
-    { value: '1', label: 'Basic' },
-    { value: '2', label: 'Top Rated' },
+    { value: 'Basic', label: 'Basic' },
+    { value: 'Top Rated', label: 'Top Rated' },
   ];
   
   const statusOptions = [
@@ -100,6 +102,13 @@ export default function Company() {
       await api.post(`/api/admin/company/${id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
+      setModalDetails({
+        isVisible: true,
+        image: "success",
+        onClose: () => {
+          resetModalDetails();
+        },
+      });
       setIsEditing(false);
       fetchCompanyData();
     } catch (err) {
@@ -111,7 +120,14 @@ export default function Company() {
   const approveCompany = async () => {
     try {
       await api.post(`api/admin/company-status/${id}?_method=PUT&do=approved`);
-      navigate(-1);
+      setModalDetails({
+        isVisible: true,
+        image: "success",
+        onClose: () => {
+          resetModalDetails();
+          navigate(-1);
+        },
+      });
     } catch (err) {
       console.error('Error during form submission:', err.response || err.message || err);
     }
@@ -120,7 +136,14 @@ export default function Company() {
   const rejectCompanyForm = async () => {
     try {
       await api.post(`api/admin/company-status/${id}?_method=PUT&do=rejected`, { reason });
-      navigate(-1);
+      setModalDetails({
+        isVisible: true,
+        image: "success",
+        onClose: () => {
+          resetModalDetails();
+          navigate(-1);
+        },
+      });
     } catch (err) {
       console.error('Error during form submission:', err.response || err.message || err);
     }
@@ -134,7 +157,6 @@ export default function Company() {
     }
   };
 
-  console.log("🚀 ~ Company ~ companyData:", statusOptions.find(option => option.value == companyData?.status));
   
   return (
     <div className="flex flex-col pt-1 pb-4">

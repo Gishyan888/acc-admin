@@ -76,5 +76,5 @@ Modal.propTypes = {
     button2OnClick: PropTypes.func,
     button1Color: PropTypes.string,
     button2Color: PropTypes.string,
-    image: PropTypes.oneOf(['success', 'fail', 'warning'])
+    image: PropTypes.string
 }
