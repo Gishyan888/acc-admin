@@ -4,6 +4,7 @@ import api from "../../api/api";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import { ArrowUpTrayIcon } from "@heroicons/react/16/solid";
+import StyledSelect from "../../Components/StyledSelect";
 
 export default function Company() {
   const { id } = useParams();
@@ -19,6 +20,18 @@ export default function Company() {
 
   const profileFileInputRef = useRef(null);
   const bannerFileInputRef = useRef(null);
+
+  const firmLevelOptions = [
+    { value: '1', label: 'Basic' },
+    { value: '2', label: 'Top Rated' },
+  ];
+  
+  const statusOptions = [
+    { value: 'Approved', label: 'Approved' },
+    { value: 'Pending', label: 'Pending' },
+    { value: 'Rejected', label: 'Rejected' },
+  ];
+
   useEffect(() => {
     fetchCompanyData();
   }, []);
@@ -38,6 +51,15 @@ export default function Company() {
       ...prevData,
       [name]: value
     }));
+  };
+
+  const handleSelectChange = (selectedOption, name) => {
+    handleInputChange({
+      target: {
+        name,
+        value: selectedOption.value,
+      },
+    });
   };
 
   const handleImageChange = (e, type) => {
@@ -112,6 +134,8 @@ export default function Company() {
     }
   };
 
+  console.log("🚀 ~ Company ~ companyData:", statusOptions.find(option => option.value == companyData?.status));
+  
   return (
     <div className="flex flex-col pt-1 pb-4">
       <div className="rounded shadow bg-white">
@@ -121,49 +145,49 @@ export default function Company() {
             alt="Banner"
             className="w-full h-[740px] object-cover rounded mb-2"
           />
-         {isEditing && (
-  <div className="flex justify-end">
-    <button
-      onClick={() => handleClick("banner")}
-      type="button"
-      className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
-    >
-      <ArrowUpTrayIcon className="w-5 h-5" />
-      <span>Edit Image</span>
-      <input
-        type="file"
-        ref={bannerFileInputRef}
-        onChange={(e) => handleImageChange(e, 'banner')}
-        style={{ display: "none" }}
-        accept="image/*"
-      />
-    </button>
-  </div>
-)}
-          <div className="flex w-1/2 justify-between items-end absolute -bottom-24 left-12">
+          {isEditing && (
+            <div className="flex justify-end">
+              <button
+                onClick={() => handleClick("banner")}
+                type="button"
+                className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              >
+                <ArrowUpTrayIcon className="w-5 h-5" />
+                <span>Edit Image</span>
+                <input
+                  type="file"
+                  ref={bannerFileInputRef}
+                  onChange={(e) => handleImageChange(e, 'banner')}
+                  style={{ display: "none" }}
+                  accept="image/*"
+                />
+              </button>
+            </div>
+          )}
+          <div className="flex w-2/3 justify-start gap-5 items-end absolute -bottom-24 left-12">
             <div>
               <img
                 src={newProfilePicture ? newProfilePicture.preview : companyData.profile_picture}
                 alt="Profile"
-                className="w-40 h-40 object-cover mb-2"
+                className="min-w-40 h-40 object-cover mb-2"
               />
-             {isEditing && (
-  <button
-    onClick={() => handleClick("profile")}
-    type="button"
-    className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
-  >
-    <ArrowUpTrayIcon className="w-5 h-5" />
-    <span>Edit Logo</span>
-    <input
-      type="file"
-      ref={profileFileInputRef}
-      onChange={(e) => handleImageChange(e, 'profile')}
-      style={{ display: "none" }}
-      accept="image/*"
-    />
-  </button>
-)}
+              {isEditing && (
+                <button
+                  onClick={() => handleClick("profile")}
+                  type="button"
+                  className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                >
+                  <ArrowUpTrayIcon className="w-5 h-5" />
+                  <span>Edit Logo</span>
+                  <input
+                    type="file"
+                    ref={profileFileInputRef}
+                    onChange={(e) => handleImageChange(e, 'profile')}
+                    style={{ display: "none" }}
+                    accept="image/*"
+                  />
+                </button>
+              )}
             </div>
             <Input
               label="Company Name"
@@ -175,6 +199,22 @@ export default function Company() {
               disabled={!isEditing}
               error={errors.company_name}
             />
+            <div className="flex gap-3 ml-16">
+              <StyledSelect
+                label="Firm Level"
+                options={firmLevelOptions}
+                value={firmLevelOptions.find(option => option.value == companyData?.firm_level)}
+                onChange={(selectedOption) => handleSelectChange(selectedOption, 'firm_level')}
+                isDisabled={!isEditing}
+              />
+              <StyledSelect
+                label="Status"
+                options={statusOptions}
+                value={statusOptions.find(option => option.value == companyData?.status)}
+                onChange={(selectedOption) => handleSelectChange(selectedOption, 'status')}
+                isDisabled={true}
+              />
+            </div>
           </div>
         </div>
 
@@ -183,7 +223,7 @@ export default function Company() {
             "brand_name", "business_address", "business_type", "city",
             "company_info", "company_type", "contact_person",
             "country", "email", "employees", "legal_address", "phone_number",
-            "region", "status", "tax_account_number", "website_url", "whatsapp",
+            "region", "tax_account_number", "website_url", "whatsapp",
             "year_of_found"
           ].map((field) => {
             if (field === "region") {
@@ -204,24 +244,6 @@ export default function Company() {
                         {region.name}
                       </option>
                     ))}
-                  </select>
-                </div>
-              );
-            } else if (field === "firm_level") {
-              return (
-                <div key={field} className="flex flex-col w-full max-w-80">
-                  <label className="text-sm font-medium mb-1">
-                    Firm Level
-                  </label>
-                  <select
-                    name="region"
-                    value={companyData.firm_level || ''}
-                    onChange={handleInputChange}
-                    className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    disabled={!isEditing}
-                  >
-                    <option value="1">Basic</option>
-                    <option value="1">Top</option>
                   </select>
                 </div>
               );

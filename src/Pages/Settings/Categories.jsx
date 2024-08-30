@@ -1,4 +1,4 @@
-import { PencilIcon, TrashIcon, ArrowUpTrayIcon } from "@heroicons/react/16/solid";
+import { PencilIcon, TrashIcon, } from "@heroicons/react/16/solid";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import { useEffect, useRef, useState } from "react";
@@ -28,8 +28,6 @@ export default function Categories() {
   const { activeSettings, setActiveSettings } = useSettings()
   const { modalDetails, setModalDetails, resetModalDetails } = useModal()
   const formRef = useRef(null);
-  const hiddenFileInput = useRef(null);
-
 
   const editCategory = (item) => {
     setActiveSettings.item({ id: item.id, name: item.name, icon: item.icon })
@@ -39,7 +37,7 @@ export default function Categories() {
   const deleteCategory = (item) => {
     setModalDetails({
       isVisible: true,
-      value: "Are you sure you want to delete this category?",
+      image: "warning",
       button1Text: "Cancel",
       button2Text: "Delete",
       button1Color: "bg-gray-500",
@@ -84,6 +82,13 @@ export default function Categories() {
       : api.post("api/admin/categories", formData, config)
     apiCall
       .then((res) => {
+        setModalDetails({
+          isVisible: true,
+          image: "success",
+          onClose: () => {
+            resetModalDetails();
+          },
+        })
         setActiveSettings.item({ name: "", icon: null });
         setActiveSettings.isCRUD(false);
         getCategories()
@@ -100,7 +105,7 @@ export default function Categories() {
             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
               <tr>
                 <th scope="col" className="px-6 py-3">Name</th>
-                <th scope="col" className="px-6 py-3">Icon</th>
+                <th scope="col" className="px-6 py-3">Image</th>
                 <th scope="col" className="px-6 py-3">Actions</th>
               </tr>
             </thead>

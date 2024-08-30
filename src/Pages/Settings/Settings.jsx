@@ -7,7 +7,6 @@ import useSettings from "../../store/useSettings";
 export default function Settings() {
   const location = useLocation();
   const { activeSettings, setActiveSettings, resetActiveSettings } = useSettings();
-  // console.log("🚀 ~ Settings ~ activeSettings:", activeSettings)
 
   useEffect(() => {
     resetActiveSettings();

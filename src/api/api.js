@@ -1,7 +1,7 @@
 import axios from "axios";
 import useAuthStore from "../store/useAuthStore";
 import useLoading from "../store/useLoading";
-
+import useModal from "../store/useModal";
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
@@ -22,7 +22,7 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
+  (error) => {    
     useLoading.getState().setIsLoading(false);
     return Promise.reject(error);
   }
@@ -34,6 +34,13 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
+    const resetModalDetails = useModal.getState().resetModalDetails;
+
+    useModal.getState().setModalDetails({
+      isVisible: true,
+      image: "fail",
+      onClose: () => resetModalDetails(), 
+    });
     useLoading.getState().setIsLoading(false);
     if (error.response && error.response.status === 401) {
       // Token is invalid or expired

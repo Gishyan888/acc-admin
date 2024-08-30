@@ -1,20 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Input from '../../Components/Input';
-import { FaUpload } from 'react-icons/fa';
 import Button from '../../Components/Button';
 import Textarea from '../../Components/Textarea';
 import api from '../../api/api';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Modal from '../../Components/Modal';
 import FileUpload from '../../Components/FileUpload';
+import useModal from "../../store/useModal";
 
 export default function CreateEditBanner() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [modalVisible, setModalVisible] = useState(false);
   const { id } = useParams();
   const [errors, setErrors] = useState({})
   let title = location.pathname.includes('header-banners') ? 'Header Banner' : 'Company Banner';
+  const { modalDetails, setModalDetails, resetModalDetails } = useModal()
 
   useEffect(() => {
     if (id) {
@@ -28,15 +28,6 @@ export default function CreateEditBanner() {
     }
   }, [])
 
-  const closeModal = () => {
-    return new Promise((resolve) => {
-      setModalVisible(false);
-      setTimeout(() => {
-        resolve();
-      }, 300);
-    });
-  };
-
   const [credentials, setCredentials] = useState({
     title: "",
     button_name: "",
@@ -46,7 +37,6 @@ export default function CreateEditBanner() {
     image_src: '',
     type: location.pathname.includes('header-banners') ? "0" : "1"
   });
-  const fileInputRef = useRef(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -56,27 +46,6 @@ export default function CreateEditBanner() {
     }));
   };
 
-
-  const handleFileDrop = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const files = event.dataTransfer.files;
-
-    if (files.length > 0) {
-      const file = files[0];
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setCredentials(prev => ({
-          ...prev,
-          image: file,
-          image_src: e.target.result
-        }));
-
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   const handleFileSelect = (file) => {
     setCredentials(prev => ({
@@ -97,7 +66,6 @@ export default function CreateEditBanner() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("🚀 ~ HeaderBanners ~ credentials:", credentials);
     const formData = new FormData();
     formData.append('title', credentials.title);
     formData.append('button_name', credentials.button_name);
@@ -119,60 +87,64 @@ export default function CreateEditBanner() {
     }
 
     api.post(apiURL, formData)
-      .then(async (res) => {
-        setModalVisible(true);
-        await new Promise(resolve => setTimeout(resolve, 3000));
-        await closeModal();
-        navigate(-1);
+      .then((res) => {
+        setModalDetails({
+          isVisible: true,
+          image: "success",
+          onClose: () => {
+            resetModalDetails();
+            navigate(-1);
+          },
+        });
       })
-      .catch((err) => {
-        setErrors(err.response.data.errors);
-      });
-  };
+      .catch ((err) => {
+    setErrors(err.response.data.errors);
+  });
+};
 
-  return (
-    <div className="w-full bg-white p-8 rounded-lg shadow-md flex flex-col">
-      <h2 className="text-2xl font-semibold mb-2">{title}</h2>
+return (
+  <div className="w-full bg-white p-8 rounded-lg shadow-md flex flex-col">
+    <h2 className="text-2xl font-semibold mb-2">{title}</h2>
 
-      <form onSubmit={handleSubmit}>
-        <div className='flex gap-4 w-full'>
-          <div className="w-full flex justify-between gap-3 max-w-4xl">
-            <div className='flex flex-col gap-3 w-full'>
-              <Input
-                label="Title"
-                type="text"
-                name="title"
-                value={credentials.title}
+    <form onSubmit={handleSubmit}>
+      <div className='flex gap-4 w-full'>
+        <div className="w-full flex justify-between gap-3 max-w-4xl">
+          <div className='flex flex-col gap-3 w-full'>
+            <Input
+              label="Title"
+              type="text"
+              name="title"
+              value={credentials.title}
+              onChange={handleChange}
+              error={errors.title}
+            />
+            <Input
+              label="Button Name"
+              type="text"
+              name="button_name"
+              value={credentials.button_name}
+              onChange={handleChange}
+              error={errors.button_name}
+            />
+            <Input
+              label="Button Link"
+              type="text"
+              name="button_link"
+              value={credentials.button_link}
+              onChange={handleChange}
+              error={errors.button_link}
+            />
+            {location.pathname.includes('company-banners') &&
+              <Textarea
+                label="text"
+                name="text"
+                value={credentials.text}
                 onChange={handleChange}
-                error={errors.title}
-              />
-              <Input
-                label="Button Name"
-                type="text"
-                name="button_name"
-                value={credentials.button_name}
-                onChange={handleChange}
-                error={errors.button_name}
-              />
-              <Input
-                label="Button Link"
-                type="text"
-                name="button_link"
-                value={credentials.button_link}
-                onChange={handleChange}
-                error={errors.button_link}
-              />
-              {location.pathname.includes('company-banners') &&
-                <Textarea
-                  label="text"
-                  name="text"
-                  value={credentials.text}
-                  onChange={handleChange}
-                  placeholder="Enter banner text"
-                  error={errors.text}
-                />}
-            </div>
-            <div className="w-full">
+                placeholder="Enter banner text"
+                error={errors.text}
+              />}
+          </div>
+          <div className="w-full">
             <FileUpload
               file={credentials.image}
               onFileSelect={handleFileSelect}
@@ -181,23 +153,21 @@ export default function CreateEditBanner() {
               imageSize="w-full h-64"
 
             />
-             {errors.image && (
+            {errors.image && (
               <p className="text-red-500">{errors.image}</p>
             )}
-            </div>
           </div>
         </div>
-        <Modal value={"Success!"} isVisible={modalVisible} onClose={closeModal} />
+      </div>
+      <div className='flex justify-end'>
+        <Button
+          text="Save Banner"
+          color="bg-amber-600 mt-4"
+          onClick={handleSubmit}
+        />
+      </div>
+    </form>
+  </div>
 
-        <div className='flex justify-end'>
-          <Button
-            text="Save Banner"
-            color="bg-amber-600 mt-4"
-            onClick={handleSubmit}
-          />
-        </div>
-      </form>
-    </div>
-
-  );
+);
 }

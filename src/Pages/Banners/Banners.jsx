@@ -2,22 +2,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Navigation from "../../Components/Navigation";
 import { useEffect, useState } from "react";
 import { PencilIcon, TrashIcon } from "@heroicons/react/16/solid";
-import { Tooltip } from "react-tooltip";
 import Button from "../../Components/Button";
 import api from "../../api/api";
-import Modal from "../../Components/Modal";
+import useModal from "../../store/useModal";
 
 export default function Banners() {
   const location = useLocation();
   const navigate = useNavigate();
   const [bannersData, setBannersData] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedBanner, setSelectedBanner] = useState(null);
-
-  const closeModal = () => {
-    setModalVisible(false);
-    setSelectedBanner(null);
-  };
+  const { setModalDetails, resetModalDetails } = useModal()
 
   const navItems = [
     { path: "/banners/header-banners", label: "Header Banners" },
@@ -49,22 +42,24 @@ export default function Banners() {
     navigate(`${item.id}/edit`);
   };
 
-  const deleteBannerModal = (item) => {
-    setSelectedBanner(item);
-    setModalVisible(true);
-  };
-
-  const deleteBanner = () => {
-    closeModal();
-    api
-      .delete(`/banners/${selectedBanner.id}`)
-      .then((res) => {
-        fetchBanners();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+const deleteBanner = (item) => {
+  setModalDetails({
+    isVisible: true,
+    image: "warning",
+    button1Text: "Cancel",
+    button2Text: "Delete",
+    button1Color: "bg-gray-500",
+    button2Color: "bg-red-500",
+    button1OnClick: () => resetModalDetails(),
+    button2OnClick: () => {
+      api.delete(`/banners/${item.id}`)
+        .then(() => fetchBanners())
+        .catch((err) => console.log(err))
+        .finally(() => resetModalDetails());
+    },
+    onClose: () => resetModalDetails(),
+  });
+};
 
   const handleCreateEditBanner = () => {
     navigate("create");
@@ -122,7 +117,7 @@ export default function Banners() {
                       className="cursor-pointer"
                       data-tooltip-id="tooltip"
                       data-tooltip-content="Delete"
-                      onClick={() => deleteBannerModal(item)}
+                      onClick={() => deleteBanner(item)}
                     >
                       <TrashIcon className="w-6 h-6" />
                     </div>
@@ -133,27 +128,6 @@ export default function Banners() {
           </tbody>
         </table>
       </div>
-      <Modal
-        value={"Do you want to delete this banner?"}
-        isVisible={modalVisible}
-        onClose={closeModal}
-        button1Text="Yes"
-        button2Text="No"
-        button1OnClick={deleteBanner}
-        button2OnClick={closeModal}
-        button1Color="bg-red-500"
-        button2Color="bg-gray-500"
-      />
-      <Tooltip
-        id="tooltip"
-        style={{
-          backgroundColor: "#fff",
-          color: "#222",
-          boxShadow: "0 0 5px #ddd",
-          fontSize: "1rem",
-          fontWeight: "normal",
-        }}
-      />
     </div>
   );
 }

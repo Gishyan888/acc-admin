@@ -24,6 +24,7 @@
     "react-icons": "^5.2.1",
     "react-paginate": "^8.2.0",
     "react-router-dom": "^6.25.1",
+    "react-select": "^5.8.0",
     "react-toastify": "^10.0.5",
     "react-tooltip": "^5.27.1",
     "rodal": "^2.1.0",

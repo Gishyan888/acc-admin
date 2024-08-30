@@ -57,7 +57,7 @@ export default function Subcategories() {
   const deleteCategory = (item) => {
     setModalDetails({
       isVisible: true,
-      value: "Are you sure you want to delete this standard?",
+      image: "warning",
       button1Text: "Cancel",
       button2Text: "Delete",
       button1Color: "bg-gray-500",

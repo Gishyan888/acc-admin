@@ -23,9 +23,14 @@ import Categories from "./Pages/Settings/Categories";
 import Subcategories from "./Pages/Settings/Subcategories";
 import Standard from "./Pages/Settings/Standard";
 import ProductType from "./Pages/Settings/ProductType";
+import useModal from "./store/useModal";
+import Modal from "./Components/Modal";
+import { Tooltip } from "react-tooltip";
 function App() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
+  const { modalDetails, setModalDetails, resetModalDetails } = useModal()
+  console.log("🚀 ~ App ~ modalDetails:", modalDetails)
 
   useEffect(() => {
     initializeAuth();
@@ -80,6 +85,27 @@ function App() {
           </Route>
         </Routes>
       </Router>
+      <Modal
+        isVisible={modalDetails.isVisible}
+        image={modalDetails.image}
+        button1Text={modalDetails.button1Text}
+        button2Text={modalDetails.button2Text}
+        button1OnClick={modalDetails.button1OnClick}
+        button2OnClick={modalDetails.button2OnClick}
+        onClose={modalDetails.onClose}
+        button1Color={modalDetails.button1Color}
+        button2Color={modalDetails.button2Color}
+      />
+      <Tooltip
+        id="tooltip"
+        style={{
+          backgroundColor: "#fff",
+          color: "#222",
+          boxShadow: "0 0 5px #ddd",
+          fontSize: "1rem",
+          fontWeight: "normal",
+        }}
+      />
     </>
   );
 }

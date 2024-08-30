@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 const initialModalDetails = {
   isVisible: false,
-  value: "",
+  image: "",
   button1Text: "",
   button2Text: "",
   button1OnClick: () => {},

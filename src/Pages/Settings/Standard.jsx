@@ -4,9 +4,7 @@ import Button from "../../Components/Button";
 import { useEffect, useState } from "react";
 import api from "../../api/api";
 import useSettings from "../../store/useSettings";
-import Modal from "../../Components/Modal";
 import useModal from "../../store/useModal";
-import { Tooltip } from "react-tooltip";
 
 export default function Standard() {
 
@@ -35,7 +33,7 @@ export default function Standard() {
   const deleteStandard = (item) => {
     setModalDetails({
       isVisible: true,
-      value: "Are you sure you want to delete this standard?",
+      image: "warning",
       button1Text: "Cancel",
       button2Text: "Delete",
       button1Color: "bg-gray-500",

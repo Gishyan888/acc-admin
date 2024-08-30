@@ -4,9 +4,7 @@ import Button from "../../Components/Button";
 import { useEffect, useState } from "react";
 import api from "../../api/api";
 import useSettings from "../../store/useSettings";
-import Modal from "../../Components/Modal";
 import useModal from "../../store/useModal";
-import { Tooltip } from "react-tooltip";
 
 export default function ProductType() {
   const [categories, setCategories] = useState([]);
@@ -15,7 +13,7 @@ export default function ProductType() {
   const [subcategories, setSubcategories] = useState([]);
   const [productTypes, setProductTypes] = useState([]);
   const { activeSettings, setActiveSettings } = useSettings();
-  const { modalDetails, setModalDetails, resetModalDetails } = useModal();
+  const { setModalDetails, resetModalDetails } = useModal();
 
   useEffect(() => {
     getCategories();
@@ -82,7 +80,7 @@ export default function ProductType() {
   const deleteProductType = (item) => {
     setModalDetails({
       isVisible: true,
-      value: "Are you sure you want to delete this standard?",
+      image: "warning",
       button1Text: "Cancel",
       button2Text: "Delete",
       button1Color: "bg-gray-500",
@@ -105,7 +103,13 @@ export default function ProductType() {
         : api.post("api/admin/product-types", { name: activeSettings.item.name, category_id: selectedSubcategory });
 
       await apiCall;
-
+      setModalDetails({
+        isVisible: true,
+        image: "success",
+        onClose: () => {
+          resetModalDetails();
+        },
+      })
       setActiveSettings.item({ name: "", icon: null });
       setActiveSettings.isCRUD(false);
 
@@ -219,27 +223,6 @@ export default function ProductType() {
           </div>
         )}
       </div>
-      <Modal
-        value={modalDetails.value}
-        isVisible={modalDetails.isVisible}
-        button1Text={modalDetails.button1Text}
-        button2Text={modalDetails.button2Text}
-        button1OnClick={modalDetails.button1OnClick}
-        button2OnClick={modalDetails.button2OnClick}
-        onClose={modalDetails.onClose}
-        button1Color={modalDetails.button1Color}
-        button2Color={modalDetails.button2Color}
-      />
-      <Tooltip
-        id="tooltip"
-        style={{
-          backgroundColor: "#fff",
-          color: "#222",
-          boxShadow: "0 0 5px #ddd",
-          fontSize: "1rem",
-          fontWeight: "normal",
-        }}
-      />
     </div>
   );
 }

@@ -5,15 +5,16 @@ import Navigation from "../../Components/Navigation";
 import Textarea from "../../Components/Textarea";
 import { useEffect, useRef, useState } from "react";
 import api from "../../api/api";
-import Modal from "../../Components/Modal";
 import FileUpload from "../../Components/FileUpload";
+import useModal from "../../store/useModal";
 
 export default function Cms() {
+  const { setModalDetails, resetModalDetails } = useModal()
+
   const navItems = [
     { path: "/cms/overview", label: "Overview" },
     { path: "/cms/product-in-action", label: "Product In Action" },
   ];
-  const [modalVisible, setModalVisible] = useState(false);
 
   const [credentials, setCredentials] = useState({
     title: "",
@@ -24,14 +25,6 @@ export default function Cms() {
   });
 
   const [errors, setErrors] = useState({})
-  const closeModal = () => {
-    return new Promise((resolve) => {
-      setModalVisible(false);
-      setTimeout(() => {
-        resolve();
-      }, 300);
-    });
-  };
 
   useEffect(() => {
     let apiURL = "";
@@ -50,8 +43,6 @@ export default function Cms() {
         console.log(err);
       });
   }, [location.pathname]);
-
-  const fileInputRef = useRef(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -100,10 +91,14 @@ export default function Cms() {
 
     api
       .post(apiURL, formData)
-      .then(async (res) => {
-        setModalVisible(true);
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        await closeModal();
+      .then(() => {
+        setModalDetails({
+          isVisible: true,
+          image: "success",
+          onClose: () => {
+            resetModalDetails();
+          },
+        });
       })
       .catch((err) => {
         setErrors(err.response.data.errors);
@@ -157,14 +152,7 @@ export default function Cms() {
               <p className="text-red-500">{errors.image}</p>
             )}
           </div>
-        </div>
-        <Modal
-          value={"Success!"}
-          isVisible={modalVisible}
-          onClose={closeModal}
-        />
-
-        <div className="flex justify-end">
+        </div> <div className="flex justify-end">
           <Button
             text="Save Info"
             color="bg-amber-600 mt-4"

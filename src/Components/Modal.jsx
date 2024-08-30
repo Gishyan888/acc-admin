@@ -3,8 +3,11 @@ import Rodal from 'rodal';
 import 'rodal/lib/rodal.css';
 import PropTypes from 'prop-types';
 import Button from './Button';
+import Fail from '../Images/Fail.svg'
+import Success from '../Images/Success.svg'
+import Warning from '../Images/Warning.svg'
 
-export default function Modal({ value, isVisible, onClose, button1Text, button2Text, button1OnClick, button2OnClick, button1Color, button2Color }) {
+export default function Modal({ isVisible, onClose, button1Text, button2Text, button1OnClick, button2OnClick, button1Color, button2Color, image }) {
     useEffect(() => {
         if (isVisible && !button1Text && !button2Text) {
             const timer = setTimeout(() => {
@@ -13,12 +16,13 @@ export default function Modal({ value, isVisible, onClose, button1Text, button2T
             return () => clearTimeout(timer);
         }
     }, [isVisible, onClose, button1Text, button2Text]);
+    
 
     return (
         <Rodal
             customStyles={{
                 width: "300px",
-                height: "200px",
+                height: "300px",
                 borderRadius: "10px",
                 backgroundColor: "#ffffff",
                 marginTop: "150px",
@@ -29,18 +33,23 @@ export default function Modal({ value, isVisible, onClose, button1Text, button2T
             visible={isVisible}
             onClose={onClose}
         >
-            <div className='flex flex-col items-center justify-center w-full h-full font-medium text-xl p-4'>
-                <p className='text-center'>{value}</p>
+            <div className='flex flex-col gap-4 items-center justify-center w-full h-full font-medium text-xl'>
+                {image === "success" && <img src={Success} alt="success" />}
+                {image === "fail" && <img src={Fail} alt="fail" />}
+                {image === "warning" && <img src={Warning} alt="warning" />}
+                {image === "success" && <p className='text-center text-base'>Success! Your action was completed.</p>}
+                {image === "fail" && <p className='text-center text-base'>Oops! Your action was failed.</p>}
+                {image === "warning" && <p className='text-center text-base'>Do you want to delete?</p>}
                 <div className='flex gap-3 mt-4'>
                     {button1Text && <Button text={button1Text} onClick={button1OnClick} color={button1Color} />}
-                    {button2Text && <Button text={button2Text} onClick={button2OnClick} color={button2Color} />}                </div>
+                    {button2Text && <Button text={button2Text} onClick={button2OnClick} color={button2Color} />}                
+                </div>
             </div>
         </Rodal>
     );
 }
 
 Modal.propTypes = {
-    value: PropTypes.string.isRequired,
     isVisible: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     button1Text: PropTypes.string,
@@ -48,5 +57,6 @@ Modal.propTypes = {
     button1OnClick: PropTypes.func,
     button2OnClick: PropTypes.func,
     button1Color: PropTypes.string,
-    button2Color: PropTypes.string
+    button2Color: PropTypes.string,
+    image: PropTypes.string
 }
