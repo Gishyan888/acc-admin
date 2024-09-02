@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Checkbox } from "@material-tailwind/react";
 import Input from "../../Components/Input";
 import useAuthStore from "../../store/useAuthStore";
 
