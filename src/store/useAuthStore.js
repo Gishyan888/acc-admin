@@ -9,7 +9,6 @@ const useAuthStore = create(
       isLoggedIn: false,
       user: null,
       loginError: null,
-      isAdmin: true,
       login: async (userData) => {
         try {
           // await axios('/sanctum/csrf-cookie')
