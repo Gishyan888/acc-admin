@@ -1,16 +1,23 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Input from "../../Components/Input";
 import api from "../../api/api";
+import useModal from "../../store/useModal";
 
 export default function ResetPassword() {
+  
   const [passwords, setPasswords] = useState({
     newPassword: "",
     confirmPassword: ""
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { token } = useParams();
+  const { setModalDetails, resetModalDetails } = useModal()
+
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const token = searchParams.get('token');
+  const email = searchParams.get('email');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,10 +42,23 @@ export default function ResetPassword() {
       return;
     }
 
-    api.post(`/reset-password/${token}`, passwords)
+    let data = {
+      token: token,
+      email: email,
+      password: passwords.newPassword,
+      password_confirmation: passwords.confirmPassword
+    }
+
+    api.post(`/reset-password`, data)
       .then((res) => {
-        console.log(res);
-        navigate("/login");
+        setModalDetails({
+          isVisible: true,
+          image: "success",
+          onClose: () => {
+            resetModalDetails();
+            navigate("/login");
+          },
+        });
 
       }).catch((err) => {
         console.log(err);

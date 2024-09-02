@@ -45,7 +45,7 @@ function App() {
             element={isLoggedIn ? <Navigate to="/" /> : <Login />}
           />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/recover-password" element={<ResetPassword />} />
           <Route element={<ProtectedMainLayout />}>
             <Route path="/" element={<Dashboard />} />
             <Route path="/my-account" element={<MyAccount />} />

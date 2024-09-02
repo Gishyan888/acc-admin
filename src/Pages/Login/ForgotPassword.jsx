@@ -6,6 +6,7 @@ import api from "../../api/api";
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
+  const [successValue, setSuccessValue] = useState('')
 
   const handleChange = (e) => {
     setEmail(e.target.value);
@@ -15,8 +16,7 @@ export default function ForgotPassword() {
     e.preventDefault();
     api.post(`/forgot-password`, { email })
     .then((res) => {
-      console.log(res);
-      navigate("/login");
+     setSuccessValue(res.data.status);
     })
     .catch((err) => {
       console.log(err);
@@ -26,8 +26,9 @@ export default function ForgotPassword() {
   return (
     <div className="w-full h-screen flex flex-col justify-center items-center gap-3 bg-gray-100">
       <h2 className="text-2xl font-semibold mb-2">Forgot Password</h2>
-      <p className="text-gray-600 mb-6">Enter your email to reset your password</p>
-      <form onSubmit={handleSubmit} className="w-full flex items-center gap-4 flex-col max-w-sm bg-white p-8 rounded-lg shadow-md">
+      {successValue ? <p className="text-gray-600 mb-6">{successValue}</p> : <p className="text-gray-600 mb-6">Enter your email to reset your password</p>}
+      {!successValue && (
+        <form onSubmit={handleSubmit} className="w-full flex items-center gap-4 flex-col max-w-sm bg-white p-8 rounded-lg shadow-md">
         <Input
           label="Email"
           type="email"
@@ -49,6 +50,7 @@ export default function ForgotPassword() {
           Back to Login
         </button>
       </form>
+      )}
     </div>
   );
 }
