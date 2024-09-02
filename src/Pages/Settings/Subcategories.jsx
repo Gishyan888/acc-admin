@@ -12,7 +12,7 @@ export default function Subcategories() {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const [subcategories, setSubcategories] = useState([]);
-
+const [errors, setErrors] = useState({})
   const { activeSettings, setActiveSettings } = useSettings()
   const { setModalDetails, resetModalDetails } = useModal()
 
@@ -89,7 +89,7 @@ export default function Subcategories() {
         setActiveSettings.isCRUD(false);
         handleSubcategories(selectedCategory)
       })
-      .catch((err) => console.log(err));
+      .catch((err) => setErrors(err.response.data.errors));
   };
 
 
@@ -160,6 +160,7 @@ export default function Subcategories() {
                     required={true}
                     value={activeSettings.item.name}
                     placeholder={`Enter ${activeSettings.name} name`}
+                    error={errors.name}
                   />
                 </div>
               </div>

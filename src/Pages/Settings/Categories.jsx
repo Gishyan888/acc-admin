@@ -10,7 +10,7 @@ import FileUpload from "../../Components/FileUpload";
 export default function Categories() {
 
   const [categories, setCategories] = useState([]);
-
+  const [errors, setErrors] = useState({});
   useEffect(() => {
     getCategories()
   }, []);
@@ -91,7 +91,7 @@ export default function Categories() {
         setActiveSettings.isCRUD(false);
         getCategories()
       })
-      .catch((err) => console.log(err));
+      .catch((err) => setErrors(err.response.data.errors));
   };
 
 
@@ -142,7 +142,7 @@ export default function Categories() {
               <p className="text-xl font-bold">{activeSettings.item.id ? "Edit" : "Add"} {activeSettings.name}</p>
 
               <div className="border-b-gray-300 border-b py-2">
-                <div className="flex items-center rounded gap-3">
+                <div className="flex items-start rounded gap-3">
                   <Input
                     type="text"
                     onChange={(e) => setActiveSettings.item({ ...activeSettings.item, name: e.target.value })}
@@ -150,12 +150,14 @@ export default function Categories() {
                     required={true}
                     value={activeSettings.item.name}
                     placeholder={`Enter ${activeSettings.name} name`}
+                    error={errors.name}
                   />
                   <FileUpload
                     file={activeSettings.item.icon}
                     onFileSelect={handleFileSelect}
                     onFileRemove={handleFileRemove}
                     buttonText="Upload Icon"
+                    error={errors.icon}
                   />
                 </div>
               </div>

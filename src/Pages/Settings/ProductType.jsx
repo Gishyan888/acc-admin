@@ -14,6 +14,7 @@ export default function ProductType() {
   const [productTypes, setProductTypes] = useState([]);
   const { activeSettings, setActiveSettings } = useSettings();
   const { setModalDetails, resetModalDetails } = useModal();
+  const [errors, setErrors] = useState({})
 
   useEffect(() => {
     getCategories();
@@ -118,7 +119,7 @@ export default function ProductType() {
       getTypes();
 
     } catch (err) {
-      console.error(err);
+      setErrors(err.response.data.errors);
     }
   };
 
@@ -200,6 +201,7 @@ export default function ProductType() {
                     required={true}
                     value={activeSettings.item.name}
                     placeholder={`Enter ${activeSettings.name} name`}
+                    error={errors.name}
                   />
                 </div>
               </div>

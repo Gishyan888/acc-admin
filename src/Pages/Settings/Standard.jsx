@@ -9,7 +9,7 @@ import useModal from "../../store/useModal";
 export default function Standard() {
 
   const [standards, setStandards] = useState([])
-
+const [errors, setErrors] = useState({})
   useEffect(() => {
     getStandards()
   }, []);
@@ -69,7 +69,7 @@ export default function Standard() {
         setActiveSettings.isCRUD(false);
         getStandards()
       })
-      .catch((err) => console.log(err));
+      .catch((err) => setErrors(err.response.data.errors));
   };
 
 
@@ -123,6 +123,7 @@ export default function Standard() {
                     required={true}
                     value={activeSettings.item.name}
                     placeholder={`Enter ${activeSettings.name} name`}
+                    error={errors.name}
                   />
                 </div>
               </div>

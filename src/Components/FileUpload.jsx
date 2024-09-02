@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { ArrowUpTrayIcon } from "@heroicons/react/16/solid";
 
-export default function FileUpload({ file, onFileSelect, onFileRemove, accept = "image/*", buttonText = "Upload File", imageSize }) {
+export default function FileUpload({ file, onFileSelect, onFileRemove, accept = "image/*", buttonText = "Upload File", imageSize, error }) {
   const hiddenFileInput = useRef(null);
 
   const handleClick = () => {
@@ -49,6 +49,7 @@ export default function FileUpload({ file, onFileSelect, onFileRemove, accept = 
           />
         </button>
       )}
+      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
     </div>
   );
 }
