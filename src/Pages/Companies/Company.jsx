@@ -24,8 +24,8 @@ export default function Company() {
   const bannerFileInputRef = useRef(null);
 
   const firmLevelOptions = [
-    { value: 'Basic', label: 'Basic' },
-    { value: 'Top Rated', label: 'Top Rated' },
+    { value: 0, label: 'Basic' },
+    { value: 1, label: 'Top Rated' },
   ];
   
   const statusOptions = [
