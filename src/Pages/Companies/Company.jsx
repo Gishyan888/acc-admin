@@ -24,10 +24,10 @@ export default function Company() {
   const bannerFileInputRef = useRef(null);
 
   const firmLevelOptions = [
-    { value: 0, label: 'Basic' },
-    { value: 1, label: 'Top Rated' },
+    { value: 1, label: 'Basic' },
+    { value: 2, label: 'Top Rated' },
   ];
-  
+
   const statusOptions = [
     { value: 'Approved', label: 'Approved' },
     { value: 'Pending', label: 'Pending' },
@@ -157,7 +157,7 @@ export default function Company() {
     }
   };
 
-  
+
   return (
     <div className="flex flex-col pt-1 pb-4">
       <div className="rounded shadow bg-white">
