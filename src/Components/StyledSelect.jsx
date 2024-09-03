@@ -4,9 +4,11 @@ import Select from 'react-select';
 const getBackgroundColor = (value) => {
     switch (value) {
         case 'Basic':
+            case 1:
         case 'Pending':
             return '#FFC107';
         case 'Top Rated':
+            case 2:
         case 'Approved':
             return '#28A745';
         case 'Rejected':
