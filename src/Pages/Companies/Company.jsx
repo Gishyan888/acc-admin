@@ -274,13 +274,13 @@ export default function Company() {
             "employees",
             "legal_address",
             "phone_number",
-            "region",
+            "region_id",
             "tax_account_number",
             "website_url",
             "whatsapp",
             "year_of_found",
           ].map((field) => {
-            if (field === "region") {
+            if (field === "region_id") {
               return (
                 <div key={field} className="flex flex-col w-full max-w-80">
                   <label className="text-sm font-medium mb-1">Region</label>
@@ -312,7 +312,7 @@ export default function Company() {
                   allowNumbers={["employees", "year_of_found"].includes(field)}
                   value={String(companyData[field] || "")}
                   onChange={handleInputChange}
-                  disabled={!isEditing}
+                  disabled={!isEditing || field === "email"}
                   error={errors[field]}
                 />
               );
