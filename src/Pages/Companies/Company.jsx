@@ -14,24 +14,24 @@ export default function Company() {
   const [isEditing, setIsEditing] = useState(false);
   const [newProfilePicture, setNewProfilePicture] = useState(null);
   const [newBanner, setNewBanner] = useState(null);
-  const [regions, setRegions] = useState([])
-  const [rejectCompany, setRejectCompany] = useState(false)
-  const [reason, setReason] = useState('')
+  const [regions, setRegions] = useState([]);
+  const [rejectCompany, setRejectCompany] = useState(false);
+  const [reason, setReason] = useState("");
   const [errors, setErrors] = useState({});
-  const { setModalDetails, resetModalDetails } = useModal()
+  const { setModalDetails, resetModalDetails } = useModal();
 
   const profileFileInputRef = useRef(null);
   const bannerFileInputRef = useRef(null);
 
   const firmLevelOptions = [
-    { value: 1, label: 'Basic' },
-    { value: 2, label: 'Top Rated' },
+    { value: 1, label: "Basic" },
+    { value: 2, label: "Top Rated" },
   ];
 
   const statusOptions = [
-    { value: 'Approved', label: 'Approved' },
-    { value: 'Pending', label: 'Pending' },
-    { value: 'Rejected', label: 'Rejected' },
+    { value: "Approved", label: "Approved" },
+    { value: "Pending", label: "Pending" },
+    { value: "Rejected", label: "Rejected" },
   ];
 
   useEffect(() => {
@@ -39,19 +39,21 @@ export default function Company() {
   }, []);
 
   const fetchCompanyData = () => {
-    api.get(`/api/admin/company/${id}`)
-      .then(res => setCompanyData(res.data.data))
-      .catch(err => console.error(err));
-    api.get(`/api/site/regions`)
-      .then(res => setRegions(res.data.data))
-      .catch(err => console.error(err));
+    api
+      .get(`/api/admin/company/${id}`)
+      .then((res) => setCompanyData(res.data.data))
+      .catch((err) => console.error(err));
+    api
+      .get(`/api/site/regions`)
+      .then((res) => setRegions(res.data.data))
+      .catch((err) => console.error(err));
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setCompanyData(prevData => ({
+    setCompanyData((prevData) => ({
       ...prevData,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -69,9 +71,9 @@ export default function Company() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        if (type === 'profile') {
+        if (type === "profile") {
           setNewProfilePicture({ file, preview: reader.result });
-        } else if (type === 'banner') {
+        } else if (type === "banner") {
           setNewBanner({ file, preview: reader.result });
         }
       };
@@ -91,16 +93,16 @@ export default function Company() {
     }
 
     if (newProfilePicture) {
-      formData.append('profile_picture', newProfilePicture.file);
+      formData.append("profile_picture", newProfilePicture.file);
     }
     if (newBanner) {
-      formData.append('banner', newBanner.file);
+      formData.append("banner", newBanner.file);
     }
-    formData.append('_method', 'PUT');
+    formData.append("_method", "PUT");
 
     try {
       await api.post(`/api/admin/company/${id}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { "Content-Type": "multipart/form-data" },
       });
       setModalDetails({
         isVisible: true,
@@ -112,7 +114,6 @@ export default function Company() {
       setIsEditing(false);
       fetchCompanyData();
     } catch (err) {
-
       setErrors(err.response.data.errors);
     }
   };
@@ -129,13 +130,18 @@ export default function Company() {
         },
       });
     } catch (err) {
-      console.error('Error during form submission:', err.response || err.message || err);
+      console.error(
+        "Error during form submission:",
+        err.response || err.message || err
+      );
     }
   };
 
   const rejectCompanyForm = async () => {
     try {
-      await api.post(`api/admin/company-status/${id}?_method=PUT&do=rejected`, { reason });
+      await api.post(`api/admin/company-status/${id}?_method=PUT&do=rejected`, {
+        reason,
+      });
       setModalDetails({
         isVisible: true,
         image: "success",
@@ -145,18 +151,20 @@ export default function Company() {
         },
       });
     } catch (err) {
-      console.error('Error during form submission:', err.response || err.message || err);
+      console.error(
+        "Error during form submission:",
+        err.response || err.message || err
+      );
     }
   };
 
   const handleClick = (type) => {
-    if (type === 'profile') {
+    if (type === "profile") {
       profileFileInputRef.current.click();
-    } else if (type === 'banner') {
+    } else if (type === "banner") {
       bannerFileInputRef.current.click();
     }
   };
-
 
   return (
     <div className="flex flex-col pt-1 pb-4">
@@ -179,7 +187,7 @@ export default function Company() {
                 <input
                   type="file"
                   ref={bannerFileInputRef}
-                  onChange={(e) => handleImageChange(e, 'banner')}
+                  onChange={(e) => handleImageChange(e, "banner")}
                   style={{ display: "none" }}
                   accept="image/*"
                 />
@@ -189,7 +197,11 @@ export default function Company() {
           <div className="flex w-2/3 justify-start gap-5 items-end absolute -bottom-24 left-12">
             <div>
               <img
-                src={newProfilePicture ? newProfilePicture.preview : companyData.profile_picture}
+                src={
+                  newProfilePicture
+                    ? newProfilePicture.preview
+                    : companyData.profile_picture
+                }
                 alt="Profile"
                 className="min-w-40 h-40 object-cover mb-2"
               />
@@ -204,7 +216,7 @@ export default function Company() {
                   <input
                     type="file"
                     ref={profileFileInputRef}
-                    onChange={(e) => handleImageChange(e, 'profile')}
+                    onChange={(e) => handleImageChange(e, "profile")}
                     style={{ display: "none" }}
                     accept="image/*"
                   />
@@ -216,7 +228,7 @@ export default function Company() {
               name="company_name"
               type="text"
               allowNumbers={false}
-              value={companyData.company_name || ''}
+              value={companyData.company_name || ""}
               onChange={handleInputChange}
               disabled={!isEditing}
               error={errors.company_name}
@@ -225,15 +237,23 @@ export default function Company() {
               <StyledSelect
                 label="Firm Level"
                 options={firmLevelOptions}
-                value={firmLevelOptions.find(option => option.value == companyData?.firm_level)}
-                onChange={(selectedOption) => handleSelectChange(selectedOption, 'firm_level')}
+                value={firmLevelOptions.find(
+                  (option) => option.value == companyData?.firm_level
+                )}
+                onChange={(selectedOption) =>
+                  handleSelectChange(selectedOption, "firm_level")
+                }
                 isDisabled={!isEditing}
               />
               <StyledSelect
                 label="Status"
                 options={statusOptions}
-                value={statusOptions.find(option => option.value == companyData?.status)}
-                onChange={(selectedOption) => handleSelectChange(selectedOption, 'status')}
+                value={statusOptions.find(
+                  (option) => option.value == companyData?.status
+                )}
+                onChange={(selectedOption) =>
+                  handleSelectChange(selectedOption, "status")
+                }
                 isDisabled={true}
               />
             </div>
@@ -242,21 +262,31 @@ export default function Company() {
 
         <div className="flex flex-wrap gap-5 p-6">
           {[
-            "brand_name", "business_address", "business_type", "city",
-            "company_info", "company_type", "contact_person",
-            "country", "email", "employees", "legal_address", "phone_number",
-            "region", "tax_account_number", "website_url", "whatsapp",
-            "year_of_found"
+            "brand_name",
+            "business_address",
+            "business_type",
+            "city",
+            "company_info",
+            "company_type",
+            "contact_person",
+            "country",
+            "email",
+            "employees",
+            "legal_address",
+            "phone_number",
+            "region",
+            "tax_account_number",
+            "website_url",
+            "whatsapp",
+            "year_of_found",
           ].map((field) => {
             if (field === "region") {
               return (
                 <div key={field} className="flex flex-col w-full max-w-80">
-                  <label className="text-sm font-medium mb-1">
-                    Region
-                  </label>
+                  <label className="text-sm font-medium mb-1">Region</label>
                   <select
-                    name="region"
-                    value={companyData.region || ''}
+                    name="region_id"
+                    value={companyData.region_id || ""}
                     onChange={handleInputChange}
                     className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     disabled={!isEditing}
@@ -273,11 +303,14 @@ export default function Company() {
               return (
                 <Input
                   key={field}
-                  label={field.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                  label={field
+                    .split("_")
+                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(" ")}
                   name={field}
                   type="text"
                   allowNumbers={["employees", "year_of_found"].includes(field)}
-                  value={String(companyData[field] || '')}
+                  value={String(companyData[field] || "")}
                   onChange={handleInputChange}
                   disabled={!isEditing}
                   error={errors[field]}
@@ -288,7 +321,9 @@ export default function Company() {
         </div>
         {companyData && companyData.reject_reason && (
           <div className="mt-4 p-4 m-4 bg-red-50 border border-red-200 rounded-lg">
-            <h3 className="text-lg font-bold text-red-800 mb-2">Rejection Reason</h3>
+            <h3 className="text-lg font-bold text-red-800 mb-2">
+              Rejection Reason
+            </h3>
             <p className="text-sm font-semibold text-red-800">
               {companyData.reject_reason}
             </p>
@@ -316,7 +351,8 @@ export default function Company() {
                   setIsEditing(false);
                   setNewProfilePicture(null);
                   setNewBanner(null);
-                }} />
+                }}
+              />
             </>
           )}
         </div>
@@ -324,9 +360,16 @@ export default function Company() {
       <div>
         {rejectCompany ? (
           <div className="p-4 rounded shadow bg-white gap-3">
-            <textarea placeholder="Enter reason for rejection" value={reason} onChange={(e) => setReason(e.target.value)} name="reason" id="reason" cols="30" rows="10" className="w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-4">
-
-            </textarea>
+            <textarea
+              placeholder="Enter reason for rejection"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              name="reason"
+              id="reason"
+              cols="30"
+              rows="10"
+              className="w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-4"
+            ></textarea>
             <div className="flex justify-end mx-auto p-4 rounded shadow bg-white gap-3 mt-4">
               <Button
                 text="Reject Company"
