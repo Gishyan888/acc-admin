@@ -15,6 +15,7 @@ export default function Company() {
   const [newProfilePicture, setNewProfilePicture] = useState(null);
   const [newBanner, setNewBanner] = useState(null);
   const [regions, setRegions] = useState([]);
+  const [countries, setCountries] = useState([]);
   const [rejectCompany, setRejectCompany] = useState(false);
   const [reason, setReason] = useState("");
   const [errors, setErrors] = useState({});
@@ -34,6 +35,17 @@ export default function Company() {
     { value: "Rejected", label: "Rejected" },
   ];
 
+  function yearsRange(from) {
+    const currentYear = new Date().getFullYear();
+    const years = [];
+    for (let i = from; i <= currentYear; i++) {
+      years.unshift(i);
+    }
+    return years;
+  }
+
+  const years = yearsRange(1900);
+
   useEffect(() => {
     fetchCompanyData();
   }, []);
@@ -46,6 +58,10 @@ export default function Company() {
     api
       .get(`/api/site/regions`)
       .then((res) => setRegions(res.data.data))
+      .catch((err) => console.error(err));
+    api
+      .get("/api/site/countries")
+      .then((res) => setCountries(res.data.data))
       .catch((err) => console.error(err));
   };
 
@@ -274,28 +290,51 @@ export default function Company() {
             "employees",
             "legal_address",
             "phone_number",
-            "region_id",
+            "region",
             "tax_account_number",
             "website_url",
             "whatsapp",
             "year_of_found",
           ].map((field) => {
-            if (field === "region_id") {
+            if (
+              field === "region" ||
+              field === "country" ||
+              field === "year_of_found"
+            ) {
               return (
                 <div key={field} className="flex flex-col w-full max-w-80">
-                  <label className="text-sm font-medium mb-1">Region</label>
+                  <label className="text-sm font-medium mb-1">
+                    {field
+                      .replace(/_/g, " ")
+                      .replace(/\b\w/g, (char) => char.toUpperCase())
+                      .replace(/\bOf\b/g, (char) => char.toLowerCase())}{" "}
+                  </label>
+
                   <select
-                    name="region_id"
-                    value={companyData.region_id || ""}
+                    name={field}
+                    value={companyData[field] || ""}
                     onChange={handleInputChange}
                     className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     disabled={!isEditing}
                   >
-                    {regions.map((region) => (
-                      <option key={region.id} value={region.id}>
-                        {region.name}
-                      </option>
-                    ))}
+                    {field === "region" &&
+                      regions.map((region) => (
+                        <option key={region.id} value={region.id}>
+                          {region.name}
+                        </option>
+                      ))}
+                    {field === "country" &&
+                      countries.map((country) => (
+                        <option key={country.id} value={country.id}>
+                          {country.name}
+                        </option>
+                      ))}
+                    {field === "year_of_found" &&
+                      years.map((year) => (
+                        <option key={year} value={year}>
+                          {year}
+                        </option>
+                      ))}
                   </select>
                 </div>
               );
@@ -304,15 +343,15 @@ export default function Company() {
                 <Input
                   key={field}
                   label={field
-                    .split("_")
-                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(" ")}
+                    .replace(/_/g, " ") 
+                    .replace(/\b\w/g, (char) => char.toUpperCase()) 
+                    .replace(/\bOf\b/g, (char) => char.toLowerCase())} 
                   name={field}
                   type="text"
                   allowNumbers={["employees", "year_of_found"].includes(field)}
                   value={String(companyData[field] || "")}
                   onChange={handleInputChange}
-                  disabled={!isEditing || field === "email"}
+                  disabled={!isEditing}
                   error={errors[field]}
                 />
               );
