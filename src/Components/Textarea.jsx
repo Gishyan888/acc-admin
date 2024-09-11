@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function Textarea({ label, name, value, onChange, placeholder, error }) {
+export default function Textarea({ label, name, value, onChange, placeholder, error, disabled = false }) {
   return (
     <div className="w-full">
       <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
       <textarea
+        disabled={disabled}
         name={name}
         value={value}
         onChange={onChange}
@@ -19,9 +20,9 @@ export default function Textarea({ label, name, value, onChange, placeholder, er
 }
 
 Textarea.propTypes = {
-  label: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  label: PropTypes.string,
+  name: PropTypes.string,
+  value: PropTypes.string,
+  onChange: PropTypes.func,
   placeholder: PropTypes.string
 };

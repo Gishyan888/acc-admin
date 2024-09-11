@@ -65,6 +65,11 @@ export default function Sidebar() {
         link: "/companies",
       },
       {
+        name: "Products",
+        icon: DocumentTextIcon,
+        link: "/products",
+      },
+      {
         name: "CMS",
         icon: ShoppingBagIcon,
         link: "/cms/overview",
