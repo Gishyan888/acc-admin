@@ -135,7 +135,7 @@ return (
             />
             {location.pathname.includes('company-banners') &&
               <Textarea
-                label="text"
+                label="Description"
                 name="text"
                 value={credentials.text}
                 onChange={handleChange}

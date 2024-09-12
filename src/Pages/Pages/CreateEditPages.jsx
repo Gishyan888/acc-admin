@@ -130,7 +130,7 @@ export default function CreateEditPages() {
                 error={errors.title}
               />
               <RichtextEditor
-                label="Text"
+                label="Description"
                 name="text"
                 value={credentials.text}
                 onChange={handleChange}

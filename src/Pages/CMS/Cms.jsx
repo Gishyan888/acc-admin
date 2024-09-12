@@ -125,7 +125,7 @@ export default function Cms() {
                 error={errors.title}
               />
               <Textarea
-                label="Text"
+                label="Description"
                 name="text"
                 value={credentials.text}
                 onChange={handleChange}

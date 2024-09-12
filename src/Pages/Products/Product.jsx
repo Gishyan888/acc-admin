@@ -197,26 +197,20 @@ export default function Product() {
   return (
     <div className="flex flex-col pt-1 pb-4 w-full">
       <div className="rounded shadow bg-white p-3 flex flex-col gap-4">
-        <div className="md:flex gap-4">
-          <div className="flex flex-col gap-3 w-full p-3 border rounded">
-            <span>Banner Image</span>
-            <img
-              src={productData.banner_image}
-              alt={productData.title}
-              className="object-cover w-full h-96"
-            />
-          </div>
-          <div className="flex flex-col gap-3 w-full p-3 border rounded">
-            <span>Main Image</span>
-            <img
-              src={productData.main_image}
-              alt={productData.title}
-              className="object-cover w-full h-96"
-            />
-          </div>
-        </div>
-        <div className="flex gap-4">
-          <div className="flex flex-col gap-4">
+        <div className="mb-32 relative">
+          <img
+            src={productData.banner_image}
+            alt="Banner"
+            className="w-full h-[740px] object-cover rounded mb-2"
+          />
+          <div className="flex w-2/3 justify-start gap-5 items-end absolute -bottom-24 left-12">
+            <div>
+              <img
+                src={productData.main_image}
+                alt="Profile"
+                className="min-w-40 h-40 object-cover mb-2"
+              />
+            </div>
             <Input
               type="text"
               label="Company Name"
@@ -226,6 +220,23 @@ export default function Product() {
               disabled={true}
               error={errors.company_name}
             />
+            <div className="flex gap-3 ml-16">
+              <StyledSelect
+                label="Status"
+                options={statusOptions}
+                value={statusOptions.find(
+                  (option) => option.value == productData?.status
+                )}
+                onChange={(selectedOption) =>
+                  handleSelectChange(selectedOption, "status")
+                }
+                isDisabled={true}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="flex gap-4">
+          <div className="flex flex-wrap gap-4 w-full">
             <Input
               type="text"
               label="Title"
@@ -235,18 +246,32 @@ export default function Product() {
               disabled={!isEditing}
               error={errors.title}
             />
-          </div>
-          <div>
-            <StyledSelect
-              label="Status"
-              options={statusOptions}
-              value={statusOptions.find(
-                (option) => option.value == productData?.status
-              )}
-              onChange={(selectedOption) =>
-                handleSelectChange(selectedOption, "status")
-              }
-              isDisabled={true}
+            <Input
+              type="text"
+              label="Category Name"
+              name="category[name]"
+              value={productData?.category?.name || ""}
+              onChange={handleInputChange}
+              disabled={true}
+              error={errors?.category?.name}
+            />
+            <Input
+              type="text"
+              label="Subcategory Name"
+              name="subcategory[name]"
+              value={productData?.subcategory?.name || ""}
+              onChange={handleInputChange}
+              disabled={true}
+              error={errors?.subcategory?.name}
+            />
+            <Input
+              type="text"
+              label="Product Type"
+              name="product_type[name]"
+              value={productData?.product_type?.name || ""}
+              onChange={handleInputChange}
+              disabled={true}
+              error={errors?.product_type?.name}
             />
           </div>
         </div>
@@ -303,37 +328,9 @@ export default function Product() {
             allowNumbers={true}
           />
         </div>
-        <div className="flex flex-wrap gap-4">
-          <Input
-            type="text"
-            label="Category Name"
-            name="category[name]"
-            value={productData?.category?.name || ""}
-            onChange={handleInputChange}
-            disabled={true}
-            error={errors?.category?.name}
-          />
-          <Input
-            type="text"
-            label="Subcategory Name"
-            name="subcategory[name]"
-            value={productData?.subcategory?.name || ""}
-            onChange={handleInputChange}
-            disabled={true}
-            error={errors?.subcategory?.name}
-          />
-          <Input
-            type="text"
-            label="Product Type"
-            name="product_type[name]"
-            value={productData?.product_type?.name || ""}
-            onChange={handleInputChange}
-            disabled={true}
-            error={errors?.product_type?.name}
-          />
-        </div>
+
         <Textarea
-          label="text"
+          label="Description"
           name="description"
           value={productData.description || ""}
           onChange={handleInputChange}
