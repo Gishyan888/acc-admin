@@ -59,12 +59,14 @@ export default function Cms() {
       image_src: URL.createObjectURL(file),
     }))
   };
+console.log(credentials);
 
   const handleFileRemove = () => {
     setCredentials((prev) => ({
       ...prev,
       image: null,
       image_src: '',
+      image_link: ''
     }))
   };
 
