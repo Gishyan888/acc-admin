@@ -1,14 +1,15 @@
-import { FaUpload } from "react-icons/fa";
-import Button from "../../Components/Button";
-import Input from "../../Components/Input";
+import { useLocation, useNavigate } from "react-router-dom";
 import Navigation from "../../Components/Navigation";
-import Textarea from "../../Components/Textarea";
 import { useEffect, useState } from "react";
+import { PencilIcon, TrashIcon } from "@heroicons/react/16/solid";
+import Button from "../../Components/Button";
 import api from "../../api/api";
-import FileUpload from "../../Components/FileUpload";
 import useModal from "../../store/useModal";
 
 export default function CustomPages() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [bannersData, setBannersData] = useState([]);
   const { setModalDetails, resetModalDetails } = useModal()
 
   const navItems = [
@@ -16,152 +17,118 @@ export default function CustomPages() {
     { path: "/pages/blog", label: "Blog" },
   ];
 
-  const [credentials, setCredentials] = useState({
-    title: "",
-    text: "",
-    image_link: "",
-    image: null,
-    image_src: "",
-  });
-
-  const [errors, setErrors] = useState({})
-
-  useEffect(() => {
+  const fetchCustomPages = () => {
     let apiURL = "";
-    if (location.pathname.includes("overview")) {
-      apiURL = "api/site/info-tab/overview";
+    if (location.pathname.includes("custom")) {
+      apiURL = "api/admin/contents?type=page";
     } else {
-      apiURL = "api/site/info-tab/product_in_action";
+      apiURL = "api/admin/contents?type=news";
     }
     api
       .get(apiURL)
       .then((res) => {
-        setErrors({});
-        setCredentials(res.data.data);
+        setBannersData(res.data.data);
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  useEffect(() => {
+    fetchCustomPages();
   }, [location.pathname]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setCredentials((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const editPage = (item) => {
+    navigate(`${item.id}/edit`);
   };
 
-  const handleFileSelect = (file) => {
-    setCredentials((prev) => ({
-      ...prev,
-      image: file,
-      image_src: URL.createObjectURL(file),
-    }))
-  };
+const 
+deletePage = (item) => {
+  setModalDetails({
+    isVisible: true,
+    image: "warning",
+    button1Text: "Cancel",
+    button2Text: "Delete",
+    button1Color: "bg-gray-500",
+    button2Color: "bg-red-500",
+    button1OnClick: () => resetModalDetails(),
+    button2OnClick: () => {
+      api.delete(`api/admin/contents/${item.id}`)
+        .then(() => fetchCustomPages())
+        .catch((err) => console.log(err))
+        .finally(() => resetModalDetails());
+    },
+    onClose: () => resetModalDetails(),
+  });
+};
 
-  
-  const handleFileRemove = () => {
-    setCredentials((prev) => ({
-      ...prev,
-      image: null,
-      image_src: '',
-      image_link: ''
-    }))
-  };
-
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("title", credentials.title);
-    formData.append("text", credentials.text);
-    if (location.pathname.includes("overview")) {
-      formData.append("image_link", credentials.image_link);
-    }
-    if (typeof credentials.image !== "string") {
-      formData.append("image", credentials.image);
-    }
-    formData.append("_method", "PUT");
-
-    let apiURL = "";
-    if (location.pathname.includes("overview")) {
-      apiURL = "api/admin/info-tab/2";
-    } else {
-      apiURL = "api/admin/info-tab/1";
-    }
-
-    api
-      .post(apiURL, formData)
-      .then(() => {
-        setModalDetails({
-          isVisible: true,
-          image: "success",
-          onClose: () => {
-            resetModalDetails();
-          },
-        });
-      })
-      .catch((err) => {
-        setErrors(err.response.data.errors);
-      });
+  const handleCreateEditPage = () => {
+    navigate("create");
   };
 
   return (
     <div className="w-full">
-      <Navigation navItems={navItems} />
-      <form
-        onSubmit={handleSubmit}
-        className="w-full bg-white p-8 rounded-lg shadow-md flex flex-col"
-      >
-        <div className="flex gap-4 w-full">
-            <div className="flex flex-col gap-3 w-1/2">
-              <Input
-                label="Title"
-                name="title"
-                type="text"
-                value={credentials.title}
-                onChange={handleChange}
-                error={errors.title}
-              />
-              <Textarea
-                label="Text"
-                name="text"
-                value={credentials.text}
-                onChange={handleChange}
-                error={errors.text}
-              />
-            </div>
-          <div className="w-full flex flex-col">
-          {credentials.image && location.pathname.includes("overview") && (
-              <Input
-                label="Image Link"
-                name="image_link"
-                type="text"
-                value={credentials.image_link ?? ""}
-                onChange={handleChange}
-                error={errors.image_link}
-              />
-            )}
-            <FileUpload
-              file={credentials.image}
-              onFileSelect={handleFileSelect}
-              onFileRemove={handleFileRemove}
-              buttonText="Upload Image"
-              imageSize="w-1/2 h-64 mt-4"
-            />
-            {errors.image && (
-              <p className="text-red-500">{errors.image}</p>
-            )}
-          </div>
-        </div> <div className="flex justify-end">
+      <div className="flex justify-between items-center">
+        <Navigation navItems={navItems} />
+        {bannersData.length < 5 && (
           <Button
-            text="Save Info"
-            color="bg-amber-600 mt-4"
-            onClick={handleSubmit}
+            text={location.pathname.includes("custom") ? "Create Custom Page" : "Create Blog Page"}
+            color="bg-amber-600"
+            onClick={() => handleCreateEditPage()}
           />
-        </div>
-      </form>
+        )}
+      </div>
+      <div className="w-full flex flex-col items-center justify-center bg-white p-2">
+        <table className="w-full table-auto border-collapse">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="px-4 py-2 font-bold text-left">Title</th>
+              <th className="px-4 py-2 font-bold text-left">Image</th>
+              <th className="px-4 py-2 font-bold text-left">Status</th>
+              <th className="px-4 py-2 font-bold text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {bannersData.map((item, index) => (
+              <tr key={index} className="border-b">
+                <td className="px-4 py-2 text-gray-800">{item.title}</td>
+                <td className="px-4 py-2">
+                  <img
+                    className="w-14 h-14 object-cover"
+                    src={item.image}
+                    alt={item.title}
+                  />
+                </td>
+                <td className="px-4 py-2">
+                  <div className={`px-2 py-1 w-20 text-center rounded-3xl text-white ${item.status === 1 ? "bg-green-500" : "bg-red-500"}`}>
+                  {item.status === 1 ? "Active" : "Inactive"}
+                  </div>
+                </td>
+                <td className="px-4 py-2">
+                  <div className="flex items-center gap-2 text-blue-500">
+                    <div
+                      className="cursor-pointer"
+                      data-tooltip-id="tooltip"
+                      data-tooltip-content="Edit"
+                      onClick={() => editPage(item)}
+                    >
+                      <PencilIcon className="w-6 h-6" />
+                    </div>
+                    <div
+                      className="cursor-pointer"
+                      data-tooltip-id="tooltip"
+                      data-tooltip-content="Delete"
+                      onClick={() => deletePage(item)}
+                    >
+                      <TrashIcon className="w-6 h-6" />
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

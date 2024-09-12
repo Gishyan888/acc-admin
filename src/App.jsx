@@ -29,6 +29,7 @@ import { Tooltip } from "react-tooltip";
 import Products from "./Pages/Products/Products";
 import Product from "./Pages/Products/Product";
 import CustomPages from "./Pages/Pages/CustomPages";
+import CreateEditPages from "./Pages/Pages/CreateEditPages";
 function App() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
@@ -82,7 +83,23 @@ function App() {
             </Route>
             <Route path="/pages" >
               <Route path="custom" element={<CustomPages />} />
+              <Route
+                path="custom/:id/edit"
+                element={<CreateEditPages />}
+              />
+              <Route
+                path="custom/create"
+                element={<CreateEditPages />}
+              />
               <Route path="blog" element={<CustomPages />} />
+              <Route
+                path="blog/:id/edit"
+                element={<CreateEditPages />}
+              />
+              <Route
+                path="blog/create"
+                element={<CreateEditPages />}
+              />
             </Route>
             <Route path="/settings" element={<Settings />}>
               <Route path="categories" element={<Categories />} />
