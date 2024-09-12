@@ -6,6 +6,7 @@ import api from "../../api/api";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import FileUpload from "../../Components/FileUpload";
 import useModal from "../../store/useModal";
+import RichtextEditor from "../../Components/RichTextEditor";
 
 export default function CreateEditPages() {
   const location = useLocation();
@@ -128,12 +129,11 @@ export default function CreateEditPages() {
                 onChange={handleChange}
                 error={errors.title}
               />
-              <Textarea
+              <RichtextEditor
                 label="Text"
                 name="text"
                 value={credentials.text}
                 onChange={handleChange}
-                placeholder="Enter content text"
                 error={errors.text}
               />
             </div>
