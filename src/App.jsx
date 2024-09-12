@@ -28,6 +28,7 @@ import Modal from "./Components/Modal";
 import { Tooltip } from "react-tooltip";
 import Products from "./Pages/Products/Products";
 import Product from "./Pages/Products/Product";
+import CustomPages from "./Pages/Pages/CustomPages";
 function App() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
@@ -79,6 +80,7 @@ function App() {
               <Route path="overview" element={<Cms />} />
               <Route path="product-in-action" element={<Cms />} />
             </Route>
+            <Route path="/pages" element={<CustomPages />} />
             <Route path="/settings" element={<Settings />}>
               <Route path="categories" element={<Categories />} />
               <Route path="subcategories" element={<Subcategories />} />

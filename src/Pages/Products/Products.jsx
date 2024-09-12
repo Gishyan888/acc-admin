@@ -8,27 +8,28 @@ import usePagination from "../../store/usePagination";
 export default function Products() {
   const navigate = useNavigate();
   const [productsData, setProductsData] = useState([]);
-  const [pageCount, setPageCount] = useState(1); 
+  const [pageCount, setPageCount] = useState(1);
   const currentPage = usePagination((state) => state.currentPage);
-  const [selectedCompany, setSelectedCompany] = useState('all'); 
-  const [companies, setCompanies] = useState([]); 
+  const [selectedCompany, setSelectedCompany] = useState("all");
+  const [companies, setCompanies] = useState([]);
 
   useEffect(() => {
-    const companyFilter = selectedCompany === 'all' ? '' : `&company_id=${selectedCompany}`;
+    api
+      .get(`/api/admin/company?paginate=${false}`)
+      .then((res) => {
+        setCompanies(res.data.data);
+      })
+      .catch((err) => console.log(err));
+  }, [currentPage]);
+
+  useEffect(() => {
+    const companyFilter =
+      selectedCompany === "all" ? "" : `&company_id=${selectedCompany}`;
     api
       .get(`/api/admin/products?page=${currentPage}${companyFilter}`)
       .then((res) => {
         setProductsData(res.data.data);
-        setPageCount(res.data.meta.last_page); 
-
-        const uniqueCompanies = res.data.data.reduce((acc, product) => {
-          if (!acc.some(company => company.company_id === product.company_id)) {
-            acc.push({ company_id: product.company_id, company_name: product.company_name });
-          }
-          return acc;
-        }, []);
-
-        setCompanies(uniqueCompanies); 
+        setPageCount(res.data.meta.last_page);
       })
       .catch((err) => console.log(err));
   }, [currentPage, selectedCompany]);
@@ -37,19 +38,19 @@ export default function Products() {
     navigate(`/product/${product.id}`);
   };
   const handleCompanyChange = (e) => {
-    setSelectedCompany(e.target.value); 
+    setSelectedCompany(e.target.value);
   };
   return (
     <div className="mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Products</h1>
-      <select 
-        value={selectedCompany} 
-        onChange={handleCompanyChange} 
+      <select
+        value={selectedCompany}
+        onChange={handleCompanyChange}
         className="mb-4 p-2 px-4 border rounded border-gray-300 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         <option value="all">All Companies</option>
-        {companies.map((company) => (
-          <option key={company.company_id} value={company.company_id}>
+        {companies.map((company, index) => (
+          <option key={index} value={company.id}>
             {company.company_name}
           </option>
         ))}

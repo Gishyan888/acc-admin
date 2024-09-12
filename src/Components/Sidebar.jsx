@@ -75,6 +75,11 @@ export default function Sidebar() {
         link: "/cms/overview",
       },
       {
+        name: "Pages",
+        icon: DocumentChartBarIcon,
+        link: "/pages",
+      },
+      {
         name: "Settings",
         icon: Cog6ToothIcon,
         link: "/settings/categories",
