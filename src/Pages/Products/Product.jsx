@@ -172,10 +172,7 @@ export default function Product() {
         },
       });
     } catch (err) {
-      console.error(
-        "Error during form submission:",
-        err.response || err.message || err
-      );
+      setErrors(err.response.data.errors);
     }
   };
 
@@ -193,13 +190,9 @@ export default function Product() {
         },
       });
     } catch (err) {
-      console.error(
-        "Error during form submission:",
-        err.response || err.message || err
-      );
+      setErrors(err.response.data.errors);
     }
   };
-  console.log("🚀 ~ {productData.images.map ~ productData:", productData);
 
   return (
     <div className="flex flex-col pt-1 pb-4 w-full">
@@ -347,20 +340,20 @@ export default function Product() {
           error={errors.description}
           disabled={!isEditing}
         />
-      <div className="flex flex-wrap gap-4 rounded border p-3">
-      {productData.images &&
-          productData.images.map((image, index) => {
-            return (
-              <img
-                key={index}
-                className={`cursor-pointer w-32 h-32 object-cover rounded border border-gray-300`}
-                src={image.image}
-                alt={`image-${index}`}
-                onClick={() => openImageModal(index)}
-              />
-            );
-          })}
-      </div>
+        <div className="flex flex-wrap gap-4 rounded border p-3">
+          {productData.images &&
+            productData.images.map((image, index) => {
+              return (
+                <img
+                  key={index}
+                  className={`cursor-pointer w-32 h-32 object-cover rounded border border-gray-300`}
+                  src={image.image}
+                  alt={`image-${index}`}
+                  onClick={() => openImageModal(index)}
+                />
+              );
+            })}
+        </div>
         {productData && productData.reject_reason && (
           <div className="mt-4 p-4 m-4 bg-red-50 border border-red-200 rounded-lg">
             <h3 className="text-lg font-bold text-red-800 mb-2">
@@ -401,16 +394,13 @@ export default function Product() {
       <div>
         {rejectProduct ? (
           <div className="p-4 rounded shadow bg-white gap-3">
-            <textarea
-              placeholder="Enter reason for rejection"
+            <Textarea
+              label="Reject reason"
+              name="reason"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              name="reason"
-              id="reason"
-              cols="30"
-              rows="10"
-              className="w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-4"
-            ></textarea>
+              error={errors.reason}
+            />
             <div className="flex justify-end mx-auto p-4 rounded shadow bg-white gap-3 mt-4">
               <Button
                 text="Reject Product"
@@ -463,10 +453,7 @@ export default function Product() {
             >
               &gt;
             </button>
-            <button
-              className="absolute top-0 right-0 bg-red-500 p-2 rounded-full"
-              onClick={closeModal}
-            >
+            <button className="absolute top-0 right-0 bg-red-500 p-2 rounded-full">
               X
             </button>
           </div>

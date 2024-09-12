@@ -80,7 +80,10 @@ function App() {
               <Route path="overview" element={<Cms />} />
               <Route path="product-in-action" element={<Cms />} />
             </Route>
-            <Route path="/pages" element={<CustomPages />} />
+            <Route path="/pages" >
+              <Route path="custom" element={<CustomPages />} />
+              <Route path="blog" element={<CustomPages />} />
+            </Route>
             <Route path="/settings" element={<Settings />}>
               <Route path="categories" element={<Categories />} />
               <Route path="subcategories" element={<Subcategories />} />

@@ -77,7 +77,7 @@ export default function Sidebar() {
       {
         name: "Pages",
         icon: DocumentChartBarIcon,
-        link: "/pages",
+        link: "/pages/custom",
       },
       {
         name: "Settings",
