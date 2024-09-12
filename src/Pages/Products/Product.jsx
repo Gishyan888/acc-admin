@@ -16,7 +16,6 @@ export default function Product() {
   const [errors, setErrors] = useState({});
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [convertedImages, setConvertedImages] = useState([]);
   const [rejectProduct, setRejectProduct] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reason, setReason] = useState("");
@@ -40,14 +39,6 @@ export default function Product() {
       .then((res) => {
         const data = res.data.data;
         setProductData(data);
-
-        // Combine banner_image, main_image, and images array into one
-        const allImages = [
-          data.banner_image,
-          data.main_image,
-          ...data.images.map((img) => img.image),
-        ];
-        setConvertedImages(allImages);
       })
       .catch((err) => console.error(err));
   };
@@ -81,11 +72,11 @@ export default function Product() {
   const navigateImage = (direction) => {
     if (direction === "prev") {
       setSelectedImageIndex((prevIndex) =>
-        prevIndex === 0 ? convertedImages.length - 1 : prevIndex - 1
+        prevIndex === 0 ? productData.images.length - 1 : prevIndex - 1
       );
     } else if (direction === "next") {
       setSelectedImageIndex((prevIndex) =>
-        prevIndex === convertedImages.length - 1 ? 0 : prevIndex + 1
+        prevIndex === productData.images.length - 1 ? 0 : prevIndex + 1
       );
     }
   };
@@ -97,7 +88,7 @@ export default function Product() {
       <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
         <div className="w-[800px] h-[800px] relative flex justify-center items-center p-6">
           <img
-            src={convertedImages[selectedImageIndex]}
+            src={productData.images[selectedImageIndex].image}
             alt={`Full size ${selectedImageIndex + 1}`}
             className="object-contain w-full h-full"
           />
@@ -125,7 +116,15 @@ export default function Product() {
   };
 
   const handleSubmit = async () => {
-    const { min_price, max_price, product_count_range, description, title, product_type, standards } = productData;
+    const {
+      min_price,
+      max_price,
+      product_count_range,
+      description,
+      title,
+      product_type,
+      standards,
+    } = productData;
 
     const formData = new FormData();
 
@@ -134,7 +133,12 @@ export default function Product() {
     formData.append("product_range", product_count_range);
     formData.append("description", description);
     formData.append("product_type_id", product_type?.id);
-    { standards && standards.map(standard => formData.append("standards[]", standard.id)) }
+    {
+      standards &&
+        standards.map((standard) =>
+          formData.append("standards[]", standard.id)
+        );
+    }
     formData.append("title", title);
     formData.append("_method", "PUT");
 
@@ -195,27 +199,29 @@ export default function Product() {
       );
     }
   };
+  console.log("🚀 ~ {productData.images.map ~ productData:", productData);
 
   return (
     <div className="flex flex-col pt-1 pb-4 w-full">
       <div className="rounded shadow bg-white p-3 flex flex-col gap-4">
-        <div className="flex gap-4">
-          {convertedImages.map((image, index) => {
-            const isBannerOrMainImage = index === 0 || index === 1;
-            return (
-              <img
-                key={index}
-                className={`cursor-pointer ${
-                  isBannerOrMainImage ? "w-80 h-80" : "w-40 h-40"
-                }`}
-                src={image}
-                alt={`image-${index}`}
-                onClick={() => openImageModal(index)}
-              />
-            );
-          })}
+        <div className="md:flex gap-4">
+          <div className="flex flex-col gap-3 w-full p-3 border rounded">
+            <span>Banner Image</span>
+            <img
+              src={productData.banner_image}
+              alt={productData.title}
+              className="object-cover w-full h-96"
+            />
+          </div>
+          <div className="flex flex-col gap-3 w-full p-3 border rounded">
+            <span>Main Image</span>
+            <img
+              src={productData.main_image}
+              alt={productData.title}
+              className="object-cover w-full h-96"
+            />
+          </div>
         </div>
-
         <div className="flex gap-4">
           <div className="flex flex-col gap-4">
             <Input
@@ -341,6 +347,20 @@ export default function Product() {
           error={errors.description}
           disabled={!isEditing}
         />
+      <div className="flex flex-wrap gap-4 rounded border p-3">
+      {productData.images &&
+          productData.images.map((image, index) => {
+            return (
+              <img
+                key={index}
+                className={`cursor-pointer w-32 h-32 object-cover rounded border border-gray-300`}
+                src={image.image}
+                alt={`image-${index}`}
+                onClick={() => openImageModal(index)}
+              />
+            );
+          })}
+      </div>
         {productData && productData.reject_reason && (
           <div className="mt-4 p-4 m-4 bg-red-50 border border-red-200 rounded-lg">
             <h3 className="text-lg font-bold text-red-800 mb-2">
