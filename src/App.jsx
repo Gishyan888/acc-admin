@@ -30,10 +30,13 @@ import Products from "./Pages/Products/Products";
 import Product from "./Pages/Products/Product";
 import CustomPages from "./Pages/Pages/CustomPages";
 import CreateEditPages from "./Pages/Pages/CreateEditPages";
+import Contacts from "./Pages/ContactCompany/Contacts";
+import ContactInfo from "./Pages/ContactCompany/ContactInfo";
+
 function App() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
-  const { modalDetails } = useModal()
+  const { modalDetails } = useModal();
 
   useEffect(() => {
     initializeAuth();
@@ -81,25 +84,13 @@ function App() {
               <Route path="overview" element={<Cms />} />
               <Route path="product-in-action" element={<Cms />} />
             </Route>
-            <Route path="/pages" >
+            <Route path="/pages">
               <Route path="custom" element={<CustomPages />} />
-              <Route
-                path="custom/:id/edit"
-                element={<CreateEditPages />}
-              />
-              <Route
-                path="custom/create"
-                element={<CreateEditPages />}
-              />
+              <Route path="custom/:id/edit" element={<CreateEditPages />} />
+              <Route path="custom/create" element={<CreateEditPages />} />
               <Route path="blog" element={<CustomPages />} />
-              <Route
-                path="blog/:id/edit"
-                element={<CreateEditPages />}
-              />
-              <Route
-                path="blog/create"
-                element={<CreateEditPages />}
-              />
+              <Route path="blog/:id/edit" element={<CreateEditPages />} />
+              <Route path="blog/create" element={<CreateEditPages />} />
             </Route>
             <Route path="/settings" element={<Settings />}>
               <Route path="categories" element={<Categories />} />
@@ -107,6 +98,8 @@ function App() {
               <Route path="standards" element={<Standard />} />
               <Route path="product-types" element={<ProductType />} />
             </Route>
+            <Route path="/contacts" element={<Contacts />} />
+            <Route path="/contact/:contact_id/show" element={<ContactInfo />} />
           </Route>
         </Routes>
       </Router>

@@ -23,6 +23,7 @@ import {
   CreditCardIcon,
   FlagIcon,
   PresentationChartLineIcon,
+  LinkIcon,
 } from "@heroicons/react/24/solid";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -39,10 +40,12 @@ export default function Sidebar() {
       setActiveTab("/cms/overview");
     } else if (location.pathname.includes("settings")) {
       setActiveTab("/settings/categories");
-    } else if(location.pathname.includes("companies") || location.pathname.includes("company")) {
+    } else if (
+      location.pathname.includes("companies") ||
+      location.pathname.includes("company")
+    ) {
       setActiveTab("/companies");
-    }
-    else {
+    } else {
       setActiveTab(location.pathname);
     }
   }, [location]);
@@ -83,6 +86,11 @@ export default function Sidebar() {
         name: "Settings",
         icon: Cog6ToothIcon,
         link: "/settings/categories",
+      },
+      {
+        name: "Contact Company",
+        icon: LinkIcon,
+        link: "/contacts",
       },
     ],
     section2: [
