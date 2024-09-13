@@ -86,10 +86,10 @@ function App() {
             </Route>
             <Route path="/pages">
               <Route path="custom" element={<CustomPages />} />
-              <Route path="custom/:id/edit" element={<CreateEditPages />} />
+              <Route path="custom/:slug/edit" element={<CreateEditPages />} />
               <Route path="custom/create" element={<CreateEditPages />} />
               <Route path="blog" element={<CustomPages />} />
-              <Route path="blog/:id/edit" element={<CreateEditPages />} />
+              <Route path="blog/:slug/edit" element={<CreateEditPages />} />
               <Route path="blog/create" element={<CreateEditPages />} />
             </Route>
             <Route path="/settings" element={<Settings />}>

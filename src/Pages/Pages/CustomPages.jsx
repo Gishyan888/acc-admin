@@ -10,7 +10,7 @@ export default function CustomPages() {
   const location = useLocation();
   const navigate = useNavigate();
   const [bannersData, setBannersData] = useState([]);
-  const { setModalDetails, resetModalDetails } = useModal()
+  const { setModalDetails, resetModalDetails } = useModal();
 
   const navItems = [
     { path: "/pages/custom", label: "Custom Pages" },
@@ -42,25 +42,25 @@ export default function CustomPages() {
     navigate(`${item.slug}/edit`);
   };
 
-const 
-deletePage = (item) => {
-  setModalDetails({
-    isVisible: true,
-    image: "warning",
-    button1Text: "Cancel",
-    button2Text: "Delete",
-    button1Color: "bg-gray-500",
-    button2Color: "bg-red-500",
-    button1OnClick: () => resetModalDetails(),
-    button2OnClick: () => {
-      api.delete(`api/admin/contents/${item.id}`)
-        .then(() => fetchCustomPages())
-        .catch((err) => console.log(err))
-        .finally(() => resetModalDetails());
-    },
-    onClose: () => resetModalDetails(),
-  });
-};
+  const deletePage = (item) => {
+    setModalDetails({
+      isVisible: true,
+      image: "warning",
+      button1Text: "Cancel",
+      button2Text: "Delete",
+      button1Color: "bg-gray-500",
+      button2Color: "bg-red-500",
+      button1OnClick: () => resetModalDetails(),
+      button2OnClick: () => {
+        api
+          .delete(`api/admin/contents/${item.id}`)
+          .then(() => fetchCustomPages())
+          .catch((err) => console.log(err))
+          .finally(() => resetModalDetails());
+      },
+      onClose: () => resetModalDetails(),
+    });
+  };
 
   const handleCreateEditPage = () => {
     navigate("create");
@@ -70,13 +70,17 @@ deletePage = (item) => {
     <div className="w-full">
       <div className="flex justify-between items-center">
         <Navigation navItems={navItems} />
-        {bannersData.length < 5 && (
-          <Button
-            text={location.pathname.includes("custom") ? "Create Custom Page" : "Create Blog Page"}
-            color="bg-amber-600"
-            onClick={() => handleCreateEditPage()}
-          />
-        )}
+        {/* {bannersData.length < 5 && ( */}
+        <Button
+          text={
+            location.pathname.includes("custom")
+              ? "Create Custom Page"
+              : "Create Blog Page"
+          }
+          color="bg-amber-600"
+          onClick={() => handleCreateEditPage()}
+        />
+        {/* )} */}
       </div>
       <div className="w-full flex flex-col items-center justify-center bg-white p-2">
         <table className="w-full table-auto border-collapse">
@@ -100,8 +104,12 @@ deletePage = (item) => {
                   />
                 </td>
                 <td className="px-4 py-2">
-                  <div className={`px-2 py-1 w-20 text-center rounded-3xl text-white ${item.status === 1 ? "bg-green-500" : "bg-red-500"}`}>
-                  {item.status === 1 ? "Active" : "Inactive"}
+                  <div
+                    className={`px-2 py-1 w-20 text-center rounded-3xl text-white ${
+                      item.status === 1 ? "bg-green-500" : "bg-red-500"
+                    }`}
+                  >
+                    {item.status === 1 ? "Active" : "Inactive"}
                   </div>
                 </td>
                 <td className="px-4 py-2">
