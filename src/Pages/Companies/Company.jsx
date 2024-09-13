@@ -65,8 +65,28 @@ export default function Company() {
       .catch((err) => console.error(err));
   };
 
+  const formatInputValue = (value, type) => {
+    if (!type) return value;
+    if (!value) {
+      return "";
+    }
+    if (typeof value === "number") {
+      value = value.toString();
+    }
+    if (typeof value === "string") {
+      if (type === "phone_number") {
+        return value.replace(/[^0-9+]/g, "");
+      }
+    }
+    return value;
+  };
+
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    let { name, value } = e.target;
+
+    if (name == "phone_number") {
+      value = formatInputValue(value, "phone_number");
+    }
     setCompanyData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -343,9 +363,9 @@ export default function Company() {
                 <Input
                   key={field}
                   label={field
-                    .replace(/_/g, " ") 
-                    .replace(/\b\w/g, (char) => char.toUpperCase()) 
-                    .replace(/\bOf\b/g, (char) => char.toLowerCase())} 
+                    .replace(/_/g, " ")
+                    .replace(/\b\w/g, (char) => char.toUpperCase())
+                    .replace(/\bOf\b/g, (char) => char.toLowerCase())}
                   name={field}
                   type="text"
                   allowNumbers={["employees", "year_of_found"].includes(field)}
