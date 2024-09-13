@@ -11,7 +11,7 @@ import RichtextEditor from "../../Components/RichTextEditor";
 export default function CreateEditPages() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { slug } = useParams();
   const [errors, setErrors] = useState({});
   let title = location.pathname.includes("custom")
     ? "Custom Page"
@@ -19,9 +19,9 @@ export default function CreateEditPages() {
   const { setModalDetails, resetModalDetails } = useModal();
 
   useEffect(() => {
-    if (id) {
+    if (slug) {
       api
-        .get(`api/site/contents/${id}`)
+        .get(`api/site/contents/${slug}`)
         .then((res) => {
           setCredentials(res.data.data);
         })
@@ -29,7 +29,7 @@ export default function CreateEditPages() {
           console.log(err);
         });
     }
-  }, [id]);
+  }, [slug]);
 
   const [credentials, setCredentials] = useState({
     title: "",
@@ -69,7 +69,7 @@ export default function CreateEditPages() {
     const formData = new FormData();
     formData.append("title", credentials.title);
     formData.append("text", credentials.text);
-    if (!id) {
+    if (!slug) {
       formData.append("type", credentials.type);
     }
     formData.append("status", credentials.status);
@@ -77,9 +77,9 @@ export default function CreateEditPages() {
       formData.append("image", credentials.image);
     }
     let apiURL = "api/admin/contents";
-    if (id) {
+    if (slug) {
       formData.append("_method", "PUT");
-      apiURL = `api/admin/contents/${id}`;
+      apiURL = `api/admin/contents/${credentials.id}`;
     }
 
     api
@@ -107,7 +107,7 @@ export default function CreateEditPages() {
         <div className="flex gap-4 w-full">
           <div className="w-full flex justify-between gap-3 max-w-4xl">
             <div className="flex flex-col gap-3 w-full">
-              {id && (
+              {slug && (
                 <div className="flex flex-col mx-2 text-sm font-medium w-80">
                   <label className="text-gray-700 font-medium">Status</label>
                   <select

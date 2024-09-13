@@ -39,7 +39,7 @@ export default function CustomPages() {
   }, [location.pathname]);
 
   const editPage = (item) => {
-    navigate(`${item.id}/edit`);
+    navigate(`${item.slug}/edit`);
   };
 
 const 
