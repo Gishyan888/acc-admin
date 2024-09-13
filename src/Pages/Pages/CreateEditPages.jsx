@@ -108,7 +108,7 @@ export default function CreateEditPages() {
           <div className="w-full flex justify-between gap-3 max-w-4xl">
             <div className="flex flex-col gap-3 w-full">
               {id && (
-                <div className="flex flex-col mb-1 text-sm font-medium w-80">
+                <div className="flex flex-col mx-2 text-sm font-medium w-80">
                   <label className="text-gray-700 font-medium">Status</label>
                   <select
                     name="status"
@@ -121,31 +121,35 @@ export default function CreateEditPages() {
                   </select>
                 </div>
               )}
-              <Input
-                label="Title"
-                type="text"
-                name="title"
-                value={credentials.title}
-                onChange={handleChange}
-                error={errors.title}
-              />
+              <div className="my-2 mx-2">
+                <Input
+                  label="Title"
+                  type="text"
+                  name="title"
+                  value={credentials.title}
+                  onChange={handleChange}
+                  error={errors.title}
+                />
+              </div>
+
+              <div className="w-80">
+                <FileUpload
+                  file={credentials.image}
+                  onFileSelect={handleFileSelect}
+                  onFileRemove={handleFileRemove}
+                  buttonText="Upload Image"
+                  imageSize="w-full h-64"
+                />
+                {errors.image && <p className="text-red-500">{errors.image}</p>}
+              </div>
               <RichtextEditor
+                containerClass="mx-2"
                 label="Description"
                 name="text"
                 value={credentials.text}
                 onChange={handleChange}
                 error={errors.text}
               />
-            </div>
-            <div className="w-full">
-              <FileUpload
-                file={credentials.image}
-                onFileSelect={handleFileSelect}
-                onFileRemove={handleFileRemove}
-                buttonText="Upload Image"
-                imageSize="w-full h-64"
-              />
-              {errors.image && <p className="text-red-500">{errors.image}</p>}
             </div>
           </div>
         </div>
