@@ -60,7 +60,7 @@ export default function Dashboard() {
             </div>
           </div>
         )}
-        {reports.contact_count && (
+        {reports.contact_count>0 && (
           <div className="bg-white px-8 py-4 rounded-md shadow-md w-2xl flex flex-col justify-end">
             <div
               className={
