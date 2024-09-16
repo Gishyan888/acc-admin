@@ -124,7 +124,8 @@ export default function Company() {
       if (key === "user" || key === "banner" || key === "profile_picture") {
         continue;
       } else {
-        formData.append(key, value);
+        // value = value ? value : "";
+        formData.append(key, value ?? "");
       }
     }
 
