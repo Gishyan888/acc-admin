@@ -9,7 +9,7 @@ import FileUpload from "../../Components/FileUpload";
 import useModal from "../../store/useModal";
 
 export default function Cms() {
-  const { setModalDetails, resetModalDetails } = useModal()
+  const { setModalDetails, resetModalDetails } = useModal();
 
   const navItems = [
     { path: "/cms/overview", label: "Overview" },
@@ -24,7 +24,7 @@ export default function Cms() {
     image_src: "",
   });
 
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     let apiURL = "";
@@ -40,7 +40,15 @@ export default function Cms() {
         setCredentials(res.data.data);
       })
       .catch((err) => {
-        console.log(err);
+        resetModalDetails();
+        setModalDetails({
+          isVisible: true,
+          image: "fail",
+          errorMessage: err.response?.data?.message || "An error occurred",
+          onClose: () => {
+            resetModalDetails();
+          },
+        });
       });
   }, [location.pathname]);
 
@@ -57,19 +65,17 @@ export default function Cms() {
       ...prev,
       image: file,
       image_src: URL.createObjectURL(file),
-    }))
+    }));
   };
 
-  
   const handleFileRemove = () => {
     setCredentials((prev) => ({
       ...prev,
       image: null,
-      image_src: '',
-      image_link: ''
-    }))
+      image_src: "",
+      image_link: "",
+    }));
   };
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -115,25 +121,25 @@ export default function Cms() {
         className="w-full bg-white p-8 rounded-lg shadow-md flex flex-col"
       >
         <div className="flex gap-4 w-full">
-            <div className="flex flex-col gap-3 w-1/2">
-              <Input
-                label="Title"
-                name="title"
-                type="text"
-                value={credentials.title}
-                onChange={handleChange}
-                error={errors.title}
-              />
-              <Textarea
-                label="Description"
-                name="text"
-                value={credentials.text}
-                onChange={handleChange}
-                error={errors.text}
-              />
-            </div>
+          <div className="flex flex-col gap-3 w-1/2">
+            <Input
+              label="Title"
+              name="title"
+              type="text"
+              value={credentials.title}
+              onChange={handleChange}
+              error={errors.title}
+            />
+            <Textarea
+              label="Description"
+              name="text"
+              value={credentials.text}
+              onChange={handleChange}
+              error={errors.text}
+            />
+          </div>
           <div className="w-full flex flex-col">
-          {credentials.image && location.pathname.includes("overview") && (
+            {credentials.image && location.pathname.includes("overview") && (
               <Input
                 label="Image Link"
                 name="image_link"
@@ -150,11 +156,10 @@ export default function Cms() {
               buttonText="Upload Image"
               imageSize="w-1/2 h-64 mt-4"
             />
-            {errors.image && (
-              <p className="text-red-500">{errors.image}</p>
-            )}
+            {errors.image && <p className="text-red-500">{errors.image}</p>}
           </div>
-        </div> <div className="flex justify-end">
+        </div>{" "}
+        <div className="flex justify-end">
           <Button
             text="Save Info"
             color="bg-amber-600 mt-4"

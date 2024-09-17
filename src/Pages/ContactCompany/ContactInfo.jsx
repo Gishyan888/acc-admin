@@ -13,7 +13,15 @@ export default function ContactInfo() {
         setContactsData(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        resetModalDetails();
+        setModalDetails({
+          isVisible: true,
+          image: "fail",
+          errorMessage: err.response?.data?.message || "An error occurred",
+          onClose: () => {
+            resetModalDetails();
+          },
+        });
       });
   };
 

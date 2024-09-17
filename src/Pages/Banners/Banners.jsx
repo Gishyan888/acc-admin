@@ -10,7 +10,7 @@ export default function Banners() {
   const location = useLocation();
   const navigate = useNavigate();
   const [bannersData, setBannersData] = useState([]);
-  const { setModalDetails, resetModalDetails } = useModal()
+  const { setModalDetails, resetModalDetails } = useModal();
 
   const navItems = [
     { path: "/banners/header-banners", label: "Header Banners" },
@@ -30,7 +30,15 @@ export default function Banners() {
         setBannersData(res.data.data);
       })
       .catch((err) => {
-        console.log(err);
+        resetModalDetails();
+        setModalDetails({
+          isVisible: true,
+          image: "fail",
+          errorMessage: err.response?.data?.message || "An error occurred",
+          onClose: () => {
+            resetModalDetails();
+          },
+        });
       });
   };
 
@@ -42,24 +50,35 @@ export default function Banners() {
     navigate(`${item.id}/edit`);
   };
 
-const deleteBanner = (item) => {
-  setModalDetails({
-    isVisible: true,
-    image: "warning",
-    button1Text: "Cancel",
-    button2Text: "Delete",
-    button1Color: "bg-gray-500",
-    button2Color: "bg-red-500",
-    button1OnClick: () => resetModalDetails(),
-    button2OnClick: () => {
-      api.delete(`api/admin/banners/${item.id}`)
-        .then(() => fetchBanners())
-        .catch((err) => console.log(err))
-        .finally(() => resetModalDetails());
-    },
-    onClose: () => resetModalDetails(),
-  });
-};
+  const deleteBanner = (item) => {
+    setModalDetails({
+      isVisible: true,
+      image: "warning",
+      button1Text: "Cancel",
+      button2Text: "Delete",
+      button1Color: "bg-gray-500",
+      button2Color: "bg-red-500",
+      button1OnClick: () => resetModalDetails(),
+      button2OnClick: () => {
+        api
+          .delete(`api/admin/banners/${item.id}`)
+          .then(() => fetchBanners())
+          .catch((err) => {
+            resetModalDetails();
+            setModalDetails({
+              isVisible: true,
+              image: "fail",
+              errorMessage: err.response?.data?.message || "An error occurred",
+              onClose: () => {
+                resetModalDetails();
+              },
+            });
+          })
+          .finally(() => resetModalDetails());
+      },
+      onClose: () => resetModalDetails(),
+    });
+  };
 
   const handleCreateEditBanner = () => {
     navigate("create");

@@ -13,6 +13,8 @@ import useModal from "../../store/useModal";
 export default function Standard() {
   const [standards, setStandards] = useState([]);
   const [errors, setErrors] = useState({});
+  const { activeSettings, setActiveSettings } = useSettings();
+  const { setModalDetails, resetModalDetails } = useModal();
   useEffect(() => {
     getStandards();
   }, []);
@@ -23,10 +25,18 @@ export default function Standard() {
       .then((res) => {
         setStandards(res.data.data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        resetModalDetails();
+        setModalDetails({
+          isVisible: true,
+          image: "fail",
+          errorMessage: err.response?.data?.message || "An error occurred",
+          onClose: () => {
+            resetModalDetails();
+          },
+        });
+      });
   };
-  const { activeSettings, setActiveSettings } = useSettings();
-  const { setModalDetails, resetModalDetails } = useModal();
 
   const editStandard = (item) => {
     setActiveSettings.item({ id: item.id, name: item.name, icon: item.icon });
@@ -45,9 +55,21 @@ export default function Standard() {
       button2OnClick: () => {
         api
           .delete(`api/admin/standards/${item.id}`)
-          .then(() => getStandards())
-          .catch((err) => console.log(err))
-          .finally(() => resetModalDetails());
+          .then(() => {
+            getStandards();
+            resetModalDetails();
+          })
+          .catch((err) => {
+            resetModalDetails();
+            setModalDetails({
+              isVisible: true,
+              image: "fail",
+              errorMessage: err.response?.data?.message || "An error occurred",
+              onClose: () => {
+                resetModalDetails();
+              },
+            });
+          });
       },
       onClose: () => resetModalDetails(),
     });

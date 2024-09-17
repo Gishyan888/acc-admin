@@ -5,32 +5,30 @@ import api from "../../api/api";
 import useModal from "../../store/useModal";
 
 export default function ResetPassword() {
-  
   const [passwords, setPasswords] = useState({
     newPassword: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { setModalDetails, resetModalDetails } = useModal()
+  const { setModalDetails, resetModalDetails } = useModal();
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const token = searchParams.get('token');
-  const email = searchParams.get('email');
+  const token = searchParams.get("token");
+  const email = searchParams.get("email");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setPasswords(prev => ({
+    setPasswords((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
-
 
     if (passwords.newPassword !== passwords.confirmPassword) {
       setError("Passwords do not match");
@@ -46,10 +44,11 @@ export default function ResetPassword() {
       token: token,
       email: email,
       password: passwords.newPassword,
-      password_confirmation: passwords.confirmPassword
-    }
+      password_confirmation: passwords.confirmPassword,
+    };
 
-    api.post(`/reset-password`, data)
+    api
+      .post(`/reset-password`, data)
       .then((res) => {
         setModalDetails({
           isVisible: true,
@@ -59,9 +58,17 @@ export default function ResetPassword() {
             navigate("/login");
           },
         });
-
-      }).catch((err) => {
-        console.log(err);
+      })
+      .catch((err) => {
+        resetModalDetails();
+        setModalDetails({
+          isVisible: true,
+          image: "fail",
+          errorMessage: err.response?.data?.message || "An error occurred",
+          onClose: () => {
+            resetModalDetails();
+          },
+        });
       });
   };
 
@@ -69,7 +76,10 @@ export default function ResetPassword() {
     <div className="w-full h-screen flex flex-col justify-center items-center gap-3 bg-gray-100">
       <h2 className="text-2xl font-semibold mb-2">Reset Password</h2>
       <p className="text-gray-600 mb-6">Enter your new password</p>
-      <form onSubmit={handleSubmit} className="w-full flex items-center gap-4 flex-col max-w-sm bg-white p-8 rounded-lg shadow-md">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full flex items-center gap-4 flex-col max-w-sm bg-white p-8 rounded-lg shadow-md"
+      >
         <Input
           label="New Password"
           type="password"

@@ -23,7 +23,17 @@ export default function Companies() {
         setCompanyData(res.data.data);
         setPageCount(res.data.meta.last_page);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        resetModalDetails();
+        setModalDetails({
+          isVisible: true,
+          image: "fail",
+          errorMessage: err.response?.data?.message || "An error occurred",
+          onClose: () => {
+            resetModalDetails();
+          },
+        });
+      });
   }, [currentPage]);
 
   const getCompany = (company) => {

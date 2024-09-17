@@ -30,7 +30,15 @@ export default function CustomPages() {
         setBannersData(res.data.data);
       })
       .catch((err) => {
-        console.log(err);
+        resetModalDetails();
+        setModalDetails({
+          isVisible: true,
+          image: "fail",
+          errorMessage: err.response?.data?.message || "An error occurred",
+          onClose: () => {
+            resetModalDetails();
+          },
+        });
       });
   };
 
@@ -55,8 +63,17 @@ export default function CustomPages() {
         api
           .delete(`api/admin/contents/${item.id}`)
           .then(() => fetchCustomPages())
-          .catch((err) => console.log(err))
-          .finally(() => resetModalDetails());
+          .catch((err) => {
+            resetModalDetails();
+            setModalDetails({
+              isVisible: true,
+              image: "fail",
+              errorMessage: err.response?.data?.message || "An error occurred",
+              onClose: () => {
+                resetModalDetails();
+              },
+            });
+          });
       },
       onClose: () => resetModalDetails(),
     });

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { EyeIcon } from "@heroicons/react/16/solid";
 import Pagination from "../../Components/Pagination";
 import usePagination from "../../store/usePagination";
-
+import { useModal } from "../../store/useModal";
 export default function Products() {
   const navigate = useNavigate();
   const [productsData, setProductsData] = useState([]);
@@ -13,7 +13,8 @@ export default function Products() {
   const [selectedCompany, setSelectedCompany] = useState("all");
   const [companies, setCompanies] = useState([]);
   const setCurrentPage = usePagination((state) => state.setCurrentPage);
-  
+  const { setModalDetails, resetModalDetails } = useModal();
+
   useEffect(() => {
     setCurrentPage(1);
   }, []);
@@ -24,7 +25,17 @@ export default function Products() {
       .then((res) => {
         setCompanies(res.data.data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        resetModalDetails();
+        setModalDetails({
+          isVisible: true,
+          image: "fail",
+          errorMessage: err.response?.data?.message || "An error occurred",
+          onClose: () => {
+            resetModalDetails();
+          },
+        });
+      });
   }, [currentPage]);
 
   useEffect(() => {
@@ -36,7 +47,17 @@ export default function Products() {
         setProductsData(res.data.data);
         setPageCount(res.data.meta.last_page);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        resetModalDetails();
+        setModalDetails({
+          isVisible: true,
+          image: "fail",
+          errorMessage: err.response?.data?.message || "An error occurred",
+          onClose: () => {
+            resetModalDetails();
+          },
+        });
+      });
   }, [currentPage, selectedCompany]);
 
   const getProduct = (product) => {

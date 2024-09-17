@@ -1,4 +1,8 @@
-import { PencilIcon, TrashIcon, ArrowUpTrayIcon } from "@heroicons/react/16/solid";
+import {
+  PencilIcon,
+  TrashIcon,
+  ArrowUpTrayIcon,
+} from "@heroicons/react/16/solid";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import { useEffect, useState } from "react";
@@ -14,7 +18,7 @@ export default function ProductType() {
   const [productTypes, setProductTypes] = useState([]);
   const { activeSettings, setActiveSettings } = useSettings();
   const { setModalDetails, resetModalDetails } = useModal();
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     getCategories();
@@ -29,15 +33,28 @@ export default function ProductType() {
   }, [categories]);
 
   const getCategories = () => {
-    api.get("api/site/categories")
+    api
+      .get("api/site/categories")
       .then((res) => {
         setCategories(res.data.data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        resetModalDetails();
+        setModalDetails({
+          isVisible: true,
+          image: "fail",
+          errorMessage: err.response?.data?.message || "An error occurred",
+          onClose: () => {
+            resetModalDetails();
+          },
+        });
+      });
   };
 
   const getSubcategories = (selectedCategoryId) => {
-    const selectedCategory = categories.find(category => category.id === parseInt(selectedCategoryId));
+    const selectedCategory = categories.find(
+      (category) => category.id === parseInt(selectedCategoryId)
+    );
     if (selectedCategory && selectedCategory.subcategories) {
       setSubcategories(selectedCategory.subcategories);
       if (selectedCategory.subcategories.length > 0) {
@@ -57,10 +74,14 @@ export default function ProductType() {
       return;
     }
 
-    const category = categories.find(cat => cat.id == parseInt(selectedCategory));
+    const category = categories.find(
+      (cat) => cat.id == parseInt(selectedCategory)
+    );
     if (!category) return;
 
-    const subcategory = category.subcategories.find(sub => sub.id == parseInt(selectedSubcategory));
+    const subcategory = category.subcategories.find(
+      (sub) => sub.id == parseInt(selectedSubcategory)
+    );
     if (subcategory && subcategory.subcategories) {
       setProductTypes(subcategory.subcategories);
     } else {
@@ -71,7 +92,6 @@ export default function ProductType() {
   useEffect(() => {
     getTypes();
   }, [selectedCategory, selectedSubcategory, categories]);
-
 
   const editProductType = (item) => {
     setActiveSettings.item({ id: item.id, name: item.name, icon: item.icon });
@@ -88,10 +108,20 @@ export default function ProductType() {
       button2Color: "bg-red-500",
       button1OnClick: () => resetModalDetails(),
       button2OnClick: () => {
-        api.delete(`api/admin/product-types/${item.id}`)
-          .then(() => getCategories(),getTypes())
-          .catch((err) => console.log(err))
-          .finally(() => resetModalDetails());
+        api
+          .delete(`api/admin/product-types/${item.id}`)
+          .then(() => getCategories(), getTypes())
+          .catch((err) => {
+            resetModalDetails();
+            setModalDetails({
+              isVisible: true,
+              image: "fail",
+              errorMessage: err.response?.data?.message || "An error occurred",
+              onClose: () => {
+                resetModalDetails();
+              },
+            });
+          });
       },
       onClose: () => resetModalDetails(),
     });
@@ -100,8 +130,14 @@ export default function ProductType() {
   const crudProductType = async () => {
     try {
       const apiCall = activeSettings.item.id
-        ? api.put(`api/admin/product-types/${activeSettings.item.id}`, { name: activeSettings.item.name, category_id: selectedSubcategory })
-        : api.post("api/admin/product-types", { name: activeSettings.item.name, category_id: selectedSubcategory });
+        ? api.put(`api/admin/product-types/${activeSettings.item.id}`, {
+            name: activeSettings.item.name,
+            category_id: selectedSubcategory,
+          })
+        : api.post("api/admin/product-types", {
+            name: activeSettings.item.name,
+            category_id: selectedSubcategory,
+          });
 
       await apiCall;
       setModalDetails({
@@ -110,14 +146,13 @@ export default function ProductType() {
         onClose: () => {
           resetModalDetails();
         },
-      })
+      });
       setActiveSettings.item({ name: "", icon: null });
       setActiveSettings.isCRUD(false);
 
       await getCategories();
 
       getTypes();
-
     } catch (err) {
       setErrors(err.response.data.errors);
     }
@@ -139,7 +174,9 @@ export default function ProductType() {
             >
               <option disabled>Select Category</option>
               {categories?.map((item, index) => (
-                <option value={item.id} key={index}>{item.name}</option>
+                <option value={item.id} key={index}>
+                  {item.name}
+                </option>
               ))}
             </select>
 
@@ -151,27 +188,45 @@ export default function ProductType() {
             >
               <option disabled>Select Subcategory</option>
               {subcategories?.map((item, index) => (
-                <option value={item.id} key={index}>{item.name}</option>
+                <option value={item.id} key={index}>
+                  {item.name}
+                </option>
               ))}
             </select>
           </div>
           <table className="w-full mt-4 text-sm text-left text-gray-500">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
               <tr>
-                <th scope="col" className="px-6 py-3">Name</th>
-                <th scope="col" className="px-6 py-3">Actions</th>
+                <th scope="col" className="px-6 py-3">
+                  Name
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
               {productTypes.map((item, index) => (
                 <tr key={index} className="bg-white border-b hover:bg-gray-50">
-                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{item.name}</td>
+                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                    {item.name}
+                  </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <button onClick={() => editProductType(item)} className="font-medium text-blue-600 hover:underline" data-tooltip-id="tooltip" data-tooltip-content="Edit">
+                      <button
+                        onClick={() => editProductType(item)}
+                        className="font-medium text-blue-600 hover:underline"
+                        data-tooltip-id="tooltip"
+                        data-tooltip-content="Edit"
+                      >
                         <PencilIcon className="w-5 h-5" />
                       </button>
-                      <button onClick={() => deleteProductType(item)} className="font-medium text-red-600 hover:underline" data-tooltip-id="tooltip" data-tooltip-content="Delete">
+                      <button
+                        onClick={() => deleteProductType(item)}
+                        className="font-medium text-red-600 hover:underline"
+                        data-tooltip-id="tooltip"
+                        data-tooltip-content="Delete"
+                      >
                         <TrashIcon className="w-5 h-5" />
                       </button>
                     </div>
@@ -190,13 +245,20 @@ export default function ProductType() {
               }}
               className="mt-2 w-full"
             >
-              <p className="text-xl font-bold">{activeSettings.item.id ? "Edit" : "Add"} {activeSettings.name}</p>
+              <p className="text-xl font-bold">
+                {activeSettings.item.id ? "Edit" : "Add"} {activeSettings.name}
+              </p>
 
               <div className="border-b-gray-300 border-b py-2">
                 <div className="flex items-center rounded gap-3">
                   <Input
                     type="text"
-                    onChange={(e) => setActiveSettings.item({ ...activeSettings.item, name: e.target.value })}
+                    onChange={(e) =>
+                      setActiveSettings.item({
+                        ...activeSettings.item,
+                        name: e.target.value,
+                      })
+                    }
                     className="ps-9 w-full"
                     required={true}
                     value={activeSettings.item.name}
@@ -218,7 +280,7 @@ export default function ProductType() {
                   text={activeSettings.item.id ? "Update" : "Create"}
                   color="bg-amber-600"
                   type="submit"
-                  onClick={() => { }}
+                  onClick={() => {}}
                 />
               </div>
             </form>

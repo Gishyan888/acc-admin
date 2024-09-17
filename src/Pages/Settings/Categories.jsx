@@ -10,6 +10,10 @@ import FileUpload from "../../Components/FileUpload";
 export default function Categories() {
   const [categories, setCategories] = useState([]);
   const [errors, setErrors] = useState({});
+  const { activeSettings, setActiveSettings } = useSettings();
+  const { setModalDetails, resetModalDetails } = useModal();
+  const formRef = useRef(null);
+
   useEffect(() => {
     getCategories();
   }, []);
@@ -20,12 +24,18 @@ export default function Categories() {
       .then((res) => {
         setCategories(res.data.data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        resetModalDetails();
+        setModalDetails({
+          isVisible: true,
+          image: "fail",
+          errorMessage: err.response?.data?.message || "An error occurred",
+          onClose: () => {
+            resetModalDetails();
+          },
+        });
+      });
   };
-
-  const { activeSettings, setActiveSettings } = useSettings();
-  const { setModalDetails, resetModalDetails } = useModal();
-  const formRef = useRef(null);
 
   const editCategory = (item) => {
     setActiveSettings.item({ id: item.id, name: item.name, icon: item.icon });
@@ -51,20 +61,18 @@ export default function Categories() {
           .catch((err) => {
             resetModalDetails();
             setModalDetails({
-                isVisible: true,
-                image: "fail",
-                errorMessage: err.response?.data?.message || "An error occurred", 
-                onClose: () => {
-                  resetModalDetails();
-                },
+              isVisible: true,
+              image: "fail",
+              errorMessage: err.response?.data?.message || "An error occurred",
+              onClose: () => {
+                resetModalDetails();
+              },
             });
-        });
-        
+          });
       },
       onClose: () => resetModalDetails(),
     });
   };
-  
 
   const handleFileSelect = (file) => {
     setActiveSettings.item({ ...activeSettings.item, icon: file });
