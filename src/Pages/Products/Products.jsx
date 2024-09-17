@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { EyeIcon } from "@heroicons/react/16/solid";
 import Pagination from "../../Components/Pagination";
 import usePagination from "../../store/usePagination";
-import { useModal } from "../../store/useModal";
+import useModal from "../../store/useModal";
 export default function Products() {
   const navigate = useNavigate();
   const [productsData, setProductsData] = useState([]);
