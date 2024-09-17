@@ -1,4 +1,8 @@
-import { PencilIcon, TrashIcon, ArrowUpTrayIcon } from "@heroicons/react/16/solid";
+import {
+  PencilIcon,
+  TrashIcon,
+  ArrowUpTrayIcon,
+} from "@heroicons/react/16/solid";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import { useEffect, useState } from "react";
@@ -7,28 +11,27 @@ import useSettings from "../../store/useSettings";
 import useModal from "../../store/useModal";
 
 export default function Standard() {
-
-  const [standards, setStandards] = useState([])
-const [errors, setErrors] = useState({})
+  const [standards, setStandards] = useState([]);
+  const [errors, setErrors] = useState({});
   useEffect(() => {
-    getStandards()
+    getStandards();
   }, []);
 
   const getStandards = () => {
-    api.get("api/site/standards")
+    api
+      .get("api/site/standards")
       .then((res) => {
         setStandards(res.data.data);
       })
       .catch((err) => console.log(err));
   };
-  const { activeSettings, setActiveSettings } = useSettings()
-  const { setModalDetails, resetModalDetails } = useModal()
-
+  const { activeSettings, setActiveSettings } = useSettings();
+  const { setModalDetails, resetModalDetails } = useModal();
 
   const editStandard = (item) => {
-    setActiveSettings.item({ id: item.id, name: item.name, icon: item.icon })
-    setActiveSettings.isCRUD(true)
-  }
+    setActiveSettings.item({ id: item.id, name: item.name, icon: item.icon });
+    setActiveSettings.isCRUD(true);
+  };
 
   const deleteStandard = (item) => {
     setModalDetails({
@@ -40,7 +43,8 @@ const [errors, setErrors] = useState({})
       button2Color: "bg-red-500",
       button1OnClick: () => resetModalDetails(),
       button2OnClick: () => {
-        api.delete(`api/admin/standards/${item.id}`)
+        api
+          .delete(`api/admin/standards/${item.id}`)
           .then(() => getStandards())
           .catch((err) => console.log(err))
           .finally(() => resetModalDetails());
@@ -49,13 +53,13 @@ const [errors, setErrors] = useState({})
     });
   };
 
-
-
   const crudCategory = () => {
-
     const apiCall = activeSettings.item.id
-    ? api.put(`api/admin/standards/${activeSettings.item.id}`, { name: activeSettings.item.name, id: activeSettings.item.id })
-    : api.post("api/admin/standards", {name: activeSettings.item.name});
+      ? api.put(`api/admin/standards/${activeSettings.item.id}`, {
+          name: activeSettings.item.name,
+          id: activeSettings.item.id,
+        })
+      : api.post("api/admin/standards", { name: activeSettings.item.name });
     apiCall
       .then((res) => {
         setModalDetails({
@@ -64,14 +68,14 @@ const [errors, setErrors] = useState({})
           onClose: () => {
             resetModalDetails();
           },
-        })
+        });
         setActiveSettings.item({ name: "", icon: null });
         setActiveSettings.isCRUD(false);
-        getStandards()
+        getStandards();
+        setErrors({});
       })
       .catch((err) => setErrors(err.response.data.errors));
   };
-
 
   return (
     <div>
@@ -80,20 +84,36 @@ const [errors, setErrors] = useState({})
           <table className="w-full text-sm text-left text-gray-500">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
               <tr>
-                <th scope="col" className="px-6 py-3">Name</th>
-                <th scope="col" className="px-6 py-3">Actions</th>
+                <th scope="col" className="px-6 py-3">
+                  Name
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
               {standards.map((item, index) => (
                 <tr key={index} className="bg-white border-b hover:bg-gray-50">
-                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{item.name}</td>
+                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                    {item.name}
+                  </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <button onClick={() => editStandard(item)} className="font-medium text-blue-600 hover:underline" data-tooltip-id="tooltip" data-tooltip-content="Edit">
+                      <button
+                        onClick={() => editStandard(item)}
+                        className="font-medium text-blue-600 hover:underline"
+                        data-tooltip-id="tooltip"
+                        data-tooltip-content="Edit"
+                      >
                         <PencilIcon className="w-5 h-5" />
                       </button>
-                      <button onClick={() => deleteStandard(item)} className="font-medium text-red-600 hover:underline" data-tooltip-id="tooltip" data-tooltip-content="Delete">
+                      <button
+                        onClick={() => deleteStandard(item)}
+                        className="font-medium text-red-600 hover:underline"
+                        data-tooltip-id="tooltip"
+                        data-tooltip-content="Delete"
+                      >
                         <TrashIcon className="w-5 h-5" />
                       </button>
                     </div>
@@ -112,13 +132,20 @@ const [errors, setErrors] = useState({})
               }}
               className="mt-2 w-full"
             >
-              <p className="text-xl font-bold">{activeSettings.item.id ? "Edit" : "Add"} {activeSettings.name}</p>
+              <p className="text-xl font-bold">
+                {activeSettings.item.id ? "Edit" : "Add"} {activeSettings.name}
+              </p>
 
               <div className="border-b-gray-300 border-b py-2">
                 <div className="flex items-center rounded gap-3">
                   <Input
                     type="text"
-                    onChange={(e) => setActiveSettings.item({ ...activeSettings.item, name: e.target.value })}
+                    onChange={(e) =>
+                      setActiveSettings.item({
+                        ...activeSettings.item,
+                        name: e.target.value,
+                      })
+                    }
                     className="ps-9 w-full"
                     required={true}
                     value={activeSettings.item.name}
@@ -140,7 +167,7 @@ const [errors, setErrors] = useState({})
                   text={activeSettings.item.id ? "Update" : "Create"}
                   color="bg-amber-600"
                   type="submit"
-                  onClick={() => { }}
+                  onClick={() => {}}
                 />
               </div>
             </form>
@@ -148,5 +175,5 @@ const [errors, setErrors] = useState({})
         )}
       </div>
     </div>
-  )
+  );
 }

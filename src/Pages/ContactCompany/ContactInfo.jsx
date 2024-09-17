@@ -99,7 +99,7 @@ export default function ContactInfo() {
           </div>
         </div>
       </div>
-      <div className="my-8 rounded-md">
+      <div className="my-8 rounded-md bg-white">
         <span className="italic mr-4 font-semibold text-gray-600">
           Subject:
         </span>

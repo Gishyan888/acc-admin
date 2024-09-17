@@ -12,6 +12,11 @@ export default function Products() {
   const currentPage = usePagination((state) => state.currentPage);
   const [selectedCompany, setSelectedCompany] = useState("all");
   const [companies, setCompanies] = useState([]);
+  const setCurrentPage = usePagination((state) => state.setCurrentPage);
+  
+  useEffect(() => {
+    setCurrentPage(1);
+  }, []);
 
   useEffect(() => {
     api

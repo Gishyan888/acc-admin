@@ -52,7 +52,7 @@ const deleteBanner = (item) => {
     button2Color: "bg-red-500",
     button1OnClick: () => resetModalDetails(),
     button2OnClick: () => {
-      api.delete(`admin/banners/${item.id}`)
+      api.delete(`api/admin/banners/${item.id}`)
         .then(() => fetchBanners())
         .catch((err) => console.log(err))
         .finally(() => resetModalDetails());

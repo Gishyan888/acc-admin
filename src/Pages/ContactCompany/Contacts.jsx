@@ -10,6 +10,7 @@ export default function Contacts() {
   const [contactsData, setContactsData] = useState([]);
   const [pageCount, setPageCount] = useState(1);
   const currentPage = usePagination((state) => state.currentPage);
+  const setCurrentPage = usePagination((state) => state.setCurrentPage);
 
   const getContactsInfo = () => {
     let apiURL = `/api/admin/contact_with?page=${currentPage}`;
@@ -27,6 +28,10 @@ export default function Contacts() {
   const showContactInfo = (contact_id) => {
     navigate(`/contact/${contact_id}/show`);
   };
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, []);
 
   useEffect(() => {
     getContactsInfo();

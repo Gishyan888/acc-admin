@@ -8,22 +8,28 @@ import usePagination from "../../store/usePagination";
 export default function Companies() {
   const navigate = useNavigate();
   const [companyData, setCompanyData] = useState([]);
-  const [pageCount, setPageCount] = useState(1); 
+  const [pageCount, setPageCount] = useState(1);
   const currentPage = usePagination((state) => state.currentPage);
+  const setCurrentPage = usePagination((state) => state.setCurrentPage);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, []);
 
   useEffect(() => {
     api
-      .get(`/api/admin/company?page=${currentPage}`) 
+      .get(`/api/admin/company?page=${currentPage}`)
       .then((res) => {
         setCompanyData(res.data.data);
-        setPageCount(res.data.meta.last_page); 
+        setPageCount(res.data.meta.last_page);
       })
       .catch((err) => console.log(err));
-  }, [currentPage]); 
+  }, [currentPage]);
 
   const getCompany = (company) => {
     navigate(`/company/${company.id}`);
   };
+
   return (
     <div className="mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Companies</h1>
