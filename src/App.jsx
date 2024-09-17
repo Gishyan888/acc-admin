@@ -113,6 +113,7 @@ function App() {
         onClose={modalDetails.onClose}
         button1Color={modalDetails.button1Color}
         button2Color={modalDetails.button2Color}
+        errorMessage={modalDetails.errorMessage}
       />
       <Tooltip
         id="tooltip"

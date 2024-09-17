@@ -1,4 +1,4 @@
-import { PencilIcon, TrashIcon, } from "@heroicons/react/16/solid";
+import { PencilIcon, TrashIcon } from "@heroicons/react/16/solid";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import { useEffect, useRef, useState } from "react";
@@ -8,29 +8,29 @@ import useModal from "../../store/useModal";
 import FileUpload from "../../Components/FileUpload";
 
 export default function Categories() {
-
   const [categories, setCategories] = useState([]);
   const [errors, setErrors] = useState({});
   useEffect(() => {
-    getCategories()
+    getCategories();
   }, []);
 
   const getCategories = () => {
-    api.get("api/site/categories")
+    api
+      .get("api/site/categories")
       .then((res) => {
         setCategories(res.data.data);
       })
       .catch((err) => console.log(err));
   };
 
-  const { activeSettings, setActiveSettings } = useSettings()
-  const { setModalDetails, resetModalDetails } = useModal()
+  const { activeSettings, setActiveSettings } = useSettings();
+  const { setModalDetails, resetModalDetails } = useModal();
   const formRef = useRef(null);
 
   const editCategory = (item) => {
-    setActiveSettings.item({ id: item.id, name: item.name, icon: item.icon })
-    setActiveSettings.isCRUD(true)
-  }
+    setActiveSettings.item({ id: item.id, name: item.name, icon: item.icon });
+    setActiveSettings.isCRUD(true);
+  };
 
   const deleteCategory = (item) => {
     setModalDetails({
@@ -42,16 +42,29 @@ export default function Categories() {
       button2Color: "bg-red-500",
       button1OnClick: () => resetModalDetails(),
       button2OnClick: () => {
-        api.delete(`api/admin/categories/${item.id}`)
-          .then(() => getCategories())
-          .catch((err) => console.log(err))
-          .finally(() => resetModalDetails());
+        api
+          .delete(`api/admin/categories/${item.id}`)
+          .then(() => {
+            getCategories();
+            resetModalDetails();
+          })
+          .catch((err) => {
+            resetModalDetails();
+            setModalDetails({
+                isVisible: true,
+                image: "fail",
+                errorMessage: err.response?.data?.message || "An error occurred", 
+                onClose: () => {
+                  resetModalDetails();
+                },
+            });
+        });
+        
       },
       onClose: () => resetModalDetails(),
     });
   };
-
-
+  
 
   const handleFileSelect = (file) => {
     setActiveSettings.item({ ...activeSettings.item, icon: file });
@@ -65,19 +78,23 @@ export default function Categories() {
     const formData = new FormData();
     formData.append("name", activeSettings.item.name);
     if (activeSettings.item.icon instanceof File) {
-      formData.append('icon', activeSettings.item.icon);
+      formData.append("icon", activeSettings.item.icon);
     }
     if (activeSettings.item.id) {
-      formData.append('_method', 'PUT');
+      formData.append("_method", "PUT");
     }
     const config = {
       headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+        "Content-Type": "multipart/form-data",
+      },
     };
     const apiCall = activeSettings.item.id
-      ? api.post(`api/admin/categories/${activeSettings.item.id}`, formData, config)
-      : api.post("api/admin/categories", formData, config)
+      ? api.post(
+          `api/admin/categories/${activeSettings.item.id}`,
+          formData,
+          config
+        )
+      : api.post("api/admin/categories", formData, config);
     apiCall
       .then((res) => {
         setModalDetails({
@@ -86,14 +103,13 @@ export default function Categories() {
           onClose: () => {
             resetModalDetails();
           },
-        })
+        });
         setActiveSettings.item({ name: "", icon: null });
         setActiveSettings.isCRUD(false);
-        getCategories()
+        getCategories();
       })
       .catch((err) => setErrors(err.response.data.errors));
   };
-
 
   return (
     <div>
@@ -102,24 +118,46 @@ export default function Categories() {
           <table className="w-full text-sm text-left text-gray-500">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
               <tr>
-                <th scope="col" className="px-6 py-3">Name</th>
-                <th scope="col" className="px-6 py-3">Image</th>
-                <th scope="col" className="px-6 py-3">Actions</th>
+                <th scope="col" className="px-6 py-3">
+                  Name
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Image
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
               {categories.map((item, index) => (
                 <tr key={index} className="bg-white border-b hover:bg-gray-50">
-                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{item.name}</td>
                   <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                    <img className="w-20 h-20 rounded-full object-cover" src={item.icon} alt={item.name} />
+                    {item.name}
+                  </td>
+                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                    <img
+                      className="w-20 h-20 rounded-full object-cover"
+                      src={item.icon}
+                      alt={item.name}
+                    />
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <button onClick={() => editCategory(item)} className="font-medium text-blue-600 hover:underline" data-tooltip-id="tooltip" data-tooltip-content="Edit">
+                      <button
+                        onClick={() => editCategory(item)}
+                        className="font-medium text-blue-600 hover:underline"
+                        data-tooltip-id="tooltip"
+                        data-tooltip-content="Edit"
+                      >
                         <PencilIcon className="w-5 h-5" />
                       </button>
-                      <button onClick={() => deleteCategory(item)} className="font-medium text-red-600 hover:underline" data-tooltip-id="tooltip" data-tooltip-content="Delete">
+                      <button
+                        onClick={() => deleteCategory(item)}
+                        className="font-medium text-red-600 hover:underline"
+                        data-tooltip-id="tooltip"
+                        data-tooltip-content="Delete"
+                      >
                         <TrashIcon className="w-5 h-5" />
                       </button>
                     </div>
@@ -139,13 +177,20 @@ export default function Categories() {
               }}
               className="mt-2 w-full"
             >
-              <p className="text-xl font-bold">{activeSettings.item.id ? "Edit" : "Add"} {activeSettings.name}</p>
+              <p className="text-xl font-bold">
+                {activeSettings.item.id ? "Edit" : "Add"} {activeSettings.name}
+              </p>
 
               <div className="border-b-gray-300 border-b py-2">
                 <div className="flex items-start rounded gap-3">
                   <Input
                     type="text"
-                    onChange={(e) => setActiveSettings.item({ ...activeSettings.item, name: e.target.value })}
+                    onChange={(e) =>
+                      setActiveSettings.item({
+                        ...activeSettings.item,
+                        name: e.target.value,
+                      })
+                    }
                     className="ps-9 w-full"
                     required={true}
                     value={activeSettings.item.name}
@@ -174,7 +219,7 @@ export default function Categories() {
                   text={activeSettings.item.id ? "Update" : "Create"}
                   color="bg-amber-600"
                   type="submit"
-                  onClick={() => { }}
+                  onClick={() => {}}
                 />
               </div>
             </form>
@@ -182,5 +227,5 @@ export default function Categories() {
         )}
       </div>
     </div>
-  )
+  );
 }

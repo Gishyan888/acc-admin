@@ -3,6 +3,7 @@ import { create } from "zustand";
 const initialModalDetails = {
   isVisible: false,
   image: "",
+  errorMessage: "",
   button1Text: "",
   button2Text: "",
   button1OnClick: () => {},

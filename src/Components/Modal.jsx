@@ -27,7 +27,7 @@ const contentMap = {
   }
 };
 
-export default function Modal({ isVisible, onClose, button1Text, button2Text, button1OnClick, button2OnClick, button1Color, button2Color, image }) {
+export default function Modal({ isVisible, onClose, button1Text, button2Text, button1OnClick, button2OnClick, button1Color, button2Color, image, errorMessage }) {
     useEffect(() => {
         if (isVisible && !button1Text && !button2Text) {
             const timer = setTimeout(onClose, 3000);
@@ -57,6 +57,7 @@ export default function Modal({ isVisible, onClose, button1Text, button2Text, bu
                 <div className='flex flex-col gap-2'>
                     {content.title && <p className='text-center'>{content.title}</p>}
                     {content.message && <p className='text-center text-base'>{content.message}</p>}
+                    {errorMessage && <p className='text-center text-base'>{errorMessage}</p>}
                 </div>
                 <div className='flex gap-3 mt-4'>
                     {button1Text && <Button text={button1Text} onClick={button1OnClick} color={button1Color} />}
@@ -76,5 +77,6 @@ Modal.propTypes = {
     button2OnClick: PropTypes.func,
     button1Color: PropTypes.string,
     button2Color: PropTypes.string,
-    image: PropTypes.string
+    image: PropTypes.string,
+    errorMessage: PropTypes.string
 }
