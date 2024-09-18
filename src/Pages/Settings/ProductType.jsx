@@ -95,7 +95,7 @@ export default function ProductType() {
   }, [selectedCategory, selectedSubcategory, categories]);
 
   const editProductType = (item) => {
-    setActiveSettings.item({ id: item.id, name: item.name, icon: item.icon });
+    setActiveSettings.item({ id: item.id, name: item.name, icon: item.image });
     setActiveSettings.isCRUD(true);
   };
 
@@ -138,16 +138,27 @@ export default function ProductType() {
   };
 
   const crudProductType = async () => {
+    const formData = new FormData();
+    formData.append("name", activeSettings.item.name);
+    formData.append("category_id", selectedSubcategory);
+    if (activeSettings.item.icon instanceof File) {
+      formData.append("image", activeSettings.item.icon);
+    }
+    if (activeSettings.item.id) {
+      formData.append("_method", "PUT");
+    }
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
     try {
       const apiCall = activeSettings.item.id
-        ? api.put(`api/admin/product-types/${activeSettings.item.id}`, {
-            name: activeSettings.item.name,
-            category_id: selectedSubcategory,
-          })
-        : api.post("api/admin/product-types", {
-            name: activeSettings.item.name,
-            category_id: selectedSubcategory,
-          });
+        ? api.post(`api/admin/product-types/${activeSettings.item.id}`, 
+            formData, config
+          )
+        : api.post("api/admin/product-types", 
+            formData, config);
 
       await apiCall;
       setModalDetails({
@@ -227,7 +238,7 @@ export default function ProductType() {
                   <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                     <img
                       className="w-20 h-20 rounded-full object-cover"
-                      src={item.icon}
+                      src={item.image}
                       alt={item.name}
                     />
                   </td>
@@ -289,8 +300,8 @@ export default function ProductType() {
                     file={activeSettings.item.icon}
                     onFileSelect={handleFileSelect}
                     onFileRemove={handleFileRemove}
-                    buttonText="Upload Icon"
-                    error={errors.icon}
+                    buttonText="Upload Image"
+                    error={errors.Image}
                   />
                 </div>
               </div>
