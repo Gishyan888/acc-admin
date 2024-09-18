@@ -74,13 +74,6 @@ export default function Categories() {
     });
   };
 
-  const handleFileSelect = (file) => {
-    setActiveSettings.item({ ...activeSettings.item, icon: file });
-  };
-
-  const handleFileRemove = () => {
-    setActiveSettings.item({ ...activeSettings.item, icon: null });
-  };
 
   const crudCategory = () => {
     const formData = new FormData();
@@ -130,9 +123,6 @@ export default function Categories() {
                   Name
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Image
-                </th>
-                <th scope="col" className="px-6 py-3">
                   Actions
                 </th>
               </tr>
@@ -142,13 +132,6 @@ export default function Categories() {
                 <tr key={index} className="bg-white border-b hover:bg-gray-50">
                   <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                     {item.name}
-                  </td>
-                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                    <img
-                      className="w-20 h-20 rounded-full object-cover"
-                      src={item.icon}
-                      alt={item.name}
-                    />
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
@@ -205,13 +188,7 @@ export default function Categories() {
                     placeholder={`Enter ${activeSettings.name} name`}
                     error={errors.name}
                   />
-                  <FileUpload
-                    file={activeSettings.item.icon}
-                    onFileSelect={handleFileSelect}
-                    onFileRemove={handleFileRemove}
-                    buttonText="Upload Icon"
-                    error={errors.icon}
-                  />
+               
                 </div>
               </div>
               <div className="mt-4 flex justify-end w-1/2 gap-3">
