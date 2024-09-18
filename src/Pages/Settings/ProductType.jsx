@@ -179,6 +179,8 @@ export default function ProductType() {
     }
   };
 
+  
+
    return (
     <div>
       <div className="w-full flex gap-5 items-start justify-between">
