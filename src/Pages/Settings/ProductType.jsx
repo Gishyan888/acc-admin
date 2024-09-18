@@ -179,7 +179,7 @@ export default function ProductType() {
     }
   };
 
-  return (
+   return (
     <div>
       <div className="w-full flex gap-5 items-start justify-between">
         <div className="w-1/2 rounded-lg shadow flex flex-col items-center justify-center bg-white p-2">
