@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import api from "../../api/api";
+import MostViewedPagesBarChart from "./Components/MostViewedPagesBarChart";
+import Select from "react-select";
 
 export default function Dashboard() {
   const [reports, setReports] = useState({});
+  const [viewsType, setViewsType] = useState("weekly");
 
   const getReports = () => {
     let apiURL = `/api/site/reports`;
@@ -22,6 +25,10 @@ export default function Dashboard() {
           },
         });
       });
+  };
+
+  const handleViewsTypeChange = (value) => {
+    setViewsType(value);
   };
 
   useEffect(() => {
@@ -83,6 +90,22 @@ export default function Dashboard() {
           </div>
         )}
       </div>
+
+        <div className="mt-8 bg-white p-8 rounded-md shadow-md w-9/12">
+          <h3 className="text-xl font-bold mb-2">Most Viewed Pages</h3>
+          <select
+            name="viewsType"
+            onChange={(e) => handleViewsTypeChange(e.target.value)}
+            className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm mb-4"
+            value={viewsType}
+          >
+            <option disabled>Filter By</option>
+            <option value={"weekly"}>Weekly</option>
+            <option value={"monthly"}>Monthly</option>
+            <option value={"yearly"}>Yearly</option>
+          </select>
+          <MostViewedPagesBarChart type={viewsType} />
+        </div>
     </div>
   );
 }

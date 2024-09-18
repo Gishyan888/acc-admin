@@ -123,10 +123,10 @@ export default function CustomPages() {
                 <td className="px-4 py-2">
                   <div
                     className={`px-2 py-1 w-20 text-center rounded-3xl text-white ${
-                      item.status === 1 ? "bg-green-500" : "bg-red-500"
+                      item.status == 1 ? "bg-green-500" : "bg-red-500"
                     }`}
                   >
-                    {item.status === 1 ? "Active" : "Inactive"}
+                    {item.status == 1 ? "Active" : "Inactive"}
                   </div>
                 </td>
                 <td className="px-4 py-2">
