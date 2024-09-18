@@ -36,7 +36,7 @@ export default function ContactInfo() {
           <h3 className="mb-4 text-xl pb-1 border-b border-b-gray-500 w-1/2">
             Guest Info
           </h3>
-          <div className="bg-white p-8 rounded-md ">
+          <div className="bg-white p-8 rounded-md shadow-md">
             <p className="text-gray-900 py-1">
               <span className="italic mr-4 font-semibold text-gray-600">
                 Fullname:
@@ -57,13 +57,19 @@ export default function ContactInfo() {
             </p>
             <p className="text-gray-900 py-1">
               <span className="italic mr-4 font-semibold text-gray-600">
+                Company:
+              </span>
+              <span>{contactsData?.contact?.company}</span>
+            </p>
+            <p className="text-gray-900 py-1">
+              <span className="italic mr-4 font-semibold text-gray-600">
                 Country:
               </span>
               <span>{contactsData?.contact?.country}</span>
             </p>
             <p className="text-gray-900 py-1">
               <span className="italic mr-4 font-semibold text-gray-600">
-                City:{" "}
+                City:
               </span>
               <span>{contactsData?.contact?.city}</span>
             </p>
@@ -73,7 +79,7 @@ export default function ContactInfo() {
           <h3 className="mb-4 text-xl pb-1 border-b border-b-gray-500 w-1/2">
             Company Info
           </h3>
-          <div className="bg-white p-8  rounded-md">
+          <div className="bg-white p-8 rounded-md shadow-md">
             <p className="text-gray-900 py-1">
               <span className="italic mr-4 font-semibold text-gray-600">
                 Brand Name:
@@ -107,17 +113,17 @@ export default function ContactInfo() {
           </div>
         </div>
       </div>
-      <div className="my-8 rounded-md bg-white">
+      <div className="my-8 rounded-md bg-white p-2 shadow-md">
         <span className="italic mr-4 font-semibold text-gray-600">
           Subject:
         </span>
         <span>{contactsData?.contact?.subject}</span>
       </div>
-      <div>
-        <p className="italic mr-4 font-semibold text-gray-600 mb-2">Message:</p>
-        <p className="bg-white p-8 rounded-md">
-          {contactsData?.contact?.message}
-        </p>
+      <div className="my-8 rounded-md bg-white p-2 shadow-md">
+        <span className="italic mr-4 font-semibold text-gray-600">
+        Message:
+        </span>
+        <span>{contactsData?.contact?.message}</span>
       </div>
     </div>
   );
