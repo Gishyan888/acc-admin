@@ -1,27 +1,26 @@
 import { Outlet, useLocation } from "react-router-dom";
 import Navigation from "../../Components/Navigation";
 import { useEffect } from "react";
-import Button from "../../Components/Button";
-import useSettings from "../../store/useSettings";
+import useSeo from "../../store/useSeo";
 
 export default function SEO() {
   const location = useLocation();
-  const { activeSettings, setActiveSettings, resetActiveSettings } = useSettings();
-
+  const { activeSeo, setActiveSeo, resetActiveSeo } = useSeo();
   useEffect(() => {
-    resetActiveSettings();
+    resetActiveSeo();
 
     if (location.pathname.includes("/seo/homepage")) {
-      setActiveSettings.name("Homepage");
+      setActiveSeo.name("Homepage");
     } else if (location.pathname.includes("/seo/categories")) {
-      setActiveSettings.name("Categories/Subcategories");
+      setActiveSeo.name("Categories/Subcategories");
     } else if (location.pathname.includes("/seo/products")) {
-      setActiveSettings.name("Products");
-    } else{
-      setActiveSettings.name("Blog");
+      setActiveSeo.name("Products");
+    } else {
+      setActiveSeo.name("Blog");
     }
   }, [location.pathname]);
 
+  console.log("🚀 ~ SEO ~ activeSeo:", activeSeo);
 
   const navItems = [
     { path: "/seo/homepage", label: "Homepage" },
@@ -30,15 +29,15 @@ export default function SEO() {
     { path: "/seo/blog", label: "Blog" },
   ];
 
-
-
   return (
     <div className="w-full">
       <div className="flex justify-between items-center">
         <Navigation navItems={navItems} />
       </div>
       <div className="w-full bg-white p-2 mt-2">
+        <div className="p-2">
         <Outlet />
+        </div>
       </div>
     </div>
   );
