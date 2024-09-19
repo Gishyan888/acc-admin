@@ -110,9 +110,14 @@ export default function MostViewedPagesBarChart() {
         <option value={"monthly"}>Monthly</option>
         <option value={"yearly"}>Yearly</option>
       </select>
-      <div className="w-full h-[400px]">
-        <Bar data={data} options={options} />
-      </div>
+
+      {mostViewedPages && mostViewedPages[viewsType]?.length > 0 ? (
+        <div className="w-full h-[400px]">
+          <Bar data={data} options={options} />
+        </div>
+      ) : (
+        <p>There are no pages viewed yet.</p>
+      )}
     </div>
   );
 }
