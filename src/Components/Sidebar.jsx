@@ -88,6 +88,11 @@ export default function Sidebar() {
         link: "/settings/categories",
       },
       {
+        name: "SEO management",
+        icon: Cog6ToothIcon,
+        link: "/seo/homepage",
+      },
+      {
         name: "Contact Company",
         icon: LinkIcon,
         link: "/contacts",
