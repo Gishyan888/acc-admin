@@ -32,6 +32,12 @@ import CustomPages from "./Pages/Pages/CustomPages";
 import CreateEditPages from "./Pages/Pages/CreateEditPages";
 import Contacts from "./Pages/ContactCompany/Contacts";
 import ContactInfo from "./Pages/ContactCompany/ContactInfo";
+import SEO from "./Pages/SEO/SEO";
+import HomePage from "./Pages/SEO/SeoHomepage";
+import SeoHomepage from "./Pages/SEO/SeoHomepage";
+import SeoCategoriesSubcategories from "./Pages/SEO/SeoCategoriesSubcategories";
+import SeoProducts from "./Pages/SEO/SeoProducts";
+import SeoBlog from "./Pages/SEO/SeoBlog";
 
 function App() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
@@ -100,6 +106,12 @@ function App() {
             </Route>
             <Route path="/contacts" element={<Contacts />} />
             <Route path="/contact/:contact_id/show" element={<ContactInfo />} />
+            <Route path="/seo" element={<SEO />}>
+              <Route path="homepage" element={<SeoHomepage />} />
+              <Route path="categories" element={<SeoCategoriesSubcategories />} />
+              <Route path="products" element={<SeoProducts />} />
+              <Route path="blog" element={<SeoBlog />} />
+            </Route>
           </Route>
         </Routes>
       </Router>
