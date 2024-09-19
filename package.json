@@ -30,6 +30,7 @@
     "react-toastify": "^10.0.5",
     "react-tooltip": "^5.27.1",
     "rodal": "^2.1.0",
+    "tailwind-merge": "^2.5.2",
     "zustand": "^4.5.4"
   },
   "devDependencies": {
