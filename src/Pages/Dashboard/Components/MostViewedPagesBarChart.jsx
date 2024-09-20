@@ -60,9 +60,9 @@ export default function MostViewedPagesBarChart() {
     });
   }, [viewsType]);
 
-  useEffect(() => {
-    getMostViewedPages();
-  }, []);
+  // useEffect(() => {
+  //   getMostViewedPages();
+  // }, []);
 
   const options = {
     scales: {
