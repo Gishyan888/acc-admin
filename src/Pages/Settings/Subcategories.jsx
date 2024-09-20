@@ -71,6 +71,8 @@ export default function Subcategories() {
     setActiveSettings.isCRUD(true);
   };
 
+  //aaaa
+
   const deleteCategory = (item) => {
     setModalDetails({
       isVisible: true,
