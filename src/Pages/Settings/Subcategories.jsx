@@ -83,7 +83,16 @@ export default function Subcategories() {
       button2OnClick: () => {
         api
           .delete(`api/admin/categories/${item.id}`)
-          .then(() => handleSubcategories(selectedCategory))
+          .then(() => {
+            setModalDetails({
+              isVisible: false,
+              image: "success",
+              onClose: () => {
+                resetModalDetails();
+              },
+            });
+            handleSubcategories(selectedCategory);
+          })
           .catch((err) => {
             resetModalDetails();
             setModalDetails({

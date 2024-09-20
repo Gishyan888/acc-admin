@@ -55,6 +55,13 @@ export default function Categories() {
         api
           .delete(`api/admin/categories/${item.id}`)
           .then(() => {
+            setModalDetails({
+              isVisible: false,
+              image: "success",
+              onClose: () => {
+                resetModalDetails();
+              },
+            });
             getCategories();
             resetModalDetails();
           })
@@ -108,18 +115,7 @@ export default function Categories() {
         setActiveSettings.isCRUD(false);
         getCategories();
       })
-      .catch((err) => {
-        resetModalDetails();
-        setModalDetails({
-          isVisible: true,
-          image: "fail",
-          errorMessage: err.response?.data?.message || "An error occurred",
-          onClose: () => {
-            resetModalDetails();
-          },
-        });
-        setErrors(err.response.data.errors);
-      });
+      .catch((err) => setErrors(err.response.data.errors));
   };
 
   return (

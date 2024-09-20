@@ -56,6 +56,13 @@ export default function Standard() {
         api
           .delete(`api/admin/standards/${item.id}`)
           .then(() => {
+            setModalDetails({
+              isVisible: false,
+              image: "success",
+              onClose: () => {
+                resetModalDetails();
+              },
+            });
             getStandards();
             resetModalDetails();
           })

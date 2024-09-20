@@ -111,7 +111,16 @@ export default function ProductType() {
       button2OnClick: () => {
         api
           .delete(`api/admin/product-types/${item.id}`)
-          .then(() => getCategories(), getTypes())
+          .then(() => {
+            setModalDetails({
+              isVisible: false,
+              image: "success",
+              onClose: () => {
+                resetModalDetails();
+              },
+            });
+            getCategories(), getTypes();
+          })
           .catch((err) => {
             resetModalDetails();
             setModalDetails({
