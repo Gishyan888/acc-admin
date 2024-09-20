@@ -1,5 +1,3 @@
-name: Deploy React Vite App to cPanel
-
 on:
   push:
     branches:
@@ -17,6 +15,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '22'
+
+      - name: Remove package-lock.json and node_modules
+        run: |
+          rm -rf package-lock.json node_modules
 
       - name: Install dependencies
         run: npm install
