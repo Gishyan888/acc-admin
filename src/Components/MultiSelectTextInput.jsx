@@ -2,19 +2,18 @@ import { useEffect, useState } from 'react';
 import CreatableSelect from 'react-select/creatable';
 
 const MultiSelectTextInput = ({ id, label, values, placeholder, onChange, required }) => {
-  console.log("🚀 ~ MultiSelectTextInput ~ values:", values)
   const [options, setOptions] = useState([]);
 
   useEffect(() => {
-    const formattedValues = values ?values?.map(value => ({ value, label: value })) : "";
+    const formattedValues = values ? values.map(value => ({ value, label: value })) : [];
     setOptions(prevOptions => {
-      const existingValues = new Set(formattedValues?.map(option => option.value));
-      return [...prevOptions, ...formattedValues?.filter(option => !existingValues.has(option.value))];
+      const existingValues = new Set(prevOptions.map(option => option.value));
+      return [...prevOptions, ...formattedValues.filter(option => !existingValues.has(option.value))];
     });
   }, [values]);
 
   const handleChange = (selectedOptions) => {
-    const selectedValues = selectedOptions ? selectedOptions?.map(option => option.value) : [];
+    const selectedValues = selectedOptions ? selectedOptions.map(option => option.value) : [];
     onChange(selectedValues);
   };
 
@@ -41,7 +40,7 @@ const MultiSelectTextInput = ({ id, label, values, placeholder, onChange, requir
         onCreateOption={handleCreate}
         options={options}
         placeholder={placeholder}
-        value={options.filter(option => values?.includes(option?.value))}
+        value={options.filter(option => values.includes(option.value))}
       />
     </div>
   );

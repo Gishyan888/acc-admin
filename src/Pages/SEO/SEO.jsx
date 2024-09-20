@@ -15,6 +15,8 @@ export default function SEO() {
       setActiveSeo.name("Categories/Subcategories");
     } else if (location.pathname.includes("/seo/products")) {
       setActiveSeo.name("Products");
+    }else if(location.pathname.includes("/seo/custom-page")){
+      setActiveSeo.name("Custom Page");
     } else {
       setActiveSeo.name("Blog");
     }
@@ -27,6 +29,7 @@ export default function SEO() {
     { path: "/seo/categories", label: "Categories/Subcategories" },
     { path: "/seo/products", label: "Products" },
     { path: "/seo/blog", label: "Blog" },
+    { path: "/seo/custom-page", label: "Custom Page" },
   ];
 
   return (

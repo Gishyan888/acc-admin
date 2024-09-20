@@ -38,6 +38,7 @@ import SeoHomepage from "./Pages/SEO/SeoHomepage";
 import SeoCategoriesSubcategories from "./Pages/SEO/SeoCategoriesSubcategories";
 import SeoProducts from "./Pages/SEO/SeoProducts";
 import SeoBlog from "./Pages/SEO/SeoBlog";
+import SeoCustomPage from "./Pages/SEO/SeoCustomPage";
 
 function App() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
@@ -111,6 +112,7 @@ function App() {
               <Route path="categories" element={<SeoCategoriesSubcategories />} />
               <Route path="products" element={<SeoProducts />} />
               <Route path="blog" element={<SeoBlog />} />
+              <Route path="custom-page" element={<SeoCustomPage />} />
             </Route>
           </Route>
         </Routes>
