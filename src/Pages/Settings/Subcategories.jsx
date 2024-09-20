@@ -122,7 +122,18 @@ export default function Subcategories() {
         setActiveSettings.isCRUD(false);
         handleSubcategories(selectedCategory);
       })
-      .catch((err) => setErrors(err.response.data.errors));
+      .catch((err) => {
+        resetModalDetails();
+        setModalDetails({
+          isVisible: true,
+          image: "fail",
+          errorMessage: err.response?.data?.message || "An error occurred",
+          onClose: () => {
+            resetModalDetails();
+          },
+        });
+        setErrors(err.response.data.errors);
+      });
   };
 
   return (

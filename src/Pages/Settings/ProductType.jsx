@@ -128,7 +128,6 @@ export default function ProductType() {
     });
   };
 
-
   const handleFileSelect = (file) => {
     setActiveSettings.item({ ...activeSettings.item, icon: file });
   };
@@ -154,11 +153,12 @@ export default function ProductType() {
     };
     try {
       const apiCall = activeSettings.item.id
-        ? api.post(`api/admin/product-types/${activeSettings.item.id}`, 
-            formData, config
+        ? api.post(
+            `api/admin/product-types/${activeSettings.item.id}`,
+            formData,
+            config
           )
-        : api.post("api/admin/product-types", 
-            formData, config);
+        : api.post("api/admin/product-types", formData, config);
 
       await apiCall;
       setModalDetails({
@@ -175,13 +175,20 @@ export default function ProductType() {
 
       getTypes();
     } catch (err) {
+      resetModalDetails();
+      setModalDetails({
+        isVisible: true,
+        image: "fail",
+        errorMessage: err.response?.data?.message || "An error occurred",
+        onClose: () => {
+          resetModalDetails();
+        },
+      });
       setErrors(err.response.data.errors);
     }
   };
 
-  
-
-   return (
+  return (
     <div>
       <div className="w-full flex gap-5 items-start justify-between">
         <div className="w-1/2 rounded-lg shadow flex flex-col items-center justify-center bg-white p-2">
@@ -298,7 +305,7 @@ export default function ProductType() {
                     placeholder={`Enter ${activeSettings.name} name`}
                     error={errors.name}
                   />
-                     <FileUpload
+                  <FileUpload
                     file={activeSettings.item.icon}
                     onFileSelect={handleFileSelect}
                     onFileRemove={handleFileRemove}
