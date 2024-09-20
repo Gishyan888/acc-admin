@@ -4,28 +4,44 @@ import MultiSelectTextInput from "../../Components/MultiSelectTextInput";
 import api from "../../api/api";
 import Button from "../../Components/Button";
 
-export default function SeoProducts() {
+export default function SeoCustomPage() {
   const [seoData, setSeoData] = useState({
     title: "",
     description: "",
     keywords: [],
   });
+  const [selected, setSelected] = useState("");
+  const [pages, setPages] = useState([]);
+  const [metaId, setMetaId] = useState(null);
 
   useEffect(() => {
     api
-      .get("/api/admin/meta/2")
+      .get("/api/admin/contents?type=page")
       .then((res) => {
-        const data = res.data.data;
-        setSeoData({
-          title: data.title || "",
-          description: data.description || "",
-          keywords: data.keywords
-            ? data.keywords.split(",").map((kw) => kw.trim())
-            : [],
-        });
+        setPages(res.data.data);
       })
       .catch((err) => console.error(err));
   }, []);
+
+  const handlePageChange = (e) => {
+    const selectedPageId = e.target.value;
+    setSelected(selectedPageId); 
+
+    const selectedPage = pages.find((page) => page.id == parseInt(selectedPageId));
+    console.log("🚀 ~ handlePageChange ~ selectedPage:", selectedPage);
+
+    if (selectedPage) {
+      setSeoData({
+        title: selectedPage.meta.title || "",
+        description: selectedPage.meta.description || "",
+        keywords: selectedPage.meta.keywords
+          ? selectedPage.meta.keywords.split(",").map((kw) => kw.trim())
+          : [],
+      });
+
+      setMetaId(selectedPage.meta.id);
+    }
+  };
 
   const handleMetaTitleChange = (e) => {
     setSeoData((prevData) => ({ ...prevData, title: e.target.value }));
@@ -43,19 +59,36 @@ export default function SeoProducts() {
   };
 
   const handleSubmit = () => {
+    if (!metaId) {
+      console.error("Meta ID not found for the selected page");
+      return;
+    }
+
     const updatedData = {
       ...seoData,
-      keywords: seoData.keywords.join(", "), 
+      keywords: seoData.keywords.join(", "),
     };
+
     api
-      .put("/api/admin/meta/2", updatedData)
+      .put(`/api/admin/meta/${metaId}`, updatedData)
       .then((res) => console.log("Updated SEO data:", res.data))
       .catch((err) => console.error(err));
   };
 
-
   return (
     <div className="flex flex-col gap-3">
+      <select
+        className="max-w-80 w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700"
+        value={selected || ""}
+        onChange={handlePageChange}
+      >
+        <option value="">Select Page</option>
+        {pages.map((page) => (
+          <option key={page.id} value={page.id}>
+            {page.title}
+          </option>
+        ))}
+      </select>
       <Input
         label="Meta Title"
         name="title"
@@ -76,11 +109,7 @@ export default function SeoProducts() {
         onChange={handleKeywordsChange}
         required
       />
-      <Button
-        color="bg-green-500"
-        text="Submit"
-        onClick={handleSubmit}
-      />
+      <Button color="bg-green-500" text="Submit" onClick={handleSubmit} />
     </div>
   );
 }
