@@ -74,7 +74,6 @@ export default function Categories() {
     });
   };
 
-
   const crudCategory = () => {
     const formData = new FormData();
     formData.append("name", activeSettings.item.name);
@@ -109,7 +108,18 @@ export default function Categories() {
         setActiveSettings.isCRUD(false);
         getCategories();
       })
-      .catch((err) => setErrors(err.response.data.errors));
+      .catch((err) => {
+        resetModalDetails();
+        setModalDetails({
+          isVisible: true,
+          image: "fail",
+          errorMessage: err.response?.data?.message || "An error occurred",
+          onClose: () => {
+            resetModalDetails();
+          },
+        });
+        setErrors(err.response.data.errors);
+      });
   };
 
   return (
@@ -188,7 +198,6 @@ export default function Categories() {
                     placeholder={`Enter ${activeSettings.name} name`}
                     error={errors.name}
                   />
-               
                 </div>
               </div>
               <div className="mt-4 flex justify-end w-1/2 gap-3">
