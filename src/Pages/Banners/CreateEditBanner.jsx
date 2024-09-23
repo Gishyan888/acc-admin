@@ -73,53 +73,64 @@ export default function CreateEditBanner() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    const formData = new FormData();
+  e.preventDefault();
+  const formData = new FormData();
+
+  if (credentials.title) {
     formData.append("title", credentials.title);
+  }
+  if (credentials.button_name) {
     formData.append("button_name", credentials.button_name);
+  }
+  if (credentials.button_link) {
     formData.append("button_link", credentials.button_link);
-    if (!id) {
-      formData.append("type", credentials.type);
-    }
-    if (typeof credentials.image !== "string") {
-      formData.append("image", credentials.image);
-    }
+  }
 
-    if (location.pathname.includes("company-banners")) {
-      formData.append("text", credentials.text);
-    }
-    let apiURL = "api/admin/banners";
-    if (id) {
-      formData.append("_method", "PUT");
-      apiURL = `api/admin/banners/${id}`;
-    }
+  if (!id && credentials.type) {
+    formData.append("type", credentials.type);
+  }
 
-    api
-      .post(apiURL, formData)
-      .then((res) => {
-        setModalDetails({
-          isVisible: true,
-          image: "success",
-          onClose: () => {
-            resetModalDetails();
-            navigate(-1);
-          },
-        });
-      })
-      .catch((err) => {
-        resetModalDetails();
-        setModalDetails({
-          isVisible: true,
-          image: "fail",
-          errorMessage: err.response?.data?.message || "An error occurred",
-          onClose: () => {
-            resetModalDetails();
-          },
-        });
-        setErrors(err.response.data.errors);
+  if (typeof credentials.image !== "string" && credentials.image) {
+    formData.append("image", credentials.image);
+  }
+
+  if (location.pathname.includes("company-banners") && credentials.text) {
+    formData.append("text", credentials.text);
+  }
+
+  let apiURL = "api/admin/banners";
+  if (id) {
+    formData.append("_method", "PUT");
+    apiURL = `api/admin/banners/${id}`;
+  }
+
+  api
+    .post(apiURL, formData)
+    .then((res) => {
+      setModalDetails({
+        isVisible: true,
+        image: "success",
+        onClose: () => {
+          resetModalDetails();
+          navigate(-1);
+        },
       });
-  };
+    })
+    .catch((err) => {
+      resetModalDetails();
+      setModalDetails({
+        isVisible: true,
+        image: "fail",
+        errorMessage: err.response?.data?.message || "An error occurred",
+        onClose: () => {
+          resetModalDetails();
+        },
+      });
+      setErrors(err.response?.data?.errors);
+    });
+};
 
+  
   return (
     <div className="w-full bg-white p-8 rounded-lg shadow-md flex flex-col">
       <h2 className="text-2xl font-semibold mb-2">{title}</h2>
