@@ -38,6 +38,7 @@ export default function Modal({
   button2Color,
   image,
   errorMessage,
+  successMessage,
 }) {
   useEffect(() => {
     if (isVisible && !button1Text && !button2Text) {
@@ -47,7 +48,6 @@ export default function Modal({
   }, [isVisible, onClose, button1Text, button2Text]);
 
   const content = contentMap[image] || {};
-
   return (
     <Rodal
       customStyles={{
@@ -67,9 +67,16 @@ export default function Modal({
         {image && <img src={imageMap[image]} alt={image} />}
         <div className="flex flex-col gap-2">
           {content.title && <p className="text-center">{content.title}</p>}
-          {content.message && (
-            <p className="text-center text-base">{content.message}</p>
+          {successMessage ? (
+            <p className="text-center text-base">{successMessage}</p>
+          ) : (
+            content.message && (
+              <p className="text-center text-base">{content.message}</p>
+            )
           )}
+          {/* {content.message && (
+            <p className="text-center text-base">{content.message}</p>
+          )} */}
           {errorMessage && (
             <p className="text-center text-base">{errorMessage}</p>
           )}

@@ -3,8 +3,11 @@ import Input from "../../Components/Input";
 import MultiSelectTextInput from "../../Components/MultiSelectTextInput";
 import api from "../../api/api";
 import Button from "../../Components/Button";
+import useModal from "../../store/useModal";
 
 export default function SeoCategoriesSubcategories() {
+  const { setModalDetails, resetModalDetails } = useModal();
+
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [seoData, setSeoData] = useState({
@@ -63,7 +66,7 @@ export default function SeoCategoriesSubcategories() {
         (cat) => cat.id === parseInt(categoryId)
       );
       setSubcategories(category ? category.subcategories : []);
-      
+
       setSelected({
         categoryId,
         subcategoryId: "",
@@ -132,8 +135,27 @@ export default function SeoCategoriesSubcategories() {
 
     api
       .put(`api/admin/meta/${id}`, updatedData)
-      .then((res) => console.log("Updated SEO data:", res.data))
-      .catch((err) => console.error(err));
+      .then((res) => {
+        setModalDetails({
+          isVisible: true,
+          image: "success",
+          successMessage: res?.data?.message,
+          onClose: () => {
+            resetModalDetails();
+          },
+        });
+      })
+      .catch((err) => {
+        resetModalDetails();
+        setModalDetails({
+          isVisible: true,
+          image: "fail",
+          errorMessage: err.response?.data?.message || "An error occurred",
+          onClose: () => {
+            resetModalDetails();
+          },
+        });
+      });
   };
 
   return (

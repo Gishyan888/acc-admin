@@ -132,6 +132,7 @@ export default function Subcategories() {
         setActiveSettings.item({ name: "", icon: null });
         setActiveSettings.isCRUD(false);
         handleSubcategories(selectedCategory);
+        setErrors({});
       })
       .catch((err) => {
         resetModalDetails();
