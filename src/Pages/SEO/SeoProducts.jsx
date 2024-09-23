@@ -3,8 +3,11 @@ import Input from "../../Components/Input";
 import MultiSelectTextInput from "../../Components/MultiSelectTextInput";
 import api from "../../api/api";
 import Button from "../../Components/Button";
+import useModal from "../../store/useModal";
 
 export default function SeoProducts() {
+  const { setModalDetails, resetModalDetails } = useModal();
+
   const [seoData, setSeoData] = useState({
     title: "",
     description: "",
@@ -45,14 +48,32 @@ export default function SeoProducts() {
   const handleSubmit = () => {
     const updatedData = {
       ...seoData,
-      keywords: seoData.keywords.join(", "), 
+      keywords: seoData.keywords.join(", "),
     };
     api
       .put("/api/admin/meta/2", updatedData)
-      .then((res) => console.log("Updated SEO data:", res.data))
-      .catch((err) => console.error(err));
+      .then((res) => {
+        setModalDetails({
+          isVisible: true,
+          image: "success",
+          successMessage: res?.data?.message,
+          onClose: () => {
+            resetModalDetails();
+          },
+        });
+      })
+      .catch((err) => {
+        resetModalDetails();
+        setModalDetails({
+          isVisible: true,
+          image: "fail",
+          errorMessage: err.response?.data?.message || "An error occurred",
+          onClose: () => {
+            resetModalDetails();
+          },
+        });
+      });
   };
-
 
   return (
     <div className="flex flex-col gap-3">
@@ -76,11 +97,7 @@ export default function SeoProducts() {
         onChange={handleKeywordsChange}
         required
       />
-      <Button
-        color="bg-green-500"
-        text="Submit"
-        onClick={handleSubmit}
-      />
+      <Button color="bg-green-500" text="Submit" onClick={handleSubmit} />
     </div>
   );
 }

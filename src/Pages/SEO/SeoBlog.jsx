@@ -3,8 +3,11 @@ import Input from "../../Components/Input";
 import MultiSelectTextInput from "../../Components/MultiSelectTextInput";
 import api from "../../api/api";
 import Button from "../../Components/Button";
+import useModal from "../../store/useModal";
 
 export default function SeoBlog() {
+  const { setModalDetails, resetModalDetails } = useModal();
+
   const [seoData, setSeoData] = useState({
     title: "",
     description: "",
@@ -27,7 +30,9 @@ export default function SeoBlog() {
     const selectedPageId = e.target.value;
     setSelected(selectedPageId);
 
-    const selectedPage = pages.find((page) => page.id == parseInt(selectedPageId));
+    const selectedPage = pages.find(
+      (page) => page.id == parseInt(selectedPageId)
+    );
     console.log("🚀 ~ handlePageChange ~ selectedPage:", selectedPage);
 
     if (selectedPage) {
@@ -70,9 +75,28 @@ export default function SeoBlog() {
     };
 
     api
-      .put(`/api/admin/meta/${metaId}`, updatedData) 
-      .then((res) => console.log("Updated SEO data:", res.data))
-      .catch((err) => console.error(err));
+      .put(`/api/admin/meta/${metaId}`, updatedData)
+      .then((res) => {
+        setModalDetails({
+          isVisible: true,
+          image: "success",
+          successMessage: res?.data?.message,
+          onClose: () => {
+            resetModalDetails();
+          },
+        });
+      })
+      .catch((err) => {
+        resetModalDetails();
+        setModalDetails({
+          isVisible: true,
+          image: "fail",
+          errorMessage: err.response?.data?.message || "An error occurred",
+          onClose: () => {
+            resetModalDetails();
+          },
+        });
+      });
   };
 
   return (

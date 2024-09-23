@@ -128,6 +128,7 @@ function App() {
         button1Color={modalDetails.button1Color}
         button2Color={modalDetails.button2Color}
         errorMessage={modalDetails.errorMessage}
+        successMessage={modalDetails.successMessage}
       />
       <Tooltip
         id="tooltip"
