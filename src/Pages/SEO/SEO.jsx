@@ -29,7 +29,7 @@ export default function SEO() {
     { path: "/seo/categories", label: "Categories/Subcategories" },
     { path: "/seo/products", label: "Products" },
     { path: "/seo/blog", label: "Blog" },
-    { path: "/seo/custom-page", label: "Custom Page" },
+    // { path: "/seo/custom-page", label: "Custom Page" },
   ];
 
   return (
