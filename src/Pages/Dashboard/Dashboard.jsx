@@ -4,6 +4,7 @@ import MostViewedPagesBarChart from "./Components/MostViewedPagesBarChart";
 import SiteViewsCountLineChart from "./Components/SiteViewsCountLineChart";
 import Select from "react-select";
 import useModal from "../../store/useModal";
+import StatusCard from "./Components/StatusCard";
 export default function Dashboard() {
   const [reports, setReports] = useState({});
   const { setModalDetails, resetModalDetails } = useModal();
@@ -37,7 +38,12 @@ export default function Dashboard() {
       <div className="flex gap-8">
         <div className="bg-white px-8 py-4 rounded-md shadow-md w-2xl">
           <h3 className="text-xl font-bold mb-2">Products Count</h3>
-          <div className="flex gap-8">
+          <StatusCard
+            title="Pending"
+            count={reports.products_count ? reports.products_count.pending : 0}
+            // icon={}
+          />
+          {/* <div className="flex gap-8">
             <div
               className={
                 "py-2 px-8 rounded-full w-[250px] flex flex-col bg-yellow-100"
@@ -68,7 +74,7 @@ export default function Dashboard() {
                 {reports.products_count ? reports.products_count.rejected : 0}
               </span>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="bg-white px-8 py-4 rounded-md shadow-md w-2xl flex flex-col justify-end">
