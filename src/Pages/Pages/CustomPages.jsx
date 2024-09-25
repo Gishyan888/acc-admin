@@ -13,8 +13,8 @@ export default function CustomPages() {
   const { setModalDetails, resetModalDetails } = useModal();
 
   const navItems = [
-    { path: "/pages/custom", label: "Custom Pages" },
     { path: "/pages/blog", label: "Blog" },
+    { path: "/pages/custom", label: "Custom Pages" },
   ];
 
   const fetchCustomPages = () => {
