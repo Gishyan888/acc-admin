@@ -80,7 +80,7 @@ export default function Sidebar() {
       {
         name: "Pages",
         icon: DocumentChartBarIcon,
-        link: "/pages/custom",
+        link: "/pages/blog",
       },
       {
         name: "Settings",
