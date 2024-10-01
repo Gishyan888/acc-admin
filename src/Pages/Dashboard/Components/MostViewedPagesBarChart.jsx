@@ -15,10 +15,17 @@ export default function MostViewedPagesBarChart() {
       .then((res) => {
         setMostViewedPages(res.data);
         setData({
-          labels: res.data["weekly"]?.map((item) => item.name) || [],
+          labels:
+            res.data["weekly"]?.map((item) => {
+              return item.name.length > 30
+                ? item.name.slice(0, 30) + "..."
+                : item.name;
+            }) || [],
           datasets: [
             {
               label: "Total Views",
+              // modelTypes:
+              //   res.data["weekly"]?.map((item) => item.model_type) || [],
               data: res.data["weekly"]?.map((item) => item.total_views) || [],
               backgroundColor: backgroundColors,
               borderWidth: 1,
@@ -46,10 +53,17 @@ export default function MostViewedPagesBarChart() {
 
   useEffect(() => {
     setData({
-      labels: mostViewedPages[viewsType]?.map((item) => item.name) || [],
+      labels:
+        mostViewedPages[viewsType]?.map((item) => {
+          return item.name.length > 30
+            ? item.name.slice(0, 30) + "..."
+            : item.name;
+        }) || [],
       datasets: [
         {
           label: "Total Views",
+          // modelTypes:
+          //   mostViewedPages[viewsType]?.map((item) => item.model_type) || [],
           data:
             mostViewedPages[viewsType]?.map((item) => item.total_views) || [],
           backgroundColor: backgroundColors,
@@ -84,6 +98,10 @@ export default function MostViewedPagesBarChart() {
       },
       tooltip: {
         callbacks: {
+          // title: function (modelTypes) {
+          //   console.log({ modelTypes });
+          //   return `Views count: ${data.model_type}`;
+          // },
           // Customize tooltip to show formatted value
           label: function (data) {
             return `Views count: ${data.formattedValue}`;

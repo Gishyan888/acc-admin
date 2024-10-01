@@ -83,7 +83,7 @@ export default function Cms() {
     formData.append("title", credentials.title);
     formData.append("text", credentials.text);
     if (location.pathname.includes("overview")) {
-      formData.append("image_link", credentials.image_link);
+      formData.append("image_link", credentials.image_link ?? "");
     }
     if (typeof credentials.image !== "string") {
       formData.append("image", credentials.image);
