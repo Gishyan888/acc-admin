@@ -17,6 +17,11 @@ const RichtextEditor = ({
 
   const handleInit = (editor) => {
     editor.on("init", () => {});
+    if (!needUploaderButton) {
+      editor.on("dragover drop", function (e) {
+        e.preventDefault(); // Prevent default behavior (drag-and-drop)
+      });
+    }
   };
 
   return (
