@@ -210,7 +210,7 @@ export default function ContactWithCompanies() {
               value={editorValue}
               onChange={handleEditorChange}
               error={errors.message}
-              required={true}
+              needUploaderButton={false}
             />
           </div>
         </div>

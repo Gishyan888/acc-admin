@@ -101,7 +101,7 @@ export default function Sidebar() {
       {
         name: "Contact with Companies",
         icon: EnvelopeIcon,
-        link: "/contact_with_companies",
+        link: "/contact_with",
       },
     ],
     section2: [

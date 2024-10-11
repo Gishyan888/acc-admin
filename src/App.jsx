@@ -119,7 +119,7 @@ function App() {
               <Route path="custom-page" element={<SeoCustomPage />} />
             </Route>
             <Route
-              path="contact_with_companies"
+              path="contact_with"
               element={<ContactWithCompanies />}
             />
           </Route>

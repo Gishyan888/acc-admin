@@ -9,14 +9,14 @@ const RichtextEditor = ({
   placeholder,
   error,
   containerClass = "",
+  needUploaderButton = true,
 }) => {
   const handleEditorChange = (content, editor) => {
     onChange({ target: { name, value: content } });
   };
 
   const handleInit = (editor) => {
-    editor.on("init", () => {
-    });
+    editor.on("init", () => {});
   };
 
   return (
@@ -54,35 +54,37 @@ const RichtextEditor = ({
           placeholder: placeholder,
           automatic_uploads: true,
           file_picker_types: "image",
-          file_picker_callback: (cb, value, meta) => {
-            if (meta.filetype === "image") {
-              const input = document.createElement("input");
-              input.setAttribute("type", "file");
-              input.setAttribute("accept", "image/*");
-              input.onchange = function (event) {
-                const target = event.target;
-                const file = target?.files?.[0];
-                if (file) {
-                  const reader = new FileReader();
-                  reader.onload = function () {
-                    if (typeof reader.result === "string") {
-                      const id = "blobid" + new Date().getTime();
-                      const editor = window.tinymce.activeEditor; // Получите активный редактор
-                      if (editor) {
-                        const blobCache = editor.editorUpload.blobCache;
-                        const base64 = reader.result.split(",")[1];
-                        const blobInfo = blobCache.create(id, file, base64);
-                        blobCache.add(blobInfo);
-                        cb(blobInfo.blobUri(), { title: file.name });
-                      }
+          file_picker_callback: !needUploaderButton
+            ? null
+            : (cb, value, meta) => {
+                if (meta.filetype === "image") {
+                  const input = document.createElement("input");
+                  input.setAttribute("type", "file");
+                  input.setAttribute("accept", "image/*");
+                  input.onchange = function (event) {
+                    const target = event.target;
+                    const file = target?.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = function () {
+                        if (typeof reader.result === "string") {
+                          const id = "blobid" + new Date().getTime();
+                          const editor = window.tinymce.activeEditor; // Получите активный редактор
+                          if (editor) {
+                            const blobCache = editor.editorUpload.blobCache;
+                            const base64 = reader.result.split(",")[1];
+                            const blobInfo = blobCache.create(id, file, base64);
+                            blobCache.add(blobInfo);
+                            cb(blobInfo.blobUri(), { title: file.name });
+                          }
+                        }
+                      };
+                      reader.readAsDataURL(file);
                     }
                   };
-                  reader.readAsDataURL(file);
+                  input.click();
                 }
-              };
-              input.click();
-            }
-          },
+              },
           setup: handleInit,
         }}
         onEditorChange={handleEditorChange}
