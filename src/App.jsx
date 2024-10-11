@@ -39,6 +39,7 @@ import SeoCategoriesSubcategories from "./Pages/SEO/SeoCategoriesSubcategories";
 import SeoProducts from "./Pages/SEO/SeoProducts";
 import SeoBlog from "./Pages/SEO/SeoBlog";
 import SeoCustomPage from "./Pages/SEO/SeoCustomPage";
+import ContactWithCompanies from "./Pages/ContactWithCompanies/ContactWithCompanies";
 
 function App() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
@@ -109,11 +110,18 @@ function App() {
             <Route path="/contact/:contact_id/show" element={<ContactInfo />} />
             <Route path="/seo" element={<SEO />}>
               <Route path="homepage" element={<SeoHomepage />} />
-              <Route path="categories" element={<SeoCategoriesSubcategories />} />
+              <Route
+                path="categories"
+                element={<SeoCategoriesSubcategories />}
+              />
               <Route path="products" element={<SeoProducts />} />
               <Route path="blog" element={<SeoBlog />} />
               <Route path="custom-page" element={<SeoCustomPage />} />
             </Route>
+            <Route
+              path="contact_with"
+              element={<ContactWithCompanies />}
+            />
           </Route>
         </Routes>
       </Router>

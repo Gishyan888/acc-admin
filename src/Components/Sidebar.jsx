@@ -24,6 +24,7 @@ import {
   FlagIcon,
   PresentationChartLineIcon,
   LinkIcon,
+  EnvelopeIcon
 } from "@heroicons/react/24/solid";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -93,9 +94,14 @@ export default function Sidebar() {
         link: "/seo/homepage",
       },
       {
-        name: "Contact Company",
+        name: "Company Contacts",
         icon: LinkIcon,
         link: "/contacts",
+      },
+      {
+        name: "Contact with Companies",
+        icon: EnvelopeIcon,
+        link: "/contact_with",
       },
     ],
     section2: [

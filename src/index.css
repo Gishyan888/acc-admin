@@ -33,3 +33,7 @@ body {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+.contact_multiselect_component .css-1nmdiq5-menu {
+z-index: 9999 !important;
+}
