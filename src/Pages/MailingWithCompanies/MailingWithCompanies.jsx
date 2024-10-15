@@ -9,7 +9,7 @@ import useModal from "../../store/useModal";
 
 const animatedComponents = makeAnimated();
 
-export default function ContactWithCompanies() {
+export default function MailingWithCompanies() {
   const { setModalDetails, resetModalDetails } = useModal();
 
   const statuses = [
@@ -40,11 +40,10 @@ export default function ContactWithCompanies() {
         `/api/admin/company?paginate=false&status=${formattedSelectesStatuses}`
       )
       .then((res) => {
-        // Map the response data to the format react-select expects
         const formattedCompanies = res.data.data.map((company) => ({
-          label: company.company_name, // Assuming 'name' is the company's display name
+          label: company.company_name,
           value: company.id,
-          status: company.status, // Assuming 'id' is the company's unique identifier
+          status: company.status, 
         }));
         formattedCompanies.unshift({ label: "All", value: "all" });
         setCompanies(formattedCompanies);
@@ -66,11 +65,10 @@ export default function ContactWithCompanies() {
     api
       .get(`/api/admin/company?paginate=false`)
       .then((res) => {
-        // Map the response data to the format react-select expects
         const formattedCompanies = res.data.data.map((company) => ({
-          label: company.company_name, // Assuming 'name' is the company's display name
+          label: company.company_name, 
           value: company.id,
-          status: company.status, // Assuming 'id' is the company's unique identifier
+          status: company.status, 
         }));
         setAllCompanies(formattedCompanies);
       })
@@ -93,14 +91,18 @@ export default function ContactWithCompanies() {
     } else {
       setSelectedCompanies(selecteds);
     }
+
+    const selectedValues = selectedOptions
+      ? selectedOptions.map((option) => option.value)
+      : [];
   };
 
   const handleStatusesChange = (selecteds) => {
-    selecteds[selecteds.length - 1].value === "all"
-      ? setSelectedStatuses([{ value: "all", label: "All" }])
-      : setSelectedStatuses(
-          selecteds.filter((status) => status.value !== "all")
-        );
+    setSelectedStatuses(selecteds.filter((status) => status.value !== "all"));
+
+    if (selecteds[selecteds.length - 1].value === "all") {
+      setSelectedStatuses([{ value: "all", label: "All" }]);
+    }
   };
 
   const handleSubjectChange = (e) => {
@@ -185,7 +187,7 @@ export default function ContactWithCompanies() {
               components={animatedComponents}
               isMulti
               options={statuses}
-              onChange={(e) => handleStatusesChange(e)}
+              onChange={handleStatusesChange}
               value={selectedStatuses}
               placeholder="Select Status"
             />
