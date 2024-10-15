@@ -99,9 +99,9 @@ export default function Sidebar() {
         link: "/contacts",
       },
       {
-        name: "Contact with Companies",
+        name: "Mailing with Companies",
         icon: EnvelopeIcon,
-        link: "/contact_with",
+        link: "/mailing_with",
       },
     ],
     section2: [
