@@ -24,7 +24,8 @@ import {
   FlagIcon,
   PresentationChartLineIcon,
   LinkIcon,
-  EnvelopeIcon
+  EnvelopeIcon,
+  SquaresPlusIcon
 } from "@heroicons/react/24/solid";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -101,7 +102,12 @@ export default function Sidebar() {
       {
         name: "Mailing with Companies",
         icon: EnvelopeIcon,
-        link: "/mailing_with",
+        link: "/mailing-with",
+      },
+      {
+        name: "Member Logos",
+        icon: SquaresPlusIcon,
+        link: "/member-logos",
       },
     ],
     section2: [

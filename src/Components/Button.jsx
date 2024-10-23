@@ -1,10 +1,10 @@
 import PropTypes from "prop-types";
 
-export default function Button({ color, text, onClick }) {
+export default function Button({ color, text, onClick, className }) {
   return (
     <button
       onClick={onClick}
-      className={`w-full max-w-80 rounded-lg ${color} p-3 shadow text-white cursor-pointer text-center hover:brightness-110 hover:shadow-md`}
+      className={`w-full max-w-80 rounded-lg ${color} p-3 shadow text-white cursor-pointer text-center hover:brightness-110 hover:shadow-md ${className}`}
     >
       {text}
     </button>
