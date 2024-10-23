@@ -55,6 +55,8 @@ export default function MemberLogos() {
       });
       getMemberLogos();
       setLoading(false);
+      setUploadedLogo(null);
+      setNeedUploadNewLogo(false);
     } catch (err) {
       setErrors(err.response.data.errors);
       setLoading(false);
@@ -105,7 +107,6 @@ export default function MemberLogos() {
 
   const handleUploadedLogoRemove = (e) => {
     setUploadedLogo(null);
-    setNeedUploadNewLogo(false);
   };
 
   useEffect(() => {
