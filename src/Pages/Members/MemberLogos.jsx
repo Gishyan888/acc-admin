@@ -143,12 +143,14 @@ export default function MemberLogos() {
               alt="logo"
               className="object-cover h-full w-full rounded-md"
             />
-            <TrashIcon
-              onClick={() => {
-                deleteLogo(item.id);
-              }}
-              className="h-6 w-6 absolute top-2 right-2 cursor-pointer text-red-500"
-            />
+            <div className="absolute top-[-12px] right-[-12px] cursor-pointer">
+              <TrashIcon
+                onClick={() => {
+                  deleteLogo(item.id);
+                }}
+                className="h-6 w-6 cursor-pointer text-red-500"
+              />
+            </div>
           </div>
         ))}
       </div>
