@@ -10,6 +10,7 @@ export default function FileUpload({
   imageSize,
   error,
   label,
+  tooltip="Remove"
 }) {
   const hiddenFileInput = useRef(null)
 
@@ -33,7 +34,7 @@ export default function FileUpload({
             }`}
             alt='Uploaded file'
           />
-          <button
+          <button title={tooltip}
             className='absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 transform translate-x-1/2 -translate-y-1/2 transition-opacity duration-200'
             onClick={() => onFileRemove()}
             type='button'
