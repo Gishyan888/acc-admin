@@ -8,7 +8,6 @@ import FileUpload from "../../Components/FileUpload";
 export default function MemberLogos() {
   const [memberLogos, setMemberLogos] = useState([]);
   const { setModalDetails, resetModalDetails } = useModal();
-  const [needUploadNewLogo, setNeedUploadNewLogo] = useState(false);
   const [uploadedLogo, setUploadedLogo] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -55,6 +54,7 @@ export default function MemberLogos() {
       });
       getMemberLogos();
       setLoading(false);
+      setUploadedLogo(null);
     } catch (err) {
       setErrors(err.response.data.errors);
       setLoading(false);
@@ -105,7 +105,6 @@ export default function MemberLogos() {
 
   const handleUploadedLogoRemove = (e) => {
     setUploadedLogo(null);
-    setNeedUploadNewLogo(false);
   };
 
   useEffect(() => {
@@ -114,33 +113,25 @@ export default function MemberLogos() {
 
   return (
     <div className="w-full p-4 bg-gray-300">
-      <div className="flex justify-end mb-4 mt-2">
-        <Button
-          text={"Add Logo"}
-          color="bg-amber-600"
-          onClick={() => setNeedUploadNewLogo(true)}
+      <div className="my-4 mx-2">
+        <FileUpload
+          file={uploadedLogo?.file}
+          onFileSelect={handleUploadedLogoChange}
+          onFileRemove={handleUploadedLogoRemove}
+          buttonText="Upload New Logo"
+          imageSize="w-1/3 h-64"
+          tooltip="Remove Uploaded Logo"
         />
-      </div>
-      {needUploadNewLogo && (
-        <div className="mb-4">
-          <FileUpload
-            file={uploadedLogo?.file}
-            onFileSelect={handleUploadedLogoChange}
-            onFileRemove={handleUploadedLogoRemove}
-            buttonText="Upload New Logo"
-            imageSize="w-1/3 h-64"
-            tooltip="Remove Uploaded Logo"
+        {uploadedLogo && (
+          <Button
+            text={"Save"}
+            color="bg-amber-600"
+            onClick={addMemberLogo}
+            className="mt-4 mx-2"
           />
-          {uploadedLogo && (
-            <Button
-              text={"Save"}
-              color="bg-amber-600"
-              onClick={addMemberLogo}
-              className="mt-4 mx-2"
-            />
-          )}
-        </div>
-      )}
+        )}
+      </div>
+
       <div className="flex flex-wrap gap-2">
         {memberLogos.map((item) => (
           <div
