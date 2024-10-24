@@ -17,7 +17,7 @@ export default function MailingHistory() {
   const navigate = useNavigate();
   const getMailingHistory = () => {
     api
-      .get(`/api/admin/email_message/history/?page=${currentPage}`)
+      .get(`/api/admin/email_message/history?page=${currentPage}`)
       .then((res) => {
         setMailingHistory(res.data.data);
         setPageCount(res.data.meta.last_page);
