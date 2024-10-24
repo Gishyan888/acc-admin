@@ -25,7 +25,8 @@ import {
   PresentationChartLineIcon,
   LinkIcon,
   EnvelopeIcon,
-  SquaresPlusIcon
+  SquaresPlusIcon,
+  ClockIcon,
 } from "@heroicons/react/24/solid";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -108,6 +109,11 @@ export default function Sidebar() {
         name: "Member Logos",
         icon: SquaresPlusIcon,
         link: "/member-logos",
+      },
+      {
+        name: "Mailing history",
+        icon: ClockIcon,
+        link: "/mailing-history",
       },
     ],
     section2: [
