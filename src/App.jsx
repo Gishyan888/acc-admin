@@ -41,7 +41,8 @@ import SeoBlog from "./Pages/SEO/SeoBlog";
 import SeoCustomPage from "./Pages/SEO/SeoCustomPage";
 import MailingWithCompanies from "./Pages/MailingWithCompanies/MailingWithCompanies";
 import MemberLogos from "./Pages/Members/MemberLogos";
-
+import MailingHistory from "./Pages/History/MailingHistory";
+import MailingHistoryData from "./Pages/History/MailingHistoryData";
 
 function App() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
@@ -120,14 +121,10 @@ function App() {
               <Route path="blog" element={<SeoBlog />} />
               <Route path="custom-page" element={<SeoCustomPage />} />
             </Route>
-            <Route
-              path="mailing-with"
-              element={<MailingWithCompanies />}
-            />
-            <Route
-              path="member-logos"
-              element={<MemberLogos />}
-            />
+            <Route path="mailing-with" element={<MailingWithCompanies />} />
+            <Route path="member-logos" element={<MemberLogos />} />
+            <Route path="mailing-history" element={<MailingHistory />} />
+            <Route path="mailing-history/:id" element={<MailingHistoryData />} />
           </Route>
         </Routes>
       </Router>
