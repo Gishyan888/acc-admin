@@ -11,7 +11,6 @@ export default function Company() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [companyData, setCompanyData] = useState({});
-  const [isRegionFieldInput, setIsRegionFieldInput] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [newProfilePicture, setNewProfilePicture] = useState(null);
   const [newBanner, setNewBanner] = useState(null);
@@ -55,15 +54,12 @@ export default function Company() {
     api
       .get(`/api/admin/company/${id}`)
       .then((res) => setCompanyData(res.data.data))
-
-      .catch((err) => console.error(err));
-    api
-      .get(`/api/site/regions`)
-      .then((res) => setRegions(res.data.data))
       .catch((err) => console.error(err));
     api
       .get("/api/site/countries")
-      .then((res) => setCountries(res.data.data))
+      .then((res) => {
+        setCountries(res.data.data);
+      })
       .catch((err) => console.error(err));
   };
 
@@ -85,13 +81,12 @@ export default function Company() {
 
   const handleInputChange = (e) => {
     let { name, value } = e.target;
+
     if (name == "country") {
-      if (value == 2) {
-        setIsRegionFieldInput(true);
-      } else {
-        setIsRegionFieldInput(false);
-      }
+      const currentCountry = countries.find((country) => country.id == value);
+      setRegions(currentCountry?.regions);
     }
+
     if (name == "phone_number") {
       value = formatInputValue(value, "phone_number");
     }
@@ -144,7 +139,6 @@ export default function Company() {
       formData.append("banner", newBanner.file);
     }
     formData.append("_method", "PUT");
-
     try {
       await api.post(`/api/admin/company/${id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -212,14 +206,15 @@ export default function Company() {
   };
 
   useEffect(() => {
-    if (companyData && companyData.country) {
-      if (companyData.country == 2) {
-        setIsRegionFieldInput(true);
-      } else {
-        setIsRegionFieldInput(false);
+    if (companyData && companyData && countries) {
+      const currentCountry = countries?.find(
+        (country) => country.id == companyData.country
+      );
+      if (currentCountry) {
+        setRegions(currentCountry.regions);
       }
     }
-  }, [companyData.country]);
+  }, [companyData]);
 
   return (
     <div className="flex flex-col pt-1 pb-4">
@@ -324,16 +319,22 @@ export default function Company() {
             "company_info",
             "company_type",
             "contact_person",
+            "country",
             "email",
             "employees",
             "legal_address",
             "phone_number",
+            "region",
             "tax_account_number",
             "website_url",
             "whatsapp",
             "year_of_found",
           ].map((field) => {
-            if (field === "year_of_found") {
+            if (
+              field === "region" ||
+              field === "country" ||
+              field === "year_of_found"
+            ) {
               return (
                 <div key={field} className="flex flex-col w-full max-w-80">
                   <label className="text-sm font-medium mb-1">
@@ -350,6 +351,18 @@ export default function Company() {
                     className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     disabled={!isEditing}
                   >
+                    {field === "region" &&
+                      regions?.map((region) => (
+                        <option key={region.id} value={region.id}>
+                          {region.name}
+                        </option>
+                      ))}
+                    {field === "country" &&
+                      countries.map((country) => (
+                        <option key={country.id} value={country.id}>
+                          {country.name}
+                        </option>
+                      ))}
                     {field === "year_of_found" &&
                       years.map((year) => (
                         <option key={year} value={year}>
@@ -378,51 +391,6 @@ export default function Company() {
               );
             }
           })}
-          <div className="flex flex-col w-full max-w-80">
-            <label className="text-sm font-medium mb-1">Country</label>
-            <select
-              name={"country"}
-              value={companyData["country"] || ""}
-              onChange={handleInputChange}
-              className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              disabled={!isEditing}
-            >
-              {countries.map((country) => (
-                <option key={country.id} value={country.id}>
-                  {country.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          {!isRegionFieldInput ? (
-            <div className="flex flex-col w-full max-w-80">
-              <label className="text-sm font-medium mb-1">Region</label>
-
-              <select
-                name={"region_id"}
-                value={companyData["region_id"] || ""}
-                onChange={handleInputChange}
-                className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                disabled={!isEditing}
-              >
-                {regions.map((region) => (
-                  <option key={region.id} value={region.id}>
-                    {region.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          ) : (
-            <Input
-              label={"Region"}
-              name={"region_name"}
-              type="text"
-              value={String(companyData["region_name"] || "")}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              error={errors["region_name"]}
-            />
-          )}
         </div>
         {companyData && companyData.reject_reason && (
           <div className="mt-4 p-4 m-4 bg-red-50 border border-red-200 rounded-lg">
