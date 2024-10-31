@@ -121,6 +121,7 @@ export default function MemberLogos() {
           buttonText="Upload New Logo"
           imageSize="w-1/3 h-64"
           tooltip="Remove Uploaded Logo"
+          label="Recommended size: 300x240"
         />
         {uploadedLogo && (
           <Button

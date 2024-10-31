@@ -148,6 +148,11 @@ export default function Subcategories() {
       });
   };
 
+  const handleCancel = () => {
+    setActiveSettings.isCRUD(false);
+    setActiveSettings.item({ name: "", icon: null });
+  };
+
   return (
     <div>
       <div className="w-full flex gap-5 items-start justify-between">
@@ -249,9 +254,7 @@ export default function Subcategories() {
                 <Button
                   text="Cancel"
                   color="bg-gray-500"
-                  onClick={() => {
-                    setActiveSettings.isCRUD(false);
-                  }}
+                  onClick={handleCancel}
                   className="mr-2"
                 />
                 <Button

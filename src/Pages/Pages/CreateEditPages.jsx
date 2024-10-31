@@ -147,6 +147,7 @@ export default function CreateEditPages() {
                   onFileRemove={handleFileRemove}
                   buttonText="Upload Image"
                   imageSize="w-full h-64"
+                  label="Recommended size: 1900x665"
                 />
                 {errors.image && <p className="text-red-500">{errors.image}</p>}
               </div>
