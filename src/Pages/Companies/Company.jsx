@@ -82,18 +82,23 @@ export default function Company() {
   const handleInputChange = (e) => {
     let { name, value } = e.target;
 
+    setCompanyData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+
     if (name == "country") {
       const currentCountry = countries.find((country) => country.id == value);
       setRegions(currentCountry?.regions);
+      setCompanyData((prevData) => ({
+        ...prevData,
+        ["region"]: null,
+      }));
     }
 
     if (name == "phone_number") {
       value = formatInputValue(value, "phone_number");
     }
-    setCompanyData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
   };
 
   const handleSelectChange = (selectedOption, name) => {
