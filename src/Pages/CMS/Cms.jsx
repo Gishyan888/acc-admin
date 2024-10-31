@@ -155,6 +155,9 @@ export default function Cms() {
               onFileRemove={handleFileRemove}
               buttonText="Upload Image"
               imageSize="w-1/2 h-64 mt-4"
+              label={`Recommended size: ${
+                location.pathname.includes("overview") ? "785x400" : "690x400"
+              }`}
             />
             {errors.image && <p className="text-red-500">{errors.image}</p>}
           </div>

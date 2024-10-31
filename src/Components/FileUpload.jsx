@@ -61,7 +61,7 @@ export default function FileUpload({
           <button
             onClick={handleClick}
             type='button'
-            className='flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300'
+            className='mt-1 flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300'
           >
             <ArrowUpTrayIcon className='w-5 h-5' />
             <span>{buttonText}</span>

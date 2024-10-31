@@ -177,6 +177,7 @@ export default function CreateEditBanner() {
                 file={credentials.image}
                 onFileSelect={handleFileSelect}
                 onFileRemove={handleFileRemove}
+                label="Recommended size: 1900x665"
                 buttonText="Upload Image"
                 imageSize="w-full h-64"
               />
