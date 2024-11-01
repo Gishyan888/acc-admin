@@ -195,10 +195,15 @@ export default function Company() {
         },
       });
     } catch (err) {
-      console.error(
-        "Error during form submission:",
-        err.response || err.message || err
-      );
+      resetModalDetails();
+      setModalDetails({
+        isVisible: true,
+        image: "fail",
+        errorMessage: err.response?.data?.message || "An error occurred",
+        onClose: () => {
+          resetModalDetails();
+        },
+      });
     }
   };
 
@@ -219,6 +224,7 @@ export default function Company() {
         setRegions(currentCountry.regions);
       }
     }
+    console.log("companyData", companyData);
   }, [companyData]);
 
   return (
@@ -463,11 +469,14 @@ export default function Company() {
           </div>
         ) : (
           <div className="mt-4 flex justify-end mx-auto p-4 rounded shadow bg-white gap-3">
-            <Button
-              text="Approve Company"
-              color="bg-blue-500 w-40"
-              onClick={() => approveCompany()}
-            />
+            {companyData && companyData.status !== "Approved" && (
+              <Button
+                text="Approve Company"
+                color="bg-blue-500 w-40"
+                onClick={() => approveCompany()}
+              />
+            )}
+
             {companyData && !companyData.reject_reason && (
               <Button
                 text="Reject Company"
