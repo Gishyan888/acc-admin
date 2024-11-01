@@ -216,7 +216,7 @@ export default function Company() {
   };
 
   useEffect(() => {
-    if (companyData && companyData && countries) {
+    if (companyData && companyData.country && countries) {
       const currentCountry = countries?.find(
         (country) => country.id == companyData.country
       );
@@ -225,7 +225,7 @@ export default function Company() {
       }
     }
     console.log("companyData", companyData);
-  }, [companyData]);
+  }, [companyData, countries]);
 
   return (
     <div className="flex flex-col pt-1 pb-4">
