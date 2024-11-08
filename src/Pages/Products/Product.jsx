@@ -123,7 +123,7 @@ export default function Product() {
       description,
       title,
       product_type,
-      standards,
+      // standards,
     } = productData;
 
     const formData = new FormData();
@@ -133,12 +133,12 @@ export default function Product() {
     formData.append("product_range", product_count_range);
     formData.append("description", description);
     formData.append("product_type_id", product_type?.id);
-    {
-      standards &&
-        standards.map((standard) =>
-          formData.append("standards[]", standard.id)
-        );
-    }
+    // {
+    //   standards &&
+    //     standards.map((standard) =>
+    //       formData.append("standards[]", standard.id)
+    //     );
+    // }
     formData.append("title", title);
     formData.append("_method", "PUT");
 
@@ -276,7 +276,7 @@ export default function Product() {
           </div>
         </div>
         <div className="flex flex-wrap gap-4">
-          {productData &&
+          {/* {productData &&
             productData.standards &&
             productData.standards.length > 0 && (
               <div className="flex flex-col">
@@ -296,7 +296,7 @@ export default function Product() {
                   components={{ MultiValueRemove }}
                 />
               </div>
-            )}
+            )} */}
           <Input
             type="text"
             label="Min Price"
