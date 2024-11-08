@@ -20,7 +20,7 @@ export default function Company() {
   const [reason, setReason] = useState("");
   const [errors, setErrors] = useState({});
   const { setModalDetails, resetModalDetails } = useModal();
-
+  const [selectedStandards, setSelectedStandards] = useState([]);
   const profileFileInputRef = useRef(null);
   const bannerFileInputRef = useRef(null);
 
@@ -53,7 +53,10 @@ export default function Company() {
   const fetchCompanyData = () => {
     api
       .get(`/api/admin/company/${id}`)
-      .then((res) => setCompanyData(res.data.data))
+      .then((res) => {
+        setCompanyData(res.data.data);
+        setSelectedStandards(res.data.data.standards);
+      })
       .catch((err) => console.error(err));
     api
       .get("/api/site/countries")
@@ -135,6 +138,11 @@ export default function Company() {
         // value = value ? value : "";
         formData.append(key, value ?? "");
       }
+    }
+    if (selectedStandards && selectedStandards.length) {
+      selectedStandards.forEach((standard, index) => {
+        formData.append(`standards[${index}]`, standard.id.toString());
+      });
     }
 
     if (newProfilePicture) {
@@ -402,6 +410,31 @@ export default function Company() {
               );
             }
           })}
+
+          {/* certificates */}
+          <div className="flex flex-col w-full max-w-80">
+            <label className="text-sm font-medium mb-1">Certificates</label>
+
+            <select
+              name={"standards"}
+              value={
+                selectedStandards
+                  ? selectedStandards.length > 1
+                    ? selectedStandards[0].id
+                    : ""
+                  : ""
+              }
+              onChange={() => {}}
+              className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              disabled={!isEditing}
+            >
+              {companyData?.standards?.map((standard) => (
+                <option key={standard.id} value={standard.id + ""} disabled>
+                  {standard.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
         {companyData && companyData.reject_reason && (
           <div className="mt-4 p-4 m-4 bg-red-50 border border-red-200 rounded-lg">
