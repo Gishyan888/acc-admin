@@ -66,6 +66,16 @@ export default function Products() {
   const handleCompanyChange = (e) => {
     setSelectedCompany(e.target.value);
   };
+
+  const getPriceRange = (price_ranges, currency) => {
+    const product_price_range = price_ranges.find(
+      (price) => price.Exchange === currency
+    );
+    if (product_price_range) {
+      return `${product_price_range.Value} ${currency}`;
+    }
+    return "";
+  };
   return (
     <div className="mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Products</h1>
@@ -123,7 +133,7 @@ export default function Products() {
                   <img className="h-10 w-10" src={product.main_image} alt="" />
                 </td>
                 <td className="px-4 py-3 text-sm text-gray-900">
-                  {product.price_range}
+                  {getPriceRange(product.price_range, product.currency)}
                 </td>
                 <td className="px-4 py-3 text-sm text-gray-900">
                   <span

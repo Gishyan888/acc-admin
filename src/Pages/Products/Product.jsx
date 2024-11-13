@@ -319,6 +319,14 @@ export default function Product() {
           />
           <Input
             type="text"
+            label="Currency"
+            name="currency"
+            value={productData.currency || ""}
+            onChange={() => {}}
+            disabled={true}
+          />
+          <Input
+            type="text"
             label="Product Range"
             name="product_count_range"
             value={productData.product_count_range || ""}
