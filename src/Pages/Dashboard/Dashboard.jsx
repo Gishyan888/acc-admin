@@ -44,7 +44,9 @@ export default function Dashboard() {
       <div className="flex gap-8">
         <div>
           <div className="bg-[#fffaf0] px-8 py-4 rounded-md shadow-md w-2xl">
-            <h3 className="text-xl font-bold mb-4">Products Count</h3>
+            <h3 className="text-xl font-bold mb-4">
+              Information about products
+            </h3>
             <div className="flex gap-8">
               <StatusCard
                 title="Pending"
@@ -76,7 +78,9 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="bg-white px-8 py-4 rounded-md shadow-md mt-8">
-            <h3 className="text-xl font-bold mb-4">Company Count</h3>
+            <h3 className="text-xl font-bold mb-4">
+              Information about Companies
+            </h3>
             <div className="flex gap-8">
               <StatusCard
                 title="Pending"

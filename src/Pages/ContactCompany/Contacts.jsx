@@ -47,8 +47,8 @@ export default function Contacts() {
 
   return (
     <div className="mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Contact Company</h1>
-      <div className="overflow-x-auto">
+      {/* <h1 className="text-3xl font-bold mb-6">Contact Company</h1> */}
+      <div className="overflow-x-auto mt-6">
         <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
           <thead className="bg-gray-200">
             <tr>
@@ -57,7 +57,7 @@ export default function Contacts() {
                 Brand Name
               </th>
               <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">
-                Guest Name
+                Visitor Name
               </th>
               <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">
                 Created At

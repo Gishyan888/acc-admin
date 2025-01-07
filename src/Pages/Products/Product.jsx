@@ -20,6 +20,13 @@ export default function Product() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reason, setReason] = useState("");
   const { setModalDetails, resetModalDetails } = useModal();
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
+  const [productTypes, setProductTypes] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+  const [selectedProductType, setSelectedProductType] = useState(null);
+
   const navigate = useNavigate();
   const MultiValueRemove = () => null;
 
@@ -30,8 +37,80 @@ export default function Product() {
   ];
 
   useEffect(() => {
-    fetchProductData();
+    getCategories();
   }, []);
+
+  useEffect(() => {
+    if (categories.length > 0) {
+      fetchProductData();
+    }
+  }, [categories]);
+
+  useEffect(() => {
+    if (selectedCategory) {
+      getSubcategories(selectedCategory);
+    }
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    if (selectedSubcategory && subcategories.length > 0) {
+      getProductTypes(selectedSubcategory);
+    }
+  }, [selectedSubcategory, subcategories]);
+
+  const getCategories = () => {
+    api
+      .get("api/site/categories")
+      .then((res) => {
+        setCategories(res.data.data);
+      })
+      .catch((err) => {
+        resetModalDetails();
+        setModalDetails({
+          isVisible: true,
+          image: "fail",
+          errorMessage: err.response?.data?.message || "An error occurred",
+          onClose: () => {
+            resetModalDetails();
+          },
+        });
+      });
+  };
+
+  const getSubcategories = (selectedCategory) => {
+    if (selectedCategory) {
+      const currentCategory = categories.find(
+        (category) => category.id === parseInt(selectedCategory)
+      );
+      if (
+        currentCategory &&
+        currentCategory.subcategories &&
+        currentCategory.subcategories.length > 0
+      ) {
+        setSubcategories(currentCategory.subcategories);
+      } else {
+        setSubcategories([]);
+      }
+    }
+  };
+
+  const getProductTypes = (selectedSubcategory) => {
+    if (selectedSubcategory) {
+      const currentSubcategory = subcategories.find(
+        (subcategory) => subcategory.id === parseInt(selectedSubcategory)
+      );
+      if (
+        currentSubcategory
+         &&
+        currentSubcategory.subcategories &&
+        currentSubcategory.subcategories.length > 0
+      ) {
+        setProductTypes(currentSubcategory.subcategories);
+      } else {
+        setProductTypes([]);
+      }
+    }
+  };
 
   const fetchProductData = () => {
     api
@@ -39,6 +118,10 @@ export default function Product() {
       .then((res) => {
         const data = res.data.data;
         setProductData(data);
+
+        setSelectedCategory(data.category.id + "");
+        setSelectedSubcategory(data.subcategory.id + "");
+        setSelectedProductType(data.product_type.id + "");
       })
       .catch((err) => console.error(err));
   };
@@ -89,6 +172,7 @@ export default function Product() {
         <div className="w-[800px] h-[800px] relative flex justify-center items-center p-6">
           <img
             src={productData.images[selectedImageIndex].image}
+            mnmb
             alt={`Full size ${selectedImageIndex + 1}`}
             className="object-contain w-full h-full"
           />
@@ -122,7 +206,7 @@ export default function Product() {
       product_count_range,
       description,
       title,
-      product_type,
+      product_type_id,
       // standards,
     } = productData;
 
@@ -132,7 +216,7 @@ export default function Product() {
     formData.append("max_price", max_price);
     formData.append("product_range", product_count_range);
     formData.append("description", description);
-    formData.append("product_type_id", product_type?.id);
+    formData.append("product_type_id", product_type_id);
     // {
     //   standards &&
     //     standards.map((standard) =>
@@ -246,33 +330,75 @@ export default function Product() {
               disabled={!isEditing}
               error={errors.title}
             />
-            <Input
-              type="text"
-              label="Category Name"
-              name="category[name]"
-              value={productData?.category?.name || ""}
-              onChange={handleInputChange}
-              disabled={true}
-              error={errors?.category?.name}
-            />
-            <Input
-              type="text"
-              label="Subcategory Name"
-              name="subcategory[name]"
-              value={productData?.subcategory?.name || ""}
-              onChange={handleInputChange}
-              disabled={true}
-              error={errors?.subcategory?.name}
-            />
-            <Input
-              type="text"
-              label="Product Type"
-              name="product_type[name]"
-              value={productData?.product_type?.name || ""}
-              onChange={handleInputChange}
-              disabled={true}
-              error={errors?.product_type?.name}
-            />
+            <div className="flex flex-col w-full max-w-80">
+              <label>Category Name</label>
+              <select
+                disabled={!isEditing}
+                name="category"
+                onChange={(e) => {
+                  setSelectedCategory(e.target.value);
+                  setProductData((prevData) => ({
+                    ...prevData,
+                    category: e.target.value,
+                  }));
+                }}
+                className=" px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                value={selectedCategory || ""}
+              >
+                <option>Select Category</option>
+                {categories?.map((item, index) => (
+                  <option value={item.id} key={index}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col w-full max-w-80">
+              <label>Subcategory Name</label>
+              <select
+                disabled={!isEditing}
+                name="subcategory"
+                onChange={(e) => {
+                  setSelectedSubcategory(e.target.value);
+                  setProductData((prevData) => ({
+                    ...prevData,
+                    subcategory: e.target.value,
+                  }));
+                }}
+                className=" px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                value={selectedSubcategory || ""}
+              >
+                <option>Select Subcategory</option>
+                {subcategories?.map((item, index) => (
+                  <option value={item.id} key={index}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col w-full max-w-80">
+              <label>Product Type</label>
+              <select
+                disabled={!isEditing}
+                name="product_type"
+                onChange={(e) => {
+                  setSelectedProductType(e.target.value);
+                  setProductData((prevData) => ({
+                    ...prevData,
+                    product_type_id: e.target.value,
+                  }));
+                }}
+                className=" px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                value={selectedProductType || ""}
+              >
+                <option>Select Product Type</option>
+                {productTypes?.map((item, index) => (
+                  <option value={item.id} key={index}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
         <div className="flex flex-wrap gap-4">

@@ -78,11 +78,11 @@ export default function Products() {
   };
   return (
     <div className="mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Products</h1>
+      {/* <h1 className="text-3xl font-bold mb-6">Products</h1> */}
       <select
         value={selectedCompany}
         onChange={handleCompanyChange}
-        className="mb-4 p-2 px-4 border rounded border-gray-300 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="mt-6 mb-4 p-2 px-4 border rounded border-gray-300 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         <option value="all">All Companies</option>
         {companies.map((company, index) => (

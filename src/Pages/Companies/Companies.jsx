@@ -42,8 +42,8 @@ export default function Companies() {
 
   return (
     <div className="mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Companies</h1>
-      <div className="overflow-x-auto">
+      {/* <h1 className="text-3xl font-bold mb-6">Companies</h1> */}
+      <div className="overflow-x-auto mt-6">
         <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
           <thead className="bg-gray-200">
             <tr>
@@ -90,7 +90,7 @@ export default function Companies() {
                 <td className="px-4 py-3 text-sm text-gray-900">
                   <span
                     className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      company.status === "In Process"
+                      company.status === "Pending"
                         ? "bg-yellow-100 text-yellow-800"
                         : company.status === "Rejected"
                         ? "bg-red-100 text-red-800"
