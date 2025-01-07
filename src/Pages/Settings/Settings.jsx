@@ -6,7 +6,8 @@ import useSettings from "../../store/useSettings";
 
 export default function Settings() {
   const location = useLocation();
-  const { activeSettings, setActiveSettings, resetActiveSettings } = useSettings();
+  const { activeSettings, setActiveSettings, resetActiveSettings } =
+    useSettings();
 
   useEffect(() => {
     resetActiveSettings();
@@ -17,20 +18,17 @@ export default function Settings() {
       setActiveSettings.name("Category");
     } else if (location.pathname.includes("standards")) {
       setActiveSettings.name("Standard");
-    } else{
+    } else {
       setActiveSettings.name("Product Type");
     }
   }, [location.pathname]);
 
-
   const navItems = [
-    { path: "/settings/categories", label: "Categories" },
-    { path: "/settings/subcategories", label: "Subcategories" },
-    { path: "/settings/standards", label: "Standards" },
-    { path: "/settings/product-types", label: "Product Types" },
+    { path: "/categories-and-standarts/categories", label: "Categories" },
+    { path: "/categories-and-standarts/subcategories", label: "Subcategories" },
+    { path: "/categories-and-standarts/product-types", label: "Product Types" },
+    { path: "/categories-and-standarts/standards", label: "Standards" },
   ];
-
-
 
   return (
     <div className="w-full">

@@ -103,7 +103,7 @@ function App() {
               <Route path="blog/:slug/edit" element={<CreateEditPages />} />
               <Route path="blog/create" element={<CreateEditPages />} />
             </Route>
-            <Route path="/settings" element={<Settings />}>
+            <Route path="/categories-and-standarts" element={<Settings />}>
               <Route path="categories" element={<Categories />} />
               <Route path="subcategories" element={<Subcategories />} />
               <Route path="standards" element={<Standard />} />

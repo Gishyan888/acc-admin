@@ -99,7 +99,6 @@ export default function MostViewedPagesBarChart() {
       tooltip: {
         callbacks: {
           // title: function (modelTypes) {
-          //   console.log({ modelTypes });
           //   return `Views count: ${data.model_type}`;
           // },
           // Customize tooltip to show formatted value

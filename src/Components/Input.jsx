@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { cn } from "../lib/utils";
 
 export default function Input({
   label,
@@ -15,6 +16,7 @@ export default function Input({
   required = false,
   allowNumbers = false,
   disabled = false,
+  labelClassNames = "",
 }) {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -43,7 +45,9 @@ export default function Input({
   return (
     <div className="w-full max-w-80">
       <div className="flex items-center justify-between mb-1 text-sm font-medium">
-        <label className="text-gray-700 font-medium">{label}</label>
+        <label className={cn("text-gray-700 font-medium", labelClassNames)}>
+          {label}
+        </label>
         {label2 && (
           <span
             className="text-cyan-400 font-medium cursor-pointer"

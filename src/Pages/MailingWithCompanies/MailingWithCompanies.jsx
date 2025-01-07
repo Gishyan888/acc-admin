@@ -158,8 +158,8 @@ export default function MailingWithCompanies() {
 
   return (
     <div className="mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-2">Contact with companies</h1>
-      <div className="w-full mt-6">
+      {/* <h1 className="text-3xl font-bold mb-2">Contact with companies</h1> */}
+      <div className="w-full mt-8">
         <div className="flex gap-4">
           <div className="w-1/4">
             <h1 className="mb-2">Select or search companies</h1>

@@ -41,8 +41,8 @@ export default function Sidebar() {
       setActiveTab("/banners/header-banners");
     } else if (location.pathname.includes("cms")) {
       setActiveTab("/cms/overview");
-    } else if (location.pathname.includes("settings")) {
-      setActiveTab("/settings/categories");
+    } else if (location.pathname.includes("categories-and-standarts")) {
+      setActiveTab("/categories-and-standarts/categories");
     } else if (
       location.pathname.includes("companies") ||
       location.pathname.includes("company")
@@ -86,9 +86,9 @@ export default function Sidebar() {
         link: "/pages/blog",
       },
       {
-        name: "Settings",
+        name: "Categories and Standarts",
         icon: Cog6ToothIcon,
-        link: "/settings/categories",
+        link: "/categories-and-standarts/categories",
       },
       {
         name: "SEO management",
