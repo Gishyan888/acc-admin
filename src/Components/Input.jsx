@@ -33,7 +33,7 @@ export default function Input({
 
   const handleInputChange = (e) => {
     if (allowNumbers) {
-      const regex = /^[0-9\b]+$/;
+      const regex = /^[0-9]*\.?[0-9]*$/;
       if (e.target.value === "" || regex.test(e.target.value)) {
         onChange(e);
       }

@@ -35,21 +35,35 @@ import logo from "../Images/acc-logo.png";
 
 export default function Sidebar() {
   const location = useLocation();
+  const [activeTab, setActiveTab] = useState("/");
+  const [open, setOpen] = useState(0);
 
   useEffect(() => {
-    if (location.pathname.includes("banners")) {
-      setActiveTab("/banners/header-banners");
-    } else if (location.pathname.includes("cms")) {
-      setActiveTab("/cms/overview");
-    } else if (location.pathname.includes("categories-and-standarts")) {
-      setActiveTab("/categories-and-standarts/categories");
-    } else if (
-      location.pathname.includes("companies") ||
-      location.pathname.includes("company")
-    ) {
-      setActiveTab("/companies");
+    const pathname = location.pathname.split("/")[1];
+    if (pathname.includes("banners")) {
+      setActiveTab("Banners");
+    } else if (pathname.includes("compan")) {
+      setActiveTab("Companies");
+    } else if (pathname.includes("product")) {
+      setActiveTab("Products");
+    } else if (pathname.includes("cms")) {
+      setActiveTab("CMS");
+    } else if (pathname.includes("pages")) {
+      setActiveTab("Pages");
+    } else if (pathname.includes("categories-and-standarts")) {
+      setActiveTab("Categories and Standarts");
+    } else if (pathname.includes("seo")) {
+      setActiveTab("SEO management");
+    } else if (pathname.includes("contact")) {
+      setActiveTab("Company Contacts");
+    } else if (pathname.includes("mailing-with")) {
+      setActiveTab("Mailing with");
+    } else if (pathname.includes("member-logos")) {
+      setActiveTab("Member Logos");
+    } else if (pathname.includes("history")) {
+      setActiveTab("History");
     } else {
-      setActiveTab(location.pathname);
+      setActiveTab("Dashboard");
     }
   }, [location]);
 
@@ -125,8 +139,6 @@ export default function Sidebar() {
     ],
   };
 
-  const [activeTab, setActiveTab] = useState("/");
-  const [open, setOpen] = useState(0);
   const navigate = useNavigate();
   const { logout } = useAuthStore();
   const handleOpen = (value) => {
@@ -139,7 +151,7 @@ export default function Sidebar() {
       <ListItem
         key={index}
         onClick={() => handleClick(item)}
-        className={activeTab === item.link ? "bg-blue-gray-50" : ""}
+        className={activeTab === item.name ? "bg-blue-gray-50" : ""}
       >
         <ListItemPrefix>
           <Icon className="h-5 w-5" />
@@ -194,11 +206,10 @@ export default function Sidebar() {
         logout();
         navigate("/login");
       } else {
-        setActiveTab(item.link);
         navigate(item.link);
       }
     } else {
-      console.log(`No link defined for ${item.name}`);
+      console.log(`🚀 No link defined for ${item.name}`);
     }
   };
 
