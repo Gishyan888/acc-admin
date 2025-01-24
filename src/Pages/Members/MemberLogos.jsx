@@ -44,7 +44,6 @@ export default function MemberLogos() {
     setLoading(true);
 
     const formData = new FormData();
-    console.log({ linkForUploaded });
     if (uploadedLogo) {
       formData.append("logo", uploadedLogo.file);
       formData.append("url", linkForUploaded);
