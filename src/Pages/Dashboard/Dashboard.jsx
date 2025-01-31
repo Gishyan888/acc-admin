@@ -9,7 +9,6 @@ import approvedIcon from "../../Images/approved.png";
 import rejectedIcon from "../../Images/rejected.png";
 import pendingIcon from "../../Images/pending.png";
 import suspendedIcon from "../../Images/pause.png";
-import contactsIcon from "../../Images/contacts.png";
 import ContactsCountCard from "./Components/ContactsCountCard";
 
 export default function Dashboard() {
@@ -42,9 +41,9 @@ export default function Dashboard() {
 
   return (
     <div className="p-8">
-      <div className="flex gap-8">
+      <div className="flex gap-8 flex-wrap">
         <div>
-          <div className="bg-[#fffaf0] px-4 py-4 rounded-md shadow-md w-2xl">
+          <div className="bg-[#fffaf0] px-8 py-4 rounded-md shadow-md w-2xl">
             <h3 className="text-xl font-bold mb-4">
               Information about products
             </h3>
@@ -82,7 +81,7 @@ export default function Dashboard() {
             <h3 className="text-xl font-bold mb-4">
               Information about Companies
             </h3>
-            <div className="flex gap-8 flex-wrap">
+            <div className="flex gap-4 flex-wrap">
               <StatusCard
                 title="Pending"
                 count={
@@ -122,14 +121,8 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-
-        <ContactsCountCard
-          icon={contactsIcon}
-          title="Contacts Count"
-          count={reports.contact_count ?? 0}
-        />
       </div>
-
+      <ContactsCountCard />
       <MostViewedPagesBarChart />
       <SiteViewsCountLineChart />
     </div>
