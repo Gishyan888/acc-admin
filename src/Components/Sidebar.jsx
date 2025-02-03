@@ -32,11 +32,15 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAuthStore from "../store/useAuthStore";
 import logo from "../Images/acc-logo.png";
-
+import useModal from "../store/useModal";
+import api from "../api/api";
 export default function Sidebar() {
+  const [reports, setReports] = useState({});
+  const { setModalDetails, resetModalDetails } = useModal();
   const location = useLocation();
   const [activeTab, setActiveTab] = useState("/");
   const [open, setOpen] = useState(0);
+  const [unconfirmedCompaniesCount, setUnconfirmedCompaniesCount] = useState(0);
 
   useEffect(() => {
     const pathname = location.pathname.split("/")[1];
@@ -67,6 +71,35 @@ export default function Sidebar() {
     }
   }, [location]);
 
+  useEffect(() => {
+    getReports();
+  }, []);
+
+  const getReports = () => {
+    let apiURL = `/api/site/reports`;
+    api
+      .get(apiURL)
+      .then((res) => {
+        setReports(res?.data);
+        const count =
+          res?.data?.company_count.rejected +
+          res?.data?.company_count.pending +
+          res?.data?.company_count.suspended;
+        setUnconfirmedCompaniesCount(count);
+      })
+      .catch((err) => {
+        resetModalDetails();
+        setModalDetails({
+          isVisible: true,
+          image: "fail",
+          errorMessage: err.response?.data?.message || "An error occurred",
+          onClose: () => {
+            resetModalDetails();
+          },
+        });
+      });
+  };
+
   const tabs = {
     section1: [
       {
@@ -83,6 +116,8 @@ export default function Sidebar() {
         name: "Companies",
         icon: UsersIcon,
         link: "/companies",
+        hasCountIcon: true,
+        count: unconfirmedCompaniesCount,
       },
       {
         name: "Products",
@@ -156,7 +191,14 @@ export default function Sidebar() {
         <ListItemPrefix>
           <Icon className="h-5 w-5" />
         </ListItemPrefix>
-        {item.name}
+        <div className="relative">
+          {item.name}
+          {item.hasCountIcon && (
+            <span className="absolute top-[-5px] right-[-12px] text-blue-700 font-bold">
+              {item.count}
+            </span>
+          )}
+        </div>
       </ListItem>
     );
   };

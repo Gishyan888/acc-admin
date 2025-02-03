@@ -8,7 +8,7 @@ import StatusCard from "./Components/StatusCard";
 import approvedIcon from "../../Images/approved.png";
 import rejectedIcon from "../../Images/rejected.png";
 import pendingIcon from "../../Images/pending.png";
-import contactsIcon from "../../Images/contacts.png";
+import suspendedIcon from "../../Images/pause.png";
 import ContactsCountCard from "./Components/ContactsCountCard";
 
 export default function Dashboard() {
@@ -41,7 +41,7 @@ export default function Dashboard() {
 
   return (
     <div className="p-8">
-      <div className="flex gap-8">
+      <div className="flex gap-8 flex-wrap">
         <div>
           <div className="bg-[#fffaf0] px-8 py-4 rounded-md shadow-md w-2xl">
             <h3 className="text-xl font-bold mb-4">
@@ -81,7 +81,7 @@ export default function Dashboard() {
             <h3 className="text-xl font-bold mb-4">
               Information about Companies
             </h3>
-            <div className="flex gap-8">
+            <div className="flex gap-4 flex-wrap">
               <StatusCard
                 title="Pending"
                 count={
@@ -109,17 +109,20 @@ export default function Dashboard() {
                 containerClassName={"bg-red-100"}
                 color="text-red-800"
               />
+              <StatusCard
+                title="Suspended"
+                count={
+                  reports.company_count ? reports.company_count.suspended : 0
+                }
+                icon={suspendedIcon}
+                containerClassName={"bg-blue-100"}
+                color="text-blue-800"
+              />
             </div>
           </div>
         </div>
-
-        <ContactsCountCard
-          icon={contactsIcon}
-          title="Contacts Count"
-          count={reports.contact_count ?? 0}
-        />
       </div>
-
+      <ContactsCountCard />
       <MostViewedPagesBarChart />
       <SiteViewsCountLineChart />
     </div>

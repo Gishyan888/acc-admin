@@ -511,13 +511,15 @@ export default function Company() {
               />
             )}
 
-            {companyData && !companyData.reject_reason && (
-              <Button
-                text="Reject Company"
-                color="bg-red-500 w-40"
-                onClick={() => setRejectCompany(true)}
-              />
-            )}
+            {companyData &&
+              !companyData.reject_reason &&
+              companyData.status !== "Suspended" && (
+                <Button
+                  text="Reject Company"
+                  color="bg-red-500 w-40"
+                  onClick={() => setRejectCompany(true)}
+                />
+              )}
           </div>
         )}
       </div>
