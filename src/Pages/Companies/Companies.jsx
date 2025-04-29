@@ -29,7 +29,7 @@ export default function Companies() {
     navigate(`/company/${company.id}`);
   };
 
-  const fetchCompanies = (currentPage) => {
+  const fetchCompanies = () => {
     api
       .get(`/api/admin/company?page=${currentPage}`)
       .then((res) => {
